@@ -61,14 +61,15 @@ services:
       - ./api/openapi.yml:/usr/share/nginx/html/openapi.yaml:${CACHING_OPTION:-cached}
 
   pgadmin:
-    image: dpage/pgadmin4
+    build:
+      context: "./env/dev/pgadmin"
     environment:
       PGADMIN_DEFAULT_EMAIL: root@webage.solutions
       PGADMIN_DEFAULT_PASSWORD: password
     ports:
       - '${PGADMIN_PORT:-8094}:80'
     volumes:
-      - ./env/dev/pgadmin/config_db:/var/lib/pgadmin
+      - pgadmin_volume:/var/lib/pgadmin
 
 volumes:
   database-volume:
