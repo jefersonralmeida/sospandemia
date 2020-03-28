@@ -68,7 +68,7 @@ services:
     ports:
       - '${PGADMIN_PORT:-8094}:80'
     volumes:
-      - pgadmin_volume:/var/lib/pgadmin
+      - ./env/dev/pgadmin/config_db:/var/lib/pgadmin
 
 volumes:
   database-volume:
