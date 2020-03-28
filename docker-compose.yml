@@ -1,0 +1,77 @@
+version: '3.5'
+services:
+  spa:
+    build:
+      context: "./env/dev/ui"
+    ports:
+      - "${VUE_UI_PORT:-8090}:8000"
+      - "${SPA_APP_PORT:-8091}:8080"
+      - '3000:3000'
+    volumes:
+      - ./spa:/var/spa:${CACHING_OPTION:-cached}
+      - vue-ui-db-volume:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
+    stdin_open: true
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    working_dir: /var/site
+    command: "vue ui -H 0.0.0.0 -p 8000"
+
+  web:
+    build:
+      context: "./env/dev/web"
+    ports:
+      - "${API_PORT:-8092}:80"
+    volumes:
+      - ./api:/var/www
+    working_dir: /var/www
+
+  api:
+    build:
+      context: "./env/dev/api"
+    environment:
+      XDEBUG_PORT: ${XDEBUG_PORT:-9000}
+    volumes:
+      - ./api:/var/www
+      - ./env/dev/api/conf/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - composer-volume:/root/.composer
+    working_dir: /var/www
+
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - database-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:5
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "${SWAGGER_PORT:-8093}:8080"
+    environment:
+      URL: openapi.yaml
+    volumes:
+      - ./api/openapi.yml:/usr/share/nginx/html/openapi.yaml:${CACHING_OPTION:-cached}
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@webage.solutions
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - '${PGADMIN_PORT:-8094}:80'
+    volumes:
+      - pgadmin_volume:/var/lib/pgadmin
+
+volumes:
+  database-volume:
+  vue-ui-db-volume:
+  pgadmin_volume:
+  composer-volume:
