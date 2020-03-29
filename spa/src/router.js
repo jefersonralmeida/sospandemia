@@ -8,13 +8,7 @@ import api from "./api";
 import LoadingMessage from "./components/views/LoadingMessage";
 import SelectEntity from "./components/views/SelectEntity";
 import OAuthCallback from "./components/views/OAuthCallback";
-// import Error403 from "./components/errors/Error403";
-// import Login from "./components/views/Login";
-// import WorkflowEditor from "./components/views/WorkflowEditor";
-// import IndexOrganization from "./components/views/organizations/IndexOrganization";
-// import CreateOrganization from "./components/views/organizations/CreateOrganization";
-// import SelectOrganization from "./components/views/SelectOrganization";
-// import IndexUsers from "./components/views/users/IndexUsers";
+import ManageDemands from "./components/views/ManageDemands";
 
 Vue.use(Router);
 
@@ -43,6 +37,13 @@ const routes = [
         title: 'Home',
         component: CreateDemand,
     },
+    {
+        path: '/gerenciar-demandas',
+        name: 'gerenciar-demandas',
+        title: 'Gerenciar Demandas',
+        component: ManageDemands,
+    },
+
     // {
     //     path: '/users/index',
     //     name: 'users.index',

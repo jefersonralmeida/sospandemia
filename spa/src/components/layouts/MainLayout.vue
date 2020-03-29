@@ -25,12 +25,11 @@
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown mr-3" v-if="isLogged">
                                 <a class="nav-link dropdown-toggle" href="#" id="entityDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Hospital 1
+                                    {{ activeEntity.name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="entityDropdown">
-                                    <a class="dropdown-item" href="#">Hospital 2</a>
-                                    <a class="dropdown-item" href="#">Hospital 3</a>
-                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" v-for="entity in otherEntities" @click="setActiveEntity(entity.id)">{{ entity.name }}</a>
+                                    <div class="dropdown-divider" v-if="otherEntities.length > 0"></div>
                                     <a class="dropdown-item" href="#">Gerenciar Entidades</a>
                                 </div>
                             </li>
@@ -65,12 +64,11 @@
 </template>
 
 <script>
-    import LoggedUserMenu from "./sections/LoggedUserMenu";
     import LoadingScreen from "./sections/LoadingScreen";
     import api from "../../api";
     export default {
         name: 'main-layout',
-        components: {LoadingScreen, LoggedUserMenu},
+        components: {LoadingScreen},
         data() {
             return {
                 uiLoaded: true,
@@ -92,6 +90,9 @@
                     this.$router.push('/ ');
 
                 });
+            },
+            setActiveEntity: function(entityId) {
+                this.$store.commit('setEntity', entityId);
             }
         },
         computed: {
@@ -104,6 +105,14 @@
             },
             logoutUrl: function() {
                 return `${api.baseURL()}/auth/logout`;
+            },
+            activeEntity: function() {
+                const store = this.$store;
+                return store.getters.activeEntity;
+            },
+            otherEntities: function() {
+                const store = this.$store;
+                return store.getters.entities.filter(entity => entity.id !== store.getters.activeEntityId);
             }
 
         },

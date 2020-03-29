@@ -23,8 +23,8 @@ const store = new Vuex.Store({
         profile: null,
     },
     mutations: {
-        setEntity (state, organizationId) {
-            state.entity = organizationId;
+        setEntity (state, entityId) {
+            state.entity = entityId;
         },
         setOauthToken (state, authInfo) {
             state.oauthToken = authInfo;
@@ -69,7 +69,9 @@ const store = new Vuex.Store({
     getters: {
         isLogged: state => state.oauthToken !== null,
         user: state => state.profile ? state.profile : null,
-        entities: state => state.auth ? state.auth.user.entities : null,
+        entities: state => state.profile ? state.profile.entities : null,
+        activeEntityId: state => state.entity ? state.entity : null,
+        activeEntity: state => state.entity && state.profile ? state.profile.entities.find(entity => entity.id === state.entity) : null,
     },
     plugins: [vuexLocal.plugin],
 });
