@@ -9,7 +9,8 @@ services:
       - '3000:3000'
     volumes:
       - ./spa:/var/spa:${CACHING_OPTION:-cached}
-      - vue-ui-db-volume:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
+      - ./env/dev/ui/config:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
+#      - vue-ui-db-volume:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
     stdin_open: true
     tty: true
     environment:

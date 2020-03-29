@@ -1,0 +1,17 @@
+{
+  "projects": [
+    {
+      "id": "GCMzWeqJv",
+      "path": "/var/spa",
+      "favorite": 0,
+      "type": "vue",
+      "name": "spa",
+      "openDate": 1585441750792
+    }
+  ],
+  "foldersFavorite": [],
+  "tasks": [],
+  "config": {
+    "lastOpenProject": "GCMzWeqJv"
+  }
+}
