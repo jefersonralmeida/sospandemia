@@ -28,11 +28,11 @@ A primeira execução do ambiente é de suma importância. Demora mais tempo, e 
  melhor automatizada). Siga as instruções com cuidado:
 
 - Clone esse repositório
-- Sempre trabalhe no branch `develop`:
+- Acesse a pasta clonada (via linha de comando)
+- Sempre trabalhe no branch `development`. Ele é o branch padrão, mas caso não esteja nele, rode: 
 ```
 git checkout development
 ```
-- Acesse a pasta clonada (via linha de comando)
 - Dentro da pasta `api` copie o arquivo `.env.example` para `.env`
 - Altere os conteúdos de .env (configurações do mailtrap)
 - Dentro da pasta `spa` copie o arquivo `.env.example` para `.env`
