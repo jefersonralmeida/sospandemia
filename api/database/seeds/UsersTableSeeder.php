@@ -23,6 +23,15 @@ class UsersTableSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
+            [
+                // 2
+                'email' => 'renly@storm.end',
+                'name' => 'Renly Baratheon',
+                'password' => Hash::make('password'),
+                'email_verified_at' => $now,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
         ]);
     }
 }
