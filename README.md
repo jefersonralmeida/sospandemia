@@ -105,4 +105,25 @@ Manter os logs na tela:
 dc logs -f <container_name>
 ```
  
+### Dados de teste
+
+O projeto não contem testes automatizados. Dado a urgência do projeto, optou-se por não usar esse método.
+
+Mas foi incluído alguns dados de teste no projeto, para que o desenvolvedor não começe do zero:
+
+Para renovar o banco de dados com os dados de teste, basta rodar (inclusive na primeira vez):
+```
+dc exec api php artisan migrate:fresh --seed
+```
+
+ATENÇÃO: Toda vez que esse comando é executado, qualquer dado incluído no sistema é perdido. Ele volta ao "estado de 
+fábrica".
+
+Dois usuários são incluídos nesses dados de teste:
+- jonsnow@thewall.north
+- renly@storm.end
+
+A senha para ambos é `password`.
+
+
 
