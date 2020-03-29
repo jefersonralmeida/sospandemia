@@ -2,15 +2,13 @@ version: '3.5'
 services:
   spa:
     build:
-      context: "./env/dev/ui"
+      context: "./env/dev/spa"
     ports:
       - "${VUE_UI_PORT:-8090}:8000"
       - "${SPA_APP_PORT:-8091}:8080"
       - '3000:3000'
     volumes:
       - ./spa:/var/spa:${CACHING_OPTION:-cached}
-      - ./env/dev/ui/config:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
-#      - vue-ui-db-volume:/root/.vue-cli-ui:${CACHING_OPTION:-cached}
     stdin_open: true
     tty: true
     environment:
@@ -69,11 +67,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: password
     ports:
       - '${PGADMIN_PORT:-8094}:80'
-    volumes:
-      - pgadmin_volume:/var/lib/pgadmin
 
 volumes:
   database-volume:
-  vue-ui-db-volume:
-  pgadmin_volume:
   composer-volume:
