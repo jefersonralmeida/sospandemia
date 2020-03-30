@@ -36,8 +36,8 @@ const routes = [
     },
     {
         path: '/nova-demanda',
-        name: 'home',
-        title: 'Home',
+        name: 'nova-demanda',
+        title: 'Nova Demanda',
         component: CreateDemand,
     },
     {

@@ -20,5 +20,8 @@ Route::middleware('auth:api')->group(function() {
     Route::post('logout', 'AuthController@logout');
 
     // profile routes
-    Route::get('/profile', 'ProfileController@info');
+    Route::get('profile', 'ProfileController@info');
+
+    Route::get('entities/{entity}/demands', 'DemandsController@index');
+
 });

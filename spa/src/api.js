@@ -131,14 +131,9 @@ const api = {
         return this.httpClient().get('profile');
     },
 
-    autoLoginHash: function() {
-        return this.httpClient().get('profile/auto-login-hash');
+    demandsIndex: function() {
+        return this.httpClient().get(`entities/${store.getters.activeEntityId}/demands`);
     },
-
-    usersSearch: function(searchQuery) {
-        searchQuery = encodeURI(searchQuery);
-        return this.httpClient().get(`users/search/${searchQuery}`);
-    }
 };
 
 export default api;

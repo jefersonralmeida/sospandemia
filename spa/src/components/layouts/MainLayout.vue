@@ -70,11 +70,9 @@
     export default {
         name: 'main-layout',
         components: {LoadingScreen},
-        data() {
-            return {
-                uiLoaded: true,
-            }
-        },
+        data: () =>  ({
+
+        }),
         mounted() {
         },
         methods: {
@@ -115,6 +113,9 @@
             },
             loginUrl: function() {
                 return api.baseURL() + '/auth/login';
+            },
+            uiLoaded: function() {
+                return this.$store.state.uiLoaded;
             }
         },
     }
