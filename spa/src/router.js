@@ -99,6 +99,12 @@ router.beforeEach((to, from, next) => {
         next('/selecionar-entidade');
     }
 
+    // login required, entity required and the selected entity is not available for the user (logged) (invalid state)
+    if (!to.meta.guestAllowed && !to.meta.noEntityRequired && store.getters.user && !store.getters.activeEntity) {
+        store.commit('setEntity', null);
+        next('/selecionar-entidade');
+    }
+
     next();
 });
 

@@ -47,6 +47,6 @@ class LoginController extends Controller
         $this->traitLogout($request);
         return $request->wantsJson()
             ? new Response('', 204)
-            : redirect('/auth/login');
+            : redirect(uiRoute());
     }
 }
