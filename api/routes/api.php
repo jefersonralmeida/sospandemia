@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +19,14 @@ Route::middleware('auth:api')->group(function() {
     // profile routes
     Route::get('profile', 'ProfileController@info');
 
-    Route::get('entities/{entity}/demands', 'DemandsController@index');
+    // entities routes
+    Route::get('entities/{entity}/demands', 'EntitiesController@indexDemands');
+    Route::post('entities/{entity}/new-demand', 'EntitiesController@createDemand')->middleware('can:createDemand,entity');
+
+    // demands routes
+    Route::get('demands', 'DemandsController@index');
+    Route::get('demands/{demand}', 'DemandsController@info');
+    Route::put('demands/{demand}', 'DemandsController@update')->middleware('can:update,demand');
+    Route::delete('demands/{demand}', 'DemandsController@delete')->middleware('can:delete,demand');
 
 });

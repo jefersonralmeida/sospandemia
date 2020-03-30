@@ -131,8 +131,24 @@ const api = {
         return this.httpClient().get('profile');
     },
 
-    demandsIndex: function() {
+    indexDemandsByEntity: function() {
         return this.httpClient().get(`entities/${store.getters.activeEntityId}/demands`);
+    },
+
+    createDemand: function(data) {
+        return this.httpClient().post(`entities/${store.getters.activeEntityId}/new-demand`, data);
+    },
+
+    getDemand: function(demandId) {
+        return this.httpClient().get(`demands/${demandId}`);
+    },
+
+    updateDemand: function(demandId, data) {
+        return this.httpClient().put(`demands/${demandId}`, data);
+    },
+
+    deleteDemand: function(demandId) {
+        return this.httpClient().delete(`demands/${demandId}`);
     },
 };
 

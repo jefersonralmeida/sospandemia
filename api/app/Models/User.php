@@ -15,7 +15,7 @@ use phpseclib\System\SSH\Agent\Identity;
  * @property int id
  * @property string name
  * @property string email
- * @property Collection|Entity[] entity
+ * @property Collection|Entity[] entities
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
