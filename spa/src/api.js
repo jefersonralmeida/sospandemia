@@ -109,7 +109,7 @@ const api = {
         axios.post(`${this.baseURL()}/oauth/token`, requestData). then(response => {
             store.commit('setOauthToken', response.data);
             store.dispatch('loadProfile').then(response => {
-                router.push('/selecionar-entidade');
+                router.push('/gerenciar-demandas');
             });
         });
     },

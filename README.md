@@ -72,7 +72,7 @@ Todos os endereços expostos pelos containers estão no `localhost`, cada um em 
   favoridos do browser utilizado para desenvolvimento:
 
 - Vue UI (http://localhost:8090) - Interface de gerenciamento do projeto VueJS
-- SPA (http://localhost:8090) - Endereço da SPA (Frontend)
+- SPA (http://localhost:8091) - Endereço da SPA (Frontend)
 - API (http://localhost:8092) - Endereço da API e autenticação (Backend)
 - Open API/Swagger UI (http://localhost:8093) - Endereço da documentação de especificação da API
 - PgAdmin (http://localhost:8094) - Painel de administração do PostgreSQL

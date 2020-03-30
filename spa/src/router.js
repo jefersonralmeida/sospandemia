@@ -29,7 +29,10 @@ const routes = [
         path: '/selecionar-entidade',
         name: 'selectionar-entidade',
         title: 'Selecionar Entidade',
-        component: SelectEntity
+        component: SelectEntity,
+        meta: {
+            noEntityRequired: true,
+        },
     },
     {
         path: '/nova-demanda',
@@ -43,31 +46,6 @@ const routes = [
         title: 'Gerenciar Demandas',
         component: ManageDemands,
     },
-
-    // {
-    //     path: '/users/index',
-    //     name: 'users.index',
-    //     title: 'Users',
-    //     component: IndexUsers,
-    // },
-    // {
-    //     path: '/organizations/index',
-    //     name: 'organizations.index',
-    //     title: 'Organizations',
-    //     component: IndexOrganization,
-    // },
-    // {
-    //     path: '/organizations/create',
-    //     name: 'organizations.create',
-    //     title: 'Organizations',
-    //     component: CreateOrganization,
-    // },
-    // {
-    //     path: '/wflow-editor',
-    //     name: 'wflow-editor',
-    //     title: 'Workflow Editor',
-    //     component: WorkflowEditor,
-    // },
     {
         path: '/oauth-callback',
         meta: {
@@ -114,6 +92,11 @@ router.beforeEach((to, from, next) => {
     if (!to.meta.guestAllowed && !store.getters.isLogged) {
         api.authorizeLogin();
         next('/preparando-login');
+    }
+
+    // login required, entity required and no entity selected
+    if (!to.meta.guestAllowed && !to.meta.noEntityRequired && !store.getters.activeEntityId) {
+        next('/selecionar-entidade');
     }
 
     next();

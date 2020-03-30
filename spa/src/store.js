@@ -61,7 +61,6 @@ const store = new Vuex.Store({
         },
         loadProfile({commit}) {
             api.profile().then(response => {
-                console.log(response.data);
                 commit('setProfile', response.data);
             });
         }

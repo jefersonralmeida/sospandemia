@@ -25,7 +25,8 @@
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown mr-3" v-if="isLogged">
                                 <a class="nav-link dropdown-toggle" href="#" id="entityDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ activeEntity.name }}
+                                    <span v-if="activeEntity">{{ activeEntity.name }}</span>
+                                    <span v-else>Selecione a Entidade</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="entityDropdown">
                                     <a class="dropdown-item" href="#" v-for="entity in otherEntities" @click="setActiveEntity(entity.id)">{{ entity.name }}</a>
@@ -45,7 +46,7 @@
                                 </div>
                             </li>
                             <li class="nav-item" v-else>
-                                <a class="nav-link" href="#">Login</a>
+                                <a class="nav-link" :href="loginUrl">Login</a>
                             </li>
                         </ul>
 
@@ -75,11 +76,6 @@
             }
         },
         mounted() {
-            // asynchronously renew profile data
-            // api.profile().then(response => {
-            //     this.$store.dispatch('loadProfile');
-            // });
-            // this.uiLoaded = true;
         },
         methods: {
             logout() {
@@ -87,7 +83,6 @@
 
                     // once logged out from the api, logout on the main app
                     this.$refs.logoutForm.submit();
-                    this.$router.push('/ ');
 
                 });
             },
@@ -112,7 +107,11 @@
             },
             otherEntities: function() {
                 const store = this.$store;
-                return store.getters.entities.filter(entity => entity.id !== store.getters.activeEntityId);
+                const entities = store.getters.entities;
+                return entities ? entities.filter(entity => entity.id !== store.getters.activeEntityId) : [];
+            },
+            loginUrl: function() {
+                return api.baseURL() + '/auth/login';
             }
 
         },

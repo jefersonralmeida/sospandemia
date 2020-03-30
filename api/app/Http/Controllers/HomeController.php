@@ -21,6 +21,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return redirect(uiRoute('selecionar-entidade'));
+        return redirect(uiRoute('gerenciar-demandas')); // redirecionar para a SPA, rota gerenciar-demandas, que é a "home" logada
     }
 }
