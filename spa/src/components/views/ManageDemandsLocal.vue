@@ -6,66 +6,54 @@
       <strong>---</strong>
     </p>
     <p>Lista paginada... Incluir opções de incluir, editar, excluir, resolver..., CRUD completo. Esqueleto abaixo, respostas no console.</p>
-    <button class="btn btn-success" @click="creatingDemand = true">Nova demanda</button>
+    <button v-if="!creatingDemand" class="btn btn-success" @click="creatingDemand=true">Nova demanda</button>
     <div v-if="creatingDemand">
       <form>
         <div class="form-group">
-          <label for="exampleInputEmail1">Titulo da demanda</label>
+          <label for="demandTitle">Título da Demanda</label>
           <input
-            v-model="demandTemp.title"
             type="text"
+            v-model="demandData.title"
             class="form-control"
-            placeholder="Titulo da demanda"
+            placeholder="Digite o título da demanda"
           />
-          <small id="emailHelp" class="form-text text-muted">{{demandTemp.title}}</small>
+          <small
+            class="form-text text-muted"
+          >Informe o que é necessitado.</small>
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input
-            type="password"
+          <label for="Description">Descrição</label>
+          <textarea
+            type="text"
             class="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
+            placeholder="Adicione um descrição"
+            v-model="demandData.text"
           />
         </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-danger" @click="creatingDemand=false">Cancelar</button>
+          <button class="btn btn-success ml-1" @click="createDemand()">Criar</button>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
-
     <hr />
+
     <demand-card
-      v-for="(demand, i) in demands"
-      :key="i"
+      v-for="demand in demands"
+      v-bind:key="demand.id"
       :demand="demand"
       :onViewDemandCB="viewDemand"
       :onUpdateDemandCB="updateDemand"
       :onDeleteDemandCB="deleteDemand"
       class="mt-2"
     ></demand-card>
-
-    <!--
-    <div class="card" v-for="(demand, i) in demands" v-bind:key="i">
-      <div class="card-body">
-        <h5 class="card-title">{{ demand.title }}</h5>
-        <p class="card-text">{{ demand.text }}</p>
-        <p class="card-text">Quantidade: {{ demand.quantity }}</p>
-        <button class="btn btn-primary" @click="viewDemand(demand.id)">Info (console)</button>
-        <button class="btn btn-warning" @click="updateDemand(demand.id)">Alterar (hard coded)</button>
-        <button class="btn btn-danger" @click="deleteDemand(demand.id)">Excluir</button>
-      </div>
-    </div>
-    -->
   </div>
 </template>
 
 <script>
+import Demand from "./Demand";
 import api from "../../api_local";
 import randomstring from "randomstring";
-import Demand from "./Demand";
 
 export default {
   name: "ManageDemandsLocal",
@@ -75,7 +63,7 @@ export default {
   data: () => ({
     demands: [],
     creatingDemand: false,
-    demandTemp: {
+    demandData: {
       title: "",
       text: ""
     }
@@ -92,7 +80,9 @@ export default {
         title: "New demand " + randomstring.generate(5),
         text: "Test description " + randomstring.generate(5)
       };
-      api.createDemand(data).then(() => {
+       
+      this.creatingDemand=false;
+      api.createDemand(this.demandData).then(() => {
         this.loadDemands();
       });
     },
