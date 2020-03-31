@@ -9,6 +9,7 @@ import LoadingMessage from "./components/views/LoadingMessage";
 import SelectEntity from "./components/views/SelectEntity";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
+import ManageDemandsLocal from "./components/views/ManageDemandsLocal";
 
 Vue.use(Router);
 
@@ -45,6 +46,15 @@ const routes = [
         name: 'gerenciar-demandas',
         title: 'Gerenciar Demandas',
         component: ManageDemands,
+    },
+    {
+        path: '/gerenciar-demandas-local',
+        name: 'gerenciar-demandas-local',
+        title: 'Gerenciar Demandas Local',
+        component: ManageDemandsLocal,
+        meta: {
+            guestAllowed: true,
+        },
     },
     {
         path: '/oauth-callback',
