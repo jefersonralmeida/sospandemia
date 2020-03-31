@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>Gerenciar Demandas</h1>
-    <p>Listar aqui as demandas da entidade <strong>{{ activeEntity.name }}</strong></p>
+    <p>Listar aqui as demandas da entidade <strong>---</strong></p>
     <p>Lista paginada... Incluir opções de incluir, editar, excluir, resolver..., CRUD completo. Esqueleto abaixo, respostas no console.</p>
     <button class="btn btn-success" @click="createDemand()">Nova demanda</button>
     <hr/>
