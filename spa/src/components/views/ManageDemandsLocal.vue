@@ -45,17 +45,8 @@
       :onViewDemandCB="viewDemand"
       :onUpdateDemandCB="updateDemand"
       :onDeleteDemandCB="deleteDemand"
+      class="mt-2"
     ></demand-card>
-    <!-- <div class="card" v-for="(demand,i) in demands" v-bind:key="i">
-      <div class="card-body">
-        <h5 class="card-title">{{ demand.title }}</h5>
-        <p class="card-text">{{ demand.text }}</p>
-        <p class="card-text">Quantidade: {{ demand.quantity }}</p>
-        <button class="btn btn-primary" @click="viewDemand(demand.id)">Info (console)</button>
-        <button class="btn btn-warning" @click="updateDemand(demand.id)">Alterar (hard coded)</button>
-        <button class="btn btn-danger" @click="deleteDemand(demand.id)">Excluir</button>
-      </div>
-    </div>-->
   </div>
 </template>
 
@@ -85,11 +76,11 @@ export default {
       });
     },
     createDemand: function() {
-      /* const data = {
+      const data = {
         title: "New demand " + randomstring.generate(5),
         text: "Test description " + randomstring.generate(5)
       };
-       */
+       
       this.creatingDemand=false;
       api.createDemand(this.demandData).then(() => {
         this.loadDemands();
@@ -100,15 +91,10 @@ export default {
         console.log(data);
       });
     },
-    updateDemand: function(demandId) {
+    updateDemand: function(demandId, data) {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
 
-      // e adicionando um - ao final do título a cada update, e incrementando a quantidade
-      const data = {
-        title: current.title + "-",
-        quantity: current.quantity === null ? 1 : ++current.quantity
-      };
       api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
