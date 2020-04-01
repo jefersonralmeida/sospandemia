@@ -10,6 +10,7 @@ import SelectEntity from "./components/views/SelectEntity";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
 import ManageDemandsLocal from "./components/views/ManageDemandsLocal";
+import ManageEntitiesLocal from "./components/views/ManageEntitiesLocal";
 
 Vue.use(Router);
 
@@ -52,6 +53,15 @@ const routes = [
         name: 'gerenciar-demandas-local',
         title: 'Gerenciar Demandas Local',
         component: ManageDemandsLocal,
+        meta: {
+            guestAllowed: true,
+        },
+    },
+    {
+        path: '/gerenciar-entidades-local',
+        name: 'gerenciar-entidades-local',
+        title: 'Gerenciar Entidades Local',
+        component: ManageEntitiesLocal,
         meta: {
             guestAllowed: true,
         },
