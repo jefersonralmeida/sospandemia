@@ -46,6 +46,7 @@ dc exec api composer install
 dc exec api npm install
 dc exec api npm run dev
 dc exec api php artisan migrate
+dc exec api php artisan passport:keys
 dc exec spa npm install
 dc restart
 ```
