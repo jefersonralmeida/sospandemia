@@ -150,6 +150,14 @@ const api = {
     deleteDemand: function(demandId) {
         return this.httpClient().delete(`demands/${demandId}`);
     },
+
+    searchDemands: function(query) {
+        return this.httpClient().get('demands/search', {
+            params: {
+                query
+            }
+        });
+    }
 };
 
 export default api;
