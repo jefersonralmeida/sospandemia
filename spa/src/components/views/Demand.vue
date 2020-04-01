@@ -25,10 +25,9 @@
             ></textarea>
           </div>
           <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
-          <button @click="handleUpdateDemand" class="btn btn-danger float-right">Cancelar</button>
+          <button @click="handleCancelUpdateDemand" class="btn btn-danger float-right">Cancelar</button>
         </form>
       </div>
-      
     </modal>
     <div class="card">
       <div class="card-body">
@@ -82,6 +81,10 @@ export default {
       this.demand.text = this.tempDemand.text;
 
       this.onUpdateDemandCB(this.demand.id, this.demand);
+      this.hidePopup();
+    },
+    handleCancelUpdateDemand(ev) {
+      ev.preventDefault();
       this.hidePopup();
     }
   }

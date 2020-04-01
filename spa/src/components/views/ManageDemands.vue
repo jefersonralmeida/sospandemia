@@ -1,69 +1,104 @@
 <template>
-  <div class="hello">
+  <div class="hello container">
     <h1>Gerenciar Demandas</h1>
-    <p>Listar aqui as demandas da entidade <strong>{{ activeEntity.name }}</strong></p>
-    <p>Lista paginada... Incluir opções de incluir, editar, excluir, resolver..., CRUD completo. Esqueleto abaixo, respostas no console.</p>
-    <a href="#" class="btn btn-success" @click="createDemand()">Nova demanda</a>
-    <hr/>
-    <div class="card" v-for="demand in demands">
-      <div class="card-body">
-        <h5 class="card-title">{{ demand.title }}</h5>
-        <p class="card-text">{{ demand.text }}</p>
-        <p class="card-text">Quantidade: {{ demand.quantity }}</p>
-        <a href="#" class="btn btn-primary" @click="viewDemand(demand.id)">Info (console)</a>
-        <a href="#" class="btn btn-warning" @click="updateDemand(demand.id)">Alterar (hard coded)</a>
-        <a href="#" class="btn btn-danger" @click="deleteDemand(demand.id)">Excluir</a>
-      </div>
+
+    <button v-if="!creatingDemand" class="btn btn-success" @click="creatingDemand=true">Nova demanda</button>
+    <div v-if="creatingDemand">
+      <form>
+        <div class="form-group">
+          <label for="demandTitle">Título da Demanda</label>
+          <input
+            type="text"
+            v-model="demandData.title"
+            class="form-control"
+            placeholder="Digite o título da demanda"
+          />
+          <small
+            class="form-text text-muted"
+          >Informe o que é necessitado.</small>
+        </div>
+        <div class="form-group">
+          <label for="Description">Descrição</label>
+          <textarea
+            type="text"
+            class="form-control"
+            placeholder="Adicione um descrição"
+            v-model="demandData.text"
+          />
+        </div>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-danger" @click="creatingDemand=false">Cancelar</button>
+          <button class="btn btn-success ml-1" @click="createDemand()">Criar</button>
+        </div>
+      </form>
     </div>
+    <hr />
+
+    <demand-card
+      v-for="demand in demands"
+      v-bind:key="demand.id"
+      :demand="demand"
+      :onViewDemandCB="viewDemand"
+      :onUpdateDemandCB="updateDemand"
+      :onDeleteDemandCB="deleteDemand"
+      class="mt-2"
+    ></demand-card>
   </div>
 </template>
 
 <script>
+import Demand from "./Demand";
 import api from "../../api";
 import randomstring from "randomstring";
 
 export default {
-  name: 'Home',
+  name: "ManageDemandsLocal",
+  components: {
+    "demand-card": Demand
+  },
   data: () => ({
-    demands: []
+    demands: [],
+    creatingDemand: false,
+    demandData: {
+      title: "",
+      text: ""
+    }
   }),
   methods: {
     loadDemands: function() {
-      api.indexDemandsByEntity().then(({data}) => {
-        this.demands = data.data;
+      api.indexDemandsByEntity().then(response => {
+        console.log(response);
+        this.demands = response.data.data;
       });
     },
     createDemand: function() {
       const data = {
-        title: 'New demand ' + randomstring.generate(5),
-        text: 'Test description ' + randomstring.generate(5),
+        title: "New demand " + randomstring.generate(5),
+        text: "Test description " + randomstring.generate(5)
       };
-      api.createDemand(data).then(() => {
+       
+      this.creatingDemand=false;
+      api.createDemand(this.demandData).then(() => {
         this.loadDemands();
       });
     },
     viewDemand: function(demandId) {
-      api.getDemand(demandId).then(({data}) => {
+      api.getDemand(demandId).then(({ data }) => {
         console.log(data);
       });
     },
-    updateDemand: function(demandId) {
-
+    updateDemand: function(demandId, data) {
       // estou apenas pegando o valor atual...
-      const current = this.demands.find((demand) => demand.id === demandId);
-
-      // e adicionando um - ao final do título a cada update, e incrementando a quantidade
-      const data = {
-        title: current.title + '-',
-        quantity: current.quantity === null ? 1 : ++current.quantity,
-      };
-      api.updateDemand(demandId, data).then(() => {
+      const current = this.demands.find(demand => demand.id === demandId);
+      data.quantity = 1;
+      api.updateDemand(demandId, data).then(response => {
+        console.log(response);
         this.loadDemands();
       });
-
     },
     deleteDemand: function(demandId) {
-      api.deleteDemand(demandId).then(() => {
+      api.deleteDemand(demandId).then(response => {
+        console.log(response);
         this.loadDemands();
       });
     }
@@ -80,11 +115,10 @@ export default {
   },
   mounted() {
     this.loadDemands();
-  },
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>
