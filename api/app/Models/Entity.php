@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class Entity
  * @package App\Models
  * @property int id
+ * @property string city
+ * @property string state
  * @property Collection|Demand[] $demands
  */
 class Entity extends Model

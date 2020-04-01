@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('demands/search', 'DemandsController@search');
+
 Route::middleware('auth:api')->group(function() {
 
     // auth routes

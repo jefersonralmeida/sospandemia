@@ -8,10 +8,24 @@ use App\Models\Demand;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class DemandsController extends Controller
 {
+
+    public function search(Request $request)
+    {
+        $query = $request->query('query');
+
+        if (empty($query)) {
+            return Demand::with('entity')->paginate();
+        }
+
+        $result = Demand::search($query)->paginate();
+        $result->load('entity');
+        return $result;
+    }
 
     /**
      * @return LengthAwarePaginator
