@@ -18,6 +18,10 @@
                             <li class="nav-item"  :class="activeClass('gerenciar-demandas')"  v-if="activeEntity">
                                 <router-link class="nav-link" to="/gerenciar-demandas">Gerenciar Demandas</router-link>
                             </li>
+                            <!-- link para acessar "gerenciar entidade" -->
+                            <li class="nav-item"  :class="activeClass('gerenciar-entidades-local')"  v-if="activeEntity">
+                                <router-link class="nav-link" to="/gerenciar-entidades-local">Gerenciar Entidade</router-link>
+                            </li>
 <!--                            <li class="nav-item">-->
 <!--                                <a class="nav-link disabled" href="#">Disabled</a>-->
 <!--                            </li>-->

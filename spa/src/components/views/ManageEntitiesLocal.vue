@@ -18,13 +18,13 @@
     </form>
     
     <div class="table-responsive">
-      <table class="table table-hover table-sm w-75">
+      <table class="table table-hover table-sm">
         <caption>Lista de usuários ligados à essa entidade.</caption>
         <thead class="thead-dark">
           <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Email</th>
-            <th scope="col">Ações</th>
+            <th scope="col" style="width:30%;">Nome</th>
+            <th scope="col" style="width:40%;">Email</th>
+            <th scope="col" style="width:20%;">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@
             <td>{{demand.text}}</td>
             <td>
               <button class="btn btn-warning btn-sm">Editar</button>
-              <button class="btn btn-danger btn-sm">Remover</button>
+              <button class="btn btn-danger btn-sm ml-2">Remover</button>
             </td>
           </tr>
         </tbody>
@@ -43,6 +43,13 @@
           @click="includingUser=true"
         >Adicionar novo usuário</button>
       </table>
+    </div>
+    <div v-if="includingUser">
+        <p>
+            adicionar forumlario
+        </p>
+        <button class="btn btn-danger" @click="includingUser=false">Cancelar</button>
+        <button class="btn btn-success ml-1">Criar</button>
     </div>
   </div>
 </template>
