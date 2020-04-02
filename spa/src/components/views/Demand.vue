@@ -1,7 +1,7 @@
 <template>
   <div>
-    <modal :name="`updateModal-${demand.id}`">
-      <div class="container my-2">
+    <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="400px">
+      <div class="container mt-2">
         <form class="ma-3">
           <div class="form-group">
             <label for="formEditTitle">Titulo</label>
@@ -11,6 +11,15 @@
               type="text"
               class="form-control"
               placeholder="Entre com o titulo"
+            />
+          </div>
+          <div class="form-group">
+            <label for="demandTitle">Quantidade</label>
+            <input
+              type="number"
+              v-model="tempDemand.quantity"
+              class="form-control"
+              placeholder="Quantidade necessaria para suprir a demanda"
             />
           </div>
           <div class="form-group">
@@ -25,7 +34,7 @@
             ></textarea>
           </div>
           <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
-          <button @click="handleUpdateDemand" class="btn btn-danger float-right">Cancelar</button>
+          <button @click="handleUpdateCancellDemand" class="btn btn-danger float-right">Cancelar</button>
         </form>
       </div>
     </modal>
@@ -34,12 +43,17 @@
       <div class="container my-2 text-center">
         <h5>Você tem certeza que deseja remover essa demanda ?</h5>
         <div class="d-flex justify-content-between mt-4">
-          <button @click="hidePopup('deleteModal')" class="btn btn-outline-danger float-right">Cancelar</button>
-          <button @click="onDeleteDemandCB(demand.id)" class="btn btn-danger float-right mx-2">Remover</button>
+          <button
+            @click="hidePopup('deleteModal')"
+            class="btn btn-outline-danger float-right"
+          >Cancelar</button>
+          <button
+            @click="onDeleteDemandCB(demand.id)"
+            class="btn btn-danger float-right mx-2"
+          >Remover</button>
         </div>
       </div>
     </modal>
-
 
     <div class="card">
       <div class="card-body">
@@ -84,18 +98,23 @@ export default {
     hidePopup(ModelName) {
       this.$modal.hide(`${ModelName}-${this.demand.id}`);
     },
-    handleRemoveDemand(ev){
+    handleRemoveDemand(ev) {
       ev.preventDefault();
 
-      this.showPopup("deleteModal")
+      this.showPopup("deleteModal");
+    },
+    handleUpdateCancellDemand(){
+      ev.preventDefault();
+      this.hidePopup("updateModal");
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-
+      
       //Validar dados
 
       this.demand.title = this.tempDemand.title;
       this.demand.text = this.tempDemand.text;
+      this.demand.quantity = this.tempDemand.quantity;
 
       this.onUpdateDemandCB(this.demand.id, this.demand);
       this.hidePopup("updateModal");
