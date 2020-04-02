@@ -5,18 +5,15 @@
         <div class="row h-100 no-gutters" v-else>
             <div class="col">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">
-    <img src="../../assets/logo_app.png" width="50" height="50" alt="">
-  </a>
+                    <router-link class="navbar-brand p-0" to="/">
+                       <img src="../../assets/logo_app.png" height="50" alt="">
+                    </router-link>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item" :class="activeClass('home')">
-                                <router-link class="nav-link" to="/">Home</router-link>
-                            </li>
                             <li class="nav-item"  :class="activeClass('gerenciar-demandas')"  v-if="activeEntity">
                                 <router-link class="nav-link" to="/gerenciar-demandas">Gerenciar Demandas</router-link>
                             </li>

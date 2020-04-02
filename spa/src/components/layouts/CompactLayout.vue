@@ -5,7 +5,9 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
-                            <h1>SOS Pandemia</h1>
+                            <router-link class="nav-link p-0" to="/">
+                                <img src="../../assets/logo_app.png" height="50" alt="">
+                            </router-link>
                         </div>
 
                         <div class="card-body compact-body">
@@ -13,7 +15,9 @@
                         </div>
 
                         <div class="card-footer">
-                            Home
+                            <router-link class="nav-link p-0" to="/">
+                                Home
+                            </router-link>
                         </div>
                     </div>
                 </div>
