@@ -13,9 +13,15 @@
             class="form-control"
             placeholder="Digite o título da demanda"
           />
-          <small
-            class="form-text text-muted"
-          >Informe o que é necessitado.</small>
+        </div>
+        <div class="form-group">
+          <label for="demandTitle">Quantidade</label>
+          <input
+            type="number"
+            v-model="demandData.quantity"
+            class="form-control"
+            placeholder="Quantidade necessaria para suprir a demanda"
+          />
         </div>
         <div class="form-group">
           <label for="Description">Descrição</label>
@@ -61,7 +67,8 @@ export default {
     creatingDemand: false,
     demandData: {
       title: "",
-      text: ""
+      text: "",
+      quantity: 1
     }
   }),
   methods: {
@@ -76,8 +83,8 @@ export default {
         title: "New demand " + randomstring.generate(5),
         text: "Test description " + randomstring.generate(5)
       };
-       
-      this.creatingDemand=false;
+
+      this.creatingDemand = false;
       api.createDemand(this.demandData).then(() => {
         this.loadDemands();
       });
@@ -90,7 +97,7 @@ export default {
     updateDemand: function(demandId, data) {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
-      data.quantity = 1;
+      
       api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
