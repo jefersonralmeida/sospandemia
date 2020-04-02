@@ -1,6 +1,6 @@
 <template>
   <div>
-    <modal :name="`hello-world-${demand.id}`">
+    <modal :name="`updateModal-${demand.id}`">
       <div class="container my-2">
         <form class="ma-3">
           <div class="form-group">
@@ -25,10 +25,22 @@
             ></textarea>
           </div>
           <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
-          <button @click="handleCancelUpdateDemand" class="btn btn-danger float-right">Cancelar</button>
+          <button @click="handleUpdateDemand" class="btn btn-danger float-right">Cancelar</button>
         </form>
       </div>
     </modal>
+
+    <modal :name="`deleteModal-${demand.id}`" :width="300" :height="150">
+      <div class="container my-2 text-center">
+        <h5>Você tem certeza que deseja remover essa demanda ?</h5>
+        <div class="d-flex justify-content-between mt-4">
+          <button @click="hidePopup('deleteModal')" class="btn btn-outline-danger float-right">Cancelar</button>
+          <button @click="onDeleteDemandCB(demand.id)" class="btn btn-danger float-right mx-2">Remover</button>
+        </div>
+      </div>
+    </modal>
+
+
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ demand.title }}</h5>
@@ -36,8 +48,8 @@
       </div>
       <div class="d-flex card-footer text-muted small">
         <div class="flex-grow-1 align-self-center">Quantidade: {{ demand.quantity }}</div>
-        <button class="btn btn-warning btn-sm ml-1" @click="showPopup">Alterar</button>
-        <button class="btn btn-danger btn-sm ml-1" @click="onDeleteDemandCB(demand.id)">Excluir</button>
+        <button class="btn btn-warning btn-sm ml-1" @click="showPopup('updateModal')">Alterar</button>
+        <button class="btn btn-danger btn-sm ml-1" @click="handleRemoveDemand">Excluir</button>
       </div>
     </div>
   </div>
@@ -65,12 +77,17 @@ export default {
     };
   },
   methods: {
-    showPopup() {
-      this.$modal.show(`hello-world-${this.demand.id}`);
+    showPopup(ModelName) {
+      this.$modal.show(`${ModelName}-${this.demand.id}`);
       this.tempDemand = JSON.parse(JSON.stringify(this.demand));
     },
-    hidePopup() {
-      this.$modal.hide(`hello-world-${this.demand.id}`);
+    hidePopup(ModelName) {
+      this.$modal.hide(`${ModelName}-${this.demand.id}`);
+    },
+    handleRemoveDemand(ev){
+      ev.preventDefault();
+
+      this.showPopup("deleteModal")
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
@@ -81,11 +98,7 @@ export default {
       this.demand.text = this.tempDemand.text;
 
       this.onUpdateDemandCB(this.demand.id, this.demand);
-      this.hidePopup();
-    },
-    handleCancelUpdateDemand(ev) {
-      ev.preventDefault();
-      this.hidePopup();
+      this.hidePopup("updateModal");
     }
   }
 };
