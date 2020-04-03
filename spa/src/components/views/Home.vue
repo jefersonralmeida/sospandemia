@@ -4,9 +4,12 @@
       <input type="email" class="form-control w-50 m-auto" aria-describedby="emailHelp" placeholder="Busca..." v-model="query">
       <small id="emailHelp" class="form-text text-muted">Começe a digitar para filtar os resultados.</small>
     </div>
-    <div class="results">
+    <div v-if="demands.length === 0" class="mt-5"><img src="../../assets/loading.gif" class="loading" alt=""/> Carregando</div>
+    <div class="results" v-else>
       <div class="card m-3" v-for="demand in demands">
-        <div class="card-header">{{ demand.title}}</div>
+        <div class="card-header">
+          <h4>{{ demand.title}}</h4>
+        </div>
         <div class="card-body">
           {{ demand.text}}
           <hr v-if="demand.quantity"/>
@@ -55,6 +58,9 @@ export default {
 }
 .results {
   text-align: left;
+}
+.loading {
+  width: 35px;
 }
 h3 {
   margin: 40px 0 0;
