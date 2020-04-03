@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateDemandRequest;
 use App\Http\Requests\CreateEntityRequest;
-use App\Http\Requests\UpdateDemandRequest;
 use App\Http\Requests\UpdateEntityRequest;
 use App\Models\Demand;
 use App\Models\Entity;
