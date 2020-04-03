@@ -4,7 +4,7 @@
       <input type="email" class="form-control w-50 m-auto" aria-describedby="emailHelp" placeholder="Busca..." v-model="query">
       <small id="emailHelp" class="form-text text-muted">Começe a digitar para filtar os resultados.</small>
     </div>
-    <div class="results">
+    <div class="results container">
       <div class="card m-3" v-for="demand in demands">
         <div class="card-header">{{ demand.title}}</div>
         <div class="card-body">
@@ -12,7 +12,7 @@
           <hr v-if="demand.quantity"/>
           <p v-if="demand.quantity">Quantidade: {{ demand.quantity }}</p>
         </div>
-        <div class="card-footer">{{ demand.entity.name }} - {{ demand.entity.city }} - {{ demand.entity.state}}</div>
+        <div class="card-footer text-muted small py-1">{{ demand.entity.name }} - {{ demand.entity.city }} - {{ demand.entity.state}}</div>
       </div>
     </div>
   </div>
