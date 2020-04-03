@@ -81,33 +81,29 @@
         </div>
     </div>
     <hr/>
-    <div class="card mt-2" v-for="entity in entities">
-      <div class="card-header">
-        <h3>{{ entity.name }}&nbsp;<span style="font-size: 14px;" class="badge badge-pill badge-success" v-if="isActiveEntity(entity.id)">Ativo</span></h3>
-      </div>
-      <div class="card-body">
-        <p><strong>CNPJ:</strong> {{ entity.cnpj }}</p>
-        <p><strong>Razão Social:</strong> {{ entity.legal_name }}</p>
-        <hr/>
-        {{ entity.description }}
-        <hr/>
-        {{ entity.street_address }} - {{ entity.city}} - {{entity.state}}
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-success m-1" v-if="!isActiveEntity(entity.id)" @click="selectEntity(entity.id)"><span class="fa fa-check-double"></span> Ativar</button>
-        <button class="btn btn-primary m-1" @click="selectEntity(entity.id, true)"><span class="fa fa-syringe"></span> Gerenciar Demandas</button>
-        <button class="btn btn-primary m-1"><span class="fa fa-user-plus"></span> Convidar Usuário</button>
-        <button class="btn btn-warning m-1"><span class="fa fa-edit"></span> Alterar</button>
-        <button class="btn btn-danger m-1"><span class="fa fa-door-open"></span> Sair</button>
-      </div>
-    </div>
+    <entity-card 
+      v-for="entity in entities" 
+      v-bind:key="entity.id"
+      :entity="entity"
+      :onUpdateEntityCB="updateEntity"
+      :onLeaveEntityCB="leaveEntity"
+      :onSelectEntityCB="selectEntity"
+      :isActiveEntityCB="isActiveEntity"
+      >
+
+    </entity-card>
   </div>
 </template>
 
 <script>
 import api from "../../api";
+import Entity from "./Entity";
+
 export default {
   name: 'SelectEntity',
+  components:{
+    "entity-card":Entity
+  },
   data: () =>({
     creatingEntity: false,
     entityData:{
@@ -127,21 +123,30 @@ export default {
         this.$router.push('/gerenciar-demandas')
       }
     },
+
     isActiveEntity: function(entityId) {
       return this.$store.getters.activeEntityId === entityId ? "active" : '';
     },
+
     createEntity: function(){
-      api.createEntity(this.entityData).then(() => {
+      api.createEntity(this.entityData).then(res => {
+        console.log(res);
         this.creatingEntity = false;
         this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
       }).catch(err=>{console.log(err);});
     },
-    teste: function(){
-      console.log(this.entities);
-        vm.$forceUpdate();
+
+    updateEntity: function(entityId, data) {
+      const current = this.entities.find(entity => entity.id === entityId);
+      api.updateEntity(entityId, data).then(response => {
+        console.log(response);
+      });
     },
+
     leaveEntity: function(entityId){
-      api.leaveEntity(entityId)
+      api.leaveEntity(entityId).catch(err=>{
+        window.alert("Você é o último usuário permanecente nessa entidade, é necessário que pelo menos um usuário permaneça na entidade");
+      })
     },
     inviteEntity: function(entityId, userId){
       api.inviteToEntity(entityId, userId)
