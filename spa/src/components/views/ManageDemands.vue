@@ -39,7 +39,8 @@
       </form>
     </div>
     <hr />
-    <loading-widget v-if="demands.length === 0"></loading-widget>
+    <loading-widget v-if="checked==false"></loading-widget>
+    <p v-else-if="checked==true && demands.length === 0">Não há demandas, clique em "Nova demanda" para adicionar!</p>
     <demand-card
       v-for="demand in demands"
       v-bind:key="demand.id"
@@ -67,6 +68,7 @@ export default {
   data: () => ({
     demands: [],
     creatingDemand: false,
+    checked: false,
     demandData: {
       title: "",
       text: "",
@@ -78,6 +80,7 @@ export default {
       api.indexDemandsByEntity().then(response => {
         console.log(response);
         this.demands = response.data.data;
+        this.checked = true;
       });
     },
     createDemand: function() {
