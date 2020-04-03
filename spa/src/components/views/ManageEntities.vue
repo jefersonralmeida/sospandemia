@@ -2,7 +2,7 @@
   <div class="container">
     <h1>Gerenciar Entidades</h1>
 
-    <button v-if="!creatingEntity" class="btn btn-success m-1" @click="creatingEntity=true;"><span class="fa fa-plus-square"></span> Nova entidade</button>
+    <button v-if="!creatingEntity" class="btn btn-success m-1" @click="creatingEntity=true"><span class="fa fa-plus-square"></span> Nova entidade</button>
     <button v-if="!creatingEntity" class="btn btn-primary m-1"><span class="fa fa-sync"></span></button>
     <div v-if="creatingEntity">
       <hr/>
@@ -70,15 +70,15 @@
           <textarea
             type="text"
             class="form-control"
-            placeholder="Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
+            placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
             v-model="entityData.description"
           />
         </div>
+      </form>
         <div class="d-flex justify-content-end">
           <button class="btn btn-danger" @click="creatingEntity=false">Cancelar</button>
-          <button class="btn btn-success ml-1">Criar</button>
+          <button class="btn btn-success ml-1" @click="createEntity()">Criar</button>
         </div>
-      </form>
     </div>
     <hr/>
     <div class="card mt-2" v-for="entity in entities">
@@ -87,7 +87,7 @@
       </div>
       <div class="card-body">
         <p><strong>CNPJ:</strong> {{ entity.cnpj }}</p>
-        <p><strong>Razão Social:</strong> {{ entity.cnpj }}</p>
+        <p><strong>Razão Social:</strong> {{ entity.legal_name }}</p>
         <hr/>
         {{ entity.description }}
         <hr/>
@@ -130,19 +130,15 @@ export default {
     isActiveEntity: function(entityId) {
       return this.$store.getters.activeEntityId === entityId ? "active" : '';
     },
-    createEntity: function(data){
-      
-       /* data = {
-        cnpj: "13590585000199", //14 digitos
-        name: "Entidade nova", //minimo 4
-        legal_name: "blablabla - Nome legal", //min 4
-        description: "Uma descrição bacanuda", //min 10
-        street_address: "Uma rua qlqr", //min 10,
-        city: "Ponta Grossa",
-        state: "PR" //sigla
-      } */
-      
-      api.createEntity(data);
+    createEntity: function(){
+      api.createEntity(this.entityData).then(() => {
+        this.creatingEntity = false;
+        this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+      }).catch(err=>{console.log(err);});
+    },
+    teste: function(){
+      console.log(this.entities);
+        vm.$forceUpdate();
     },
     leaveEntity: function(entityId){
       api.leaveEntity(entityId)
@@ -156,13 +152,6 @@ export default {
       return this.$store.getters.entities;
     }
   },
-  watch:{
-    entities: function() {
-      return this.$store.getters.entities;
-    }
-  },
-
-
 }
 </script>
 
