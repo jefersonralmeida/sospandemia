@@ -24,6 +24,11 @@ Route::middleware('auth:api')->group(function() {
     // entities routes
     Route::get('entities/{entity}/demands', 'EntitiesController@indexDemands');
     Route::post('entities/{entity}/new-demand', 'EntitiesController@createDemand')->middleware('can:createDemand,entity');
+    Route::post('entities', 'EntitiesController@create');
+    Route::get('entities/{entity}', 'EntitiesController@info');
+    Route::put('entities/{entity}', 'EntitiesController@update')->middleware('can:update,entity');
+    Route::post('entities/{entity}/invite/{user}', 'EntitiesController@invite')->middleware('can:invite,entity');
+    Route::post('entities/{entity}/leave', 'EntitiesController@leave')->middleware('can:leave,entity');
 
     // demands routes
     Route::get('demands', 'DemandsController@index');

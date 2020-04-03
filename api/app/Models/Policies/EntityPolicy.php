@@ -19,4 +19,25 @@ class EntityPolicy
             : Response::deny('Você não é membro dessa entidade.');
     }
 
+    public function update(User $user, Entity $entity)
+    {
+        return $user->entities->contains('id', $entity->id)
+            ? Response::allow()
+            : Response::deny('Você não é membro dessa entidade.');
+    }
+
+    public function invite(User $user, Entity $entity)
+    {
+        return $user->entities->contains('id', $entity->id)
+            ? Response::allow()
+            : Response::deny('Você não é membro dessa entidade.');
+    }
+
+    public function leave(User $user, Entity $entity)
+    {
+        return $user->entities->contains('id', $entity->id)
+            ? Response::allow()
+            : Response::deny('Você não é membro dessa entidade.');
+    }
+
 }

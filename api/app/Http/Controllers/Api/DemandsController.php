@@ -64,7 +64,7 @@ class DemandsController extends Controller
     public function delete(Demand $demand)
     {
         $demand->delete();
-        return response(null, 204);
+        return response(null, 204); // return deleted
     }
 
 }
