@@ -157,7 +157,26 @@ const api = {
                 query
             }
         });
-    }
+    },
+
+
+    createEntity: function(data) {
+        return this.httpClient().post('entities/', data);
+    },
+
+    getEntity: function(entityId) {
+        return this.httpClient().get(`entities/${entityId}`);
+    },
+
+    updateEntity: function(entityId, data) {
+        return this.httpClient().put(`entities/${entityId}`, data);
+    },
+    leaveEntity: function(entityId) {
+        return this.httpClient().post(`entities/${entityId}/leave`);
+    },
+    inviteToEntity: function(entityId, userId){
+        return this.httpClient().post(`entities/${entityId}/invite/${userId}`);
+    },
 };
 
 export default api;
