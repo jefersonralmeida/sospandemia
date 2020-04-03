@@ -4,7 +4,7 @@
       <input type="email" class="form-control w-50 m-auto" aria-describedby="emailHelp" placeholder="Busca..." v-model="query">
       <small id="emailHelp" class="form-text text-muted">Começe a digitar para filtar os resultados.</small>
     </div>
-    <div v-if="demands.length === 0" class="mt-5"><img src="../../assets/loading.gif" class="loading" alt=""/> Carregando</div>
+    <loading-widget v-if="demands.length === 0"></loading-widget>
     <div class="results" v-else>
       <div class="card m-3" v-for="demand in demands">
         <div class="card-header">
@@ -24,9 +24,11 @@
 <script>
 import api from "../../api";
 import _ from 'lodash';
+import LoadingWidget from "../widgets/LoadingWidget";
 
 export default {
   name: 'Home',
+  components: {LoadingWidget},
   data() {
     return {
       query: '',
@@ -58,9 +60,6 @@ export default {
 }
 .results {
   text-align: left;
-}
-.loading {
-  width: 35px;
 }
 h3 {
   margin: 40px 0 0;

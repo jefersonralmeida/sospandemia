@@ -39,7 +39,7 @@
       </form>
     </div>
     <hr />
-
+    <loading-widget v-if="demands.length === 0"></loading-widget>
     <demand-card
       v-for="demand in demands"
       v-bind:key="demand.id"
@@ -56,11 +56,13 @@
 import Demand from "./Demand";
 import api from "../../api";
 import randomstring from "randomstring";
+import LoadingWidget from "../widgets/LoadingWidget";
 
 export default {
   name: "ManageDemandsLocal",
   components: {
-    "demand-card": Demand
+    "demand-card": Demand,
+    "loading-widget": LoadingWidget
   },
   data: () => ({
     demands: [],

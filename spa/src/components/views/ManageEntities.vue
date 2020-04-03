@@ -2,7 +2,8 @@
   <div class="container">
     <h1>Gerenciar Entidades</h1>
 
-    <button class="btn btn-success"><span class="fa fa-plus-square"></span> Nova entidade</button>
+    <button class="btn btn-success m-1"><span class="fa fa-plus-square"></span> Nova entidade</button>
+    <button class="btn btn-primary m-1"><span class="fa fa-sync"></span></button>
     <hr/>
     <div class="card mt-2" v-for="entity in entities">
       <div class="card-header">
