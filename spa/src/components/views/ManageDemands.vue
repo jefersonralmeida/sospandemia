@@ -41,7 +41,7 @@
     <hr />
     <loading-widget v-if="checked==false"></loading-widget>
     <p v-else-if="checked==true && demands.length === 0">Não há demandas, clique em "Nova demanda" para adicionar!</p>
-    <demand-card
+    <demand-card v-else
       v-for="demand in demands"
       v-bind:key="demand.id"
       :demand="demand"
@@ -122,6 +122,7 @@ export default {
   },
   watch: {
     activeEntity: function() {
+      this.checked = false;
       this.loadDemands();
     }
   },
