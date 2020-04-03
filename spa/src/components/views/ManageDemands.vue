@@ -122,6 +122,7 @@ export default {
   },
   watch: {
     activeEntity: function() {
+      this.creatingDemand = false;
       this.checked = false;
       this.loadDemands();
     }
