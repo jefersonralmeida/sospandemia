@@ -34,7 +34,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="entityDropdown">
                                     <a class="dropdown-item" href="#" v-for="entity in otherEntities" @click="setActiveEntity(entity.id)">{{ entity.name }}</a>
                                     <div class="dropdown-divider" v-if="otherEntities.length > 0"></div>
-                                    <a class="dropdown-item" href="#">Gerenciar Entidades</a>
+                                    <router-link class="dropdown-item" to="gerenciar-entidades">Gerenciar Entidades</router-link>
                                 </div>
                             </li>
                             <li class="nav-item dropdown" v-if="isLogged">

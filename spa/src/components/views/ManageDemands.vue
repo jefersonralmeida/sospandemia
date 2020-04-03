@@ -1,6 +1,6 @@
 <template>
-  <div class="hello container">
-    <h1>Gerenciar Demandas</h1>
+  <div class="container">
+    <h1>Gerenciar Demandas - {{ activeEntity.name }}</h1>
 
     <button v-if="!creatingDemand" class="btn btn-success" @click="creatingDemand=true">Nova demanda</button>
     <div v-if="creatingDemand">

@@ -6,10 +6,9 @@ import CreateDemand from "./components/views/CreateDemand";
 import store from './store';
 import api from "./api";
 import LoadingMessage from "./components/views/LoadingMessage";
-import SelectEntity from "./components/views/SelectEntity";
+import ManageEntities from "./components/views/ManageEntities";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
-import ManageDemandsLocal from "./components/views/ManageDemandsLocal";
 import ManageEntitiesLocal from "./components/views/ManageEntitiesLocal";
 
 Vue.use(Router);
@@ -28,10 +27,10 @@ const routes = [
         },
     },
     {
-        path: '/selecionar-entidade',
-        name: 'selectionar-entidade',
-        title: 'Selecionar Entidade',
-        component: SelectEntity,
+        path: '/gerenciar-entidades',
+        name: 'gerenciar_entidades',
+        title: 'Gerenciar Entidades',
+        component: ManageEntities,
         meta: {
             noEntityRequired: true,
         },
@@ -47,15 +46,6 @@ const routes = [
         name: 'gerenciar-demandas',
         title: 'Gerenciar Demandas',
         component: ManageDemands,
-    },
-    {
-        path: '/gerenciar-demandas-local',
-        name: 'gerenciar-demandas-local',
-        title: 'Gerenciar Demandas Local',
-        component: ManageDemandsLocal,
-        meta: {
-            guestAllowed: true,
-        },
     },
     {
         path: '/gerenciar-entidades-local',
@@ -116,13 +106,13 @@ router.beforeEach((to, from, next) => {
 
     // login required, entity required and no entity selected
     if (!to.meta.guestAllowed && !to.meta.noEntityRequired && !store.getters.activeEntityId) {
-        next('/selecionar-entidade');
+        next('/gerenciar-entidades');
     }
 
     // login required, entity required and the selected entity is not available for the user (logged) (invalid state)
     if (!to.meta.guestAllowed && !to.meta.noEntityRequired && store.getters.user && !store.getters.activeEntity) {
         store.commit('setEntity', null);
-        next('/selecionar-entidade');
+        next('/gerenciar-entidades');
     }
 
     next();
