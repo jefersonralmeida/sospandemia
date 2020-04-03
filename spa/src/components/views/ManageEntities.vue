@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import api from "../../api";
 export default {
   name: 'SelectEntity',
   methods: {
@@ -40,13 +41,36 @@ export default {
     },
     isActiveEntity: function(entityId) {
       return this.$store.getters.activeEntityId === entityId ? "active" : '';
-    }
+    },
+    createEntity: function(data){
+      /*
+      data = {
+        cnpj: "13590585000199", //14 digitos
+        name: "Entidade nova", //minimo 4
+        legal_name: "blablabla - Nome legal", //min 4
+        description: "Uma descrição bacanuda", //min 10
+        street_address: "Uma rua qlqr", //min 10,
+        city: "Ponta Grossa",
+        state: "PR" //sigla
+
+      }
+      */
+      api.createEntity(data);
+    },
+    leaveEntity: function(entityId){
+      api.leaveEntity(entityId)
+    },
+    inviteEntity: function(entityId, userId){
+      api.inviteToEntity(entityId, userId)
+    },
   },
   computed: {
     entities: function() {
       return this.$store.getters.entities;
     }
-  }
+  },
+
+
 }
 </script>
 
