@@ -170,7 +170,7 @@ export default {
       this.entity.name = this.tempEntity.name;
       this.entity.legal_name = this.tempEntity.legal_name;
       //this.entity.cnpj = this.tempEntity.cnpj;
-      this.entity.street_adress = this.tempEntity.street_adress;
+      this.entity.street_address = this.tempEntity.street_address;
       this.entity.city = this.tempEntity.city;
       this.entity.state = this.tempEntity.state;
       this.entity.description = this.tempEntity.description;
