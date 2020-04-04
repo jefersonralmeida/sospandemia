@@ -103,7 +103,7 @@ export default {
 
       this.showPopup("deleteModal");
     },
-    handleUpdateCancellDemand(){
+    handleUpdateCancellDemand(ev){
       ev.preventDefault();
       this.hidePopup("updateModal");
     },
