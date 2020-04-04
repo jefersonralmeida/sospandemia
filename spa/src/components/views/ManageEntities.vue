@@ -57,12 +57,9 @@
           </div>
           <div class="form-group col">
             <label>Estado</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="XX"
-              v-model="entityData.state"
-            />
+            <select class ="form-control" v-model="entityData.state">
+                <option v-for="state in states">{{state}}</option>
+            </select>
           </div>
         </div>
         <div class="form-group">
@@ -74,11 +71,11 @@
             v-model="entityData.description"
           />
         </div>
-      </form>
         <div class="d-flex justify-content-end">
-          <button class="btn btn-danger" @click="creatingEntity=false">Cancelar</button>
-          <button class="btn btn-success ml-1" @click="createEntity()">Criar</button>
+          <button class="btn btn-danger" @click="handleCreateCancel">Cancelar</button>
+          <button class="btn btn-success ml-1" @click="createEntity">Criar</button>
         </div>
+      </form>
     </div>
     <hr/>
     <entity-card 
@@ -114,7 +111,11 @@ export default {
       street_address: "",
       city: "",
       state: ""
-    }
+    },
+    states:[
+        "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT",
+        "PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"
+      ],
   }),
   methods: {
     selectEntity: function(entityId, redirect = false) {
@@ -123,19 +124,23 @@ export default {
         this.$router.push('/gerenciar-demandas')
       }
     },
+    handleCreateCancel: function(ev){
+      ev.preventDefault();
+      this.creatingEntity = false;
+    },
 
     isActiveEntity: function(entityId) {
       return this.$store.getters.activeEntityId === entityId ? "active" : '';
     },
 
-    createEntity: function(){
+    createEntity: function(ev){
+      ev.preventDefault()
       api.createEntity(this.entityData).then(res => {
         console.log(res);
         this.creatingEntity = false;
         this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
       }).catch(err=>{console.log(err);});
     },
-
     updateEntity: function(entityId, data) {
       const current = this.entities.find(entity => entity.id === entityId);
       api.updateEntity(entityId, data).then(response => {

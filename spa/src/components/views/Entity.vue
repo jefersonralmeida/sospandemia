@@ -1,79 +1,73 @@
 <template>
   <div>
     <modal :name="`updateModal-${entity.id}`" :adaptive="false" height="600px">
-      <div class="container mt-2">  
+      <div class="container mt-2">
         <form>
-        <h3 class="py-2">Insira as informações referente à entidade</h3>
-        <div class="row">
-          <div class="form-group col-8">
-            <label>Nome</label>
-            <input
-              type="text"
-              v-model="tempEntity.name"
-              class="form-control"
-              placeholder="Nome da entidade"
-            />
+          <h3 class="py-2">Alterar informações</h3>
+          <div class="row">
+            <div class="form-group col-8">
+              <label>Nome</label>
+              <input
+                type="text"
+                v-model="tempEntity.name"
+                class="form-control"
+                placeholder="Nome da entidade"
+              />
+            </div>
+            <div class="form-group col">
+              <label>CNPJ</label>
+              <input
+                type="text"
+                v-model="tempEntity.cnpj"
+                disabled
+                class="form-control"
+                placeholder="informe o CNPJ"
+              />
+            </div>
           </div>
-          <div class="form-group col">
-            <label>CNPJ</label>
-            <input
-              type="text"
-              v-model="tempEntity.cnpj"
-              disabled
-              class="form-control"
-              placeholder="informe o CNPJ"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Razão Social</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Insira a razão social da entidade"
-            v-model="tempEntity.legal_name"
-          />
-        </div>
-        <div class="row">
-          <div class="form-group col-8">
-            <label>Endereço</label>
+          <div class="form-group">
+            <label>Razão Social</label>
             <input
               type="text"
               class="form-control"
-              placeholder="Ex: Rua Exemplo, 1029"
-              v-model="tempEntity.street_address"
+              placeholder="Insira a razão social da entidade"
+              v-model="tempEntity.legal_name"
             />
           </div>
-          <div class="form-group col-3">
+          <div class="row">
+            <div class="form-group col-9">
+              <label>Endereço</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Ex: Rua Exemplo, 1029"
+                v-model="tempEntity.street_address"
+              />
+            </div>
+            <div class="form-group col">
+              <label>Estado</label>
+              <select class ="form-control" v-model="tempEntity.state">
+                <option v-for="state in states">{{state}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
             <label>Cidade</label>
-            <input
+            <input type="text" class="form-control" v-model="tempEntity.city" />
+          </div>
+          <div class="form-group">
+            <label>Descrição</label>
+            <textarea
               type="text"
               class="form-control"
-              v-model="tempEntity.city"
+              placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
+              v-model="tempEntity.description"
+              style="resize: none"
             />
           </div>
-          <div class="form-group col">
-            <label>Estado</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="XX"
-              v-model="tempEntity.state"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Descrição</label>
-          <textarea
-            type="text"
-            class="form-control"
-            placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
-            v-model="tempEntity.description"
-          />
-        </div>
-      </form>
-          <button @click="handleUpdateEntity" class="btn btn-success float-right mx-2">Salvar</button>
-          <button @click="handleUpdateCancelEntity" class="btn btn-danger float-right">Cancelar</button>
+        </form>
+        <button @click="handleUpdateEntity" class="btn btn-success float-right mx-2">Salvar</button>
+        <button @click="handleUpdateCancelEntity" class="btn btn-danger float-right">Cancelar</button>
       </div>
     </modal>
 
@@ -85,35 +79,59 @@
             @click="hidePopup('deleteModal')"
             class="btn btn-outline-danger float-right"
           >Cancelar</button>
-          <button
-            @click="onLeaveEntityCB(entity.id)"
-            class="btn btn-danger float-right mx-2"
-          >Sair</button>
+          <button @click="onLeaveEntityCB(entity.id)" class="btn btn-danger float-right mx-2">Sair</button>
         </div>
       </div>
     </modal>
 
     <div class="card mt-2">
       <div class="card-header">
-        <h3>{{ entity.name }}&nbsp;<span style="font-size: 14px;" class="badge badge-pill badge-success" v-if="isActiveEntityCB(entity.id)">Ativo</span></h3>
+        <h3>
+          {{ entity.name }}&nbsp;
+          <span
+            style="font-size: 14px;"
+            class="badge badge-pill badge-success"
+            v-if="isActiveEntityCB(entity.id)"
+          >Ativo</span>
+        </h3>
       </div>
       <div class="card-body">
-        <p><strong>CNPJ:</strong> {{ entity.cnpj }}</p>
-        <p><strong>Razão Social:</strong> {{ entity.legal_name }}</p>
-        <hr/>
+        <p>
+          <strong>CNPJ:</strong>
+          {{ entity.cnpj }}
+        </p>
+        <p>
+          <strong>Razão Social:</strong>
+          {{ entity.legal_name }}
+        </p>
+        <hr />
         {{ entity.description }}
-        <hr/>
+        <hr />
         {{ entity.street_address }} - {{ entity.city}} - {{entity.state}}
       </div>
       <div class="card-footer">
-        <button class="btn btn-success m-1" v-if="!isActiveEntityCB(entity.id)" @click="onSelectEntityCB(entity.id)"><span class="fa fa-check-double"></span> Ativar</button>
-        <button class="btn btn-primary m-1" @click="onSelectEntityCB(entity.id, true)"><span class="fa fa-syringe"></span> Gerenciar Demandas</button>
-        <button class="btn btn-primary m-1"><span class="fa fa-user-plus"></span> Convidar Usuário</button>
-        <button class="btn btn-warning m-1" @click="showPopup('updateModal')"><span class="fa fa-edit"></span> Alterar</button>
-        <button @click="handleLeaveEntity" class="btn btn-danger m-1"><span class="fa fa-door-open"></span> Sair</button>
+        <button
+          class="btn btn-success m-1"
+          v-if="!isActiveEntityCB(entity.id)"
+          @click="onSelectEntityCB(entity.id)"
+        >
+          <span class="fa fa-check-double"></span> Ativar
+        </button>
+        <button class="btn btn-primary m-1" @click="onSelectEntityCB(entity.id, true)">
+          <span class="fa fa-syringe"></span> Gerenciar Demandas
+        </button>
+        <button class="btn btn-primary m-1">
+          <span class="fa fa-user-plus"></span> Convidar Usuário
+        </button>
+        <button class="btn btn-warning m-1" @click="showPopup('updateModal')">
+          <span class="fa fa-edit"></span> Alterar
+        </button>
+        <button @click="handleLeaveEntity" class="btn btn-danger m-1">
+          <span class="fa fa-door-open"></span> Sair
+        </button>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -131,18 +149,22 @@ export default {
       type: Function,
       required: true
     },
-    onSelectEntityCB:{
-        type: Function,
-        required: true
+    onSelectEntityCB: {
+      type: Function,
+      required: true
     },
     isActiveEntityCB: {
-        type: Function,
-        required: true
+      type: Function,
+      required: true
     }
   },
   data() {
     return {
-      tempEntity: {}
+      tempEntity: {},
+      states:[
+        "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT",
+        "PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"
+      ],
     };
   },
   methods: {
@@ -158,13 +180,13 @@ export default {
 
       this.showPopup("deleteModal");
     },
-    handleUpdateCancelEntity(ev){
+    handleUpdateCancelEntity(ev) {
       ev.preventDefault();
       this.hidePopup("updateModal");
     },
     handleUpdateEntity(ev) {
       ev.preventDefault();
-      
+
       //Validar dados
 
       this.entity.name = this.tempEntity.name;
