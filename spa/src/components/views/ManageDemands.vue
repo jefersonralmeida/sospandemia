@@ -34,7 +34,12 @@
         </div>
         <div class="d-flex justify-content-end">
           <button class="btn btn-danger" @click="creatingDemand=false">Cancelar</button>
-          <button class="btn btn-success ml-1" @click="createDemand()">Criar</button>
+          <v-btn
+            @click="createDemand"
+            color="success"
+            class="ml-1"
+            :loading="creatingDemandLoading"
+          >Criar</v-btn>
         </div>
       </form>
     </div>
@@ -69,6 +74,7 @@ export default {
     demands: [],
     creatingDemand: false,
     checked: false,
+    creatingDemandLoading: false,
     demandData: {
       title: "",
       text: "",
@@ -89,10 +95,13 @@ export default {
         text: "Test description " + randomstring.generate(5)
       };
 
-      this.creatingDemand = false;
+      this.creatingDemandLoading = true;
       api.createDemand(this.demandData).then(() => {
+        this.creatingDemand = false;
         this.loadDemands();
-      });
+      }).finally(()=>{
+        this.creatingDemandLoading = false;
+      })
     },
     viewDemand: function(demandId) {
       api.getDemand(demandId).then(({ data }) => {
@@ -103,13 +112,13 @@ export default {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
       
-      api.updateDemand(demandId, data).then(response => {
+      return api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
       });
     },
     deleteDemand: function(demandId) {
-      api.deleteDemand(demandId).then(response => {
+      return api.deleteDemand(demandId).then(response => {
         console.log(response);
         this.loadDemands();
       });
