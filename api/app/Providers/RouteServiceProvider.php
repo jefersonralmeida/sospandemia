@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Entity;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('invitee', function (string $email) {
             return User::where('email', $email)->first() ?? abort(404, 'Usuário não encontrado');
+        });
+
+        Route::bind('entity', function (string $entityId) {
+            return Entity::find($entityId) ?? abort(404, 'Entidade não encontrada');
         });
 
     }
