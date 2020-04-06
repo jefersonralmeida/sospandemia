@@ -6,31 +6,24 @@
     <div v-if="creatingDemand">
       <v-form ref="form">
         <div class="form-group">
-          <label for="demandTitle">Título da Demanda</label>
           <v-text-field
             v-model="demandData.title"
             :counter="200"
             :rules="[rules.required]"
             label="Demanda"
+            outlined
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="demandTitle">Quantidade</label>
           <v-text-field
             type="number"
             v-model="demandData.quantity"
             :rules="[rules.numberRule,rules.required]"
             label="Quantidade"
+            outlined
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="Description">Descrição</label>
-          <!--<textarea
-            type="text"
-            class="form-control"
-            placeholder="Adicione um descrição"
-            v-model="demandData.text"
-          />-->
           <v-textarea
             rows="3"
             auto-grow
@@ -38,6 +31,7 @@
             label="Adicione um descrição"
             v-model="demandData.text"
             :rules="[rules.required]"
+            outlined
           ></v-textarea>
         </div>
         <div class="d-flex justify-content-end">
@@ -92,11 +86,11 @@ export default {
       quantity: 1
     },
     rules: {
-      min: v => v.length >= 1 || "Min 15 caracteres",
+      min: v => v.length >= 1 || "Minimo 15 caracteres",
       required: value => !!value || "Obrigatório.",
       numberRule: v => {
         if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas múmero. Favor verificar!";
+        return "O campo deve conter apenas números.";
       }
     }
   }),
@@ -113,18 +107,22 @@ export default {
       return this.$refs.form.validate();
     },
     createDemand: function() {
-      const data = {
-        title: "New demand " + randomstring.generate(5),
-        text: "Test description " + randomstring.generate(5)
-      };
-
-      this.creatingDemandLoading = true;
-      api.createDemand(this.demandData).then(() => {
-        this.creatingDemand = false;
-        this.loadDemands();
-      }).finally(()=>{
-        this.creatingDemandLoading = false;
-      })
+      if (this.validate()) {
+        this.creatingDemandLoading = true;
+        api.createDemand(this.demandData)
+          .then(() => {
+            this.creatingDemand = false;
+            this.loadDemands();
+          })
+          .finally(() => {
+            this.creatingDemandLoading = false;
+            this.demandData = {
+              title: "",
+              text: "",
+              quantity: 1
+            };
+          });
+      }
     },
     viewDemand: function(demandId) {
       api.getDemand(demandId).then(({ data }) => {
@@ -134,7 +132,7 @@ export default {
     updateDemand: function(demandId, data) {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
-      
+
       return api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
