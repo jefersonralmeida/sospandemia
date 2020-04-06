@@ -52,12 +52,12 @@ class EntitiesController extends Controller
         return $entity;
     }
 
-    public function invite(Entity $entity, User $user)
+    public function invite(Entity $entity, User $invitee)
     {
-        if ($entity->users->contains('id', $user->id)) {
+        if ($entity->users->contains('id', $invitee->id)) {
             throw new HttpException(400, 'Este usuário já é membro da entidade');
         }
-        $entity->users()->attach($user->id);
+        $entity->users()->attach($invitee->id);
         return response(null, 204); // no content
     }
 

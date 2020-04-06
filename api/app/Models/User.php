@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use phpseclib\System\SSH\Agent\Identity;
 
 /**
  * Class User
+ * @mixin Eloquent
  * @package App\Models
  * @property int id
  * @property string name
