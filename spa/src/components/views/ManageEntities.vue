@@ -86,6 +86,7 @@
       :onLeaveEntityCB="leaveEntity"
       :onSelectEntityCB="selectEntity"
       :isActiveEntityCB="isActiveEntity"
+      :onInviteUserCB="inviteEntity"
       >
 
     </entity-card>
