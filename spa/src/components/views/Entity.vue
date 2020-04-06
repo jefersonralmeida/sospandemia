@@ -84,6 +84,28 @@
       </div>
     </modal>
 
+    <modal :name="`inviteModal-${entity.id}`" :width="500" :height="150">
+      <div class="container my-2 text-center">
+        <h5>Adicionar Usuário à entidade</h5>
+        <div class="form-group row">
+          <label class="col-form-label col-sm-2">Email</label>
+          <input 
+            type="text"
+            v-model="tempEntity.email"
+            class="form-control col mr-2"
+            placeholder="example@example.ex"
+          >
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+          <button
+            @click="hidePopup('inviteModal')"
+            class="btn btn-danger float-right"
+          >Cancelar</button>
+          <button @click="onInviteUserCB(entity.id, tempEntity.email)" class="btn btn-success float-right mx-2">Adicionar</button>
+        </div>
+      </div>
+    </modal>
+
     <div class="card mt-2">
       <div class="card-header">
         <h3>
@@ -120,7 +142,7 @@
         <button class="btn btn-primary m-1" @click="onSelectEntityCB(entity.id, true)">
           <span class="fa fa-syringe"></span> Gerenciar Demandas
         </button>
-        <button class="btn btn-primary m-1">
+        <button class="btn btn-primary m-1" @click="showPopup('inviteModal')">
           <span class="fa fa-user-plus"></span> Convidar Usuário
         </button>
         <button class="btn btn-warning m-1" @click="showPopup('updateModal')">
@@ -154,6 +176,10 @@ export default {
       required: true
     },
     isActiveEntityCB: {
+      type: Function,
+      required: true
+    },
+    onInviteUserCB: {
       type: Function,
       required: true
     }
