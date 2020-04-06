@@ -2,40 +2,60 @@
   <div>
     <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="400px">
       <div class="container mt-2">
-        <form class="ma-3">
+        <v-form class="ma-3" ref="form" >
           <div class="form-group">
             <label for="formEditTitle">Titulo</label>
-            <input
+            <!--<input
               v-model="tempDemand.title"
               id="formEditTitle"
               type="text"
               class="form-control"
               placeholder="Entre com o titulo"
-            />
+            />-->
+            <v-text-field
+            v-model="tempDemand.title"
+            :counter="200"
+            :rules="[rules.required]"
+            label="Demanda"
+          ></v-text-field>
           </div>
           <div class="form-group">
             <label for="demandTitle">Quantidade</label>
-            <input
+            <!--<input
               type="number"
               v-model="tempDemand.quantity"
               class="form-control"
               placeholder="Quantidade necessaria para suprir a demanda"
-            />
+            />-->
+            <v-text-field
+            type="number"
+            v-model="tempDemand.quantity"
+            :rules="[rules.numberRule,rules.required]"
+            label="Quantidade"
+          ></v-text-field>
           </div>
           <div class="form-group">
             <label for="formEditDescription">Descrição</label>
-            <textarea
+            <!--<textarea
               v-model="tempDemand.text"
               type="text"
               class="form-control"
               id="formEditDescription"
               rows="4"
               style="resize: none"
-            ></textarea>
+            ></textarea>-->
+            <v-textarea
+            rows="3"
+            auto-grow
+            :counter="500"
+            label="Adicione um descrição"
+            v-model="tempDemand.text"
+            :rules="[rules.required]"
+          ></v-textarea>
           </div>
           <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
           <button @click="handleUpdateCancellDemand" class="btn btn-danger float-right">Cancelar</button>
-        </form>
+        </v-form>
       </div>
     </modal>
 
@@ -87,13 +107,26 @@ export default {
   },
   data() {
     return {
-      tempDemand: {}
+      tempDemand: {},
+      rules: {
+      min: v => v.length >= 1 || "Min 15 caracteres",
+      required: value => !!value || "Obrigatório.",
+      numberRule: v => {
+        if (parseInt(v) && v >= 1) return true;
+        return "O campo deve conter apenas múmero. Favor verificar!";
+      }
+    }
     };
+    
   },
   methods: {
     showPopup(ModelName) {
       this.$modal.show(`${ModelName}-${this.demand.id}`);
       this.tempDemand = JSON.parse(JSON.stringify(this.demand));
+    },
+    validate() {
+      console.log(this.$refs);
+      return this.$refs.form.validate();
     },
     hidePopup(ModelName) {
       this.$modal.hide(`${ModelName}-${this.demand.id}`);
