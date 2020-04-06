@@ -9,6 +9,7 @@ services:
       - '3000:3000'
     volumes:
       - ./spa:/var/spa:${CACHING_OPTION:-cached}
+      - ./env/prod/web/spa:/var/spa/dist
     stdin_open: true
     tty: true
     environment:
@@ -32,6 +33,7 @@ services:
       XDEBUG_PORT: ${XDEBUG_PORT:-9000}
     volumes:
       - ./api:/var/www
+      - ./env/prod/web/api:/var/www/dist
       - ./env/dev/api/conf/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - composer-volume:/root/.composer
     working_dir: /var/www
