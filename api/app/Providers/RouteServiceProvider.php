@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
         Route::bind('invitee', function (string $email) {
-            return User::where('email', $email)->first();
+            return User::where('email', $email)->first() ?? abort(404, 'Usuário não encontrado');
         });
 
     }
