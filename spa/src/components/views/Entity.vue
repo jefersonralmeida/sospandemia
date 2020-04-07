@@ -132,25 +132,45 @@
         {{ entity.street_address }} - {{ entity.city}} - {{entity.state}}
       </div>
       <div class="card-footer">
-        <button
-          class="btn btn-success m-1"
-          v-if="!isActiveEntityCB(entity.id)"
-          @click="onSelectEntityCB(entity.id)"
-        >
-          <span class="fa fa-check-double"></span> Ativar
-        </button>
-        <button class="btn btn-primary m-1" @click="onSelectEntityCB(entity.id, true)">
-          <span class="fa fa-syringe"></span> Gerenciar Demandas
-        </button>
-        <button class="btn btn-primary m-1" @click="showPopup('inviteModal')">
-          <span class="fa fa-user-plus"></span> Convidar Usuário
-        </button>
-        <button class="btn btn-warning m-1" @click="showPopup('updateModal')">
-          <span class="fa fa-edit"></span> Alterar
-        </button>
-        <button @click="handleLeaveEntity" class="btn btn-danger m-1">
-          <span class="fa fa-door-open"></span> Sair
-        </button>
+        <div class="row">
+          <div class="col-md col-sm-12 col-12 p-1">
+            <v-btn
+              class="btn btn-success w-100"
+              v-if="!isActiveEntityCB(entity.id)"
+              @click="onSelectEntityCB(entity.id)"
+            >
+            <span class="fa fa-check-double"></span> Ativar
+            </v-btn>
+            <v-btn
+              class="btn btn-success w-100"
+              v-if="isActiveEntityCB(entity.id)"
+              @click="onSelectEntityCB(entity.id)"
+              disabled
+            >
+            Ativo
+            </v-btn>
+          </div>
+          <div class="col-md col-sm-6 col-6 p-1">
+            <v-btn class="btn btn-primary w-100" @click="onSelectEntityCB(entity.id, true)">
+              <span class="fa fa-syringe"></span> Gerenciar Demandas
+            </v-btn>
+          </div>
+          <div class="col-md col-sm-6 col-6 p-1">
+            <v-btn class="btn btn-primary w-100" @click="showPopup('inviteModal')">
+              <span class="fa fa-user-plus"></span> Convidar Usuário
+            </v-btn>
+          </div>
+          <div class="col-md col-sm-6 col-6 p-1">
+            <v-btn class="btn btn-warning w-100" @click="showPopup('updateModal')">
+              <span class="fa fa-edit"></span> Alterar
+            </v-btn>
+          </div>
+          <div class="col-md col-sm-6 col-6 p-1">
+            <v-btn @click="handleLeaveEntity" class="btn btn-danger w-100">
+              <span class="fa fa-door-open"></span> Sair
+            </v-btn>
+          </div>
+        </div>
       </div>
     </div>
   </div>
