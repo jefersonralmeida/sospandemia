@@ -4,44 +4,55 @@
 
     <button v-if="!creatingDemand" class="btn btn-success" @click="creatingDemand=true">Nova demanda</button>
     <div v-if="creatingDemand">
-      <form>
+      <v-form ref="form">
         <div class="form-group">
           <label for="demandTitle">Título da Demanda</label>
-          <input
-            type="text"
+          <v-text-field
             v-model="demandData.title"
-            class="form-control"
-            placeholder="Digite o título da demanda"
-          />
+            :counter="200"
+            :rules="[rules.required]"
+            label="Demanda"
+          ></v-text-field>
         </div>
         <div class="form-group">
           <label for="demandTitle">Quantidade</label>
-          <input
+          <v-text-field
             type="number"
             v-model="demandData.quantity"
-            class="form-control"
-            placeholder="Quantidade necessaria para suprir a demanda"
-          />
+            :rules="[rules.numberRule,rules.required]"
+            label="Quantidade"
+          ></v-text-field>
         </div>
         <div class="form-group">
           <label for="Description">Descrição</label>
-          <textarea
+          <!--<textarea
             type="text"
             class="form-control"
             placeholder="Adicione um descrição"
             v-model="demandData.text"
-          />
+          />-->
+          <v-textarea
+            rows="3"
+            auto-grow
+            :counter="500"
+            label="Adicione um descrição"
+            v-model="demandData.text"
+            :rules="[rules.required]"
+          ></v-textarea>
         </div>
         <div class="d-flex justify-content-end">
           <button class="btn btn-danger" @click="creatingDemand=false">Cancelar</button>
-          <button class="btn btn-success ml-1" @click="createDemand()">Criar</button>
+          <button class="btn btn-success ml-1" @click="createDemand">Criar</button>
         </div>
-      </form>
+      </v-form>
     </div>
     <hr />
     <loading-widget v-if="checked==false"></loading-widget>
-    <p v-else-if="checked==true && demands.length === 0">Não há demandas, clique em "Nova demanda" para adicionar!</p>
-    <demand-card v-else
+    <p
+      v-else-if="checked==true && demands.length === 0"
+    >Não há demandas, clique em "Nova demanda" para adicionar!</p>
+    <demand-card
+      v-else
       v-for="demand in demands"
       v-bind:key="demand.id"
       :demand="demand"
@@ -73,6 +84,14 @@ export default {
       title: "",
       text: "",
       quantity: 1
+    },
+    rules: {
+      min: v => v.length >= 1 || "Min 15 caracteres",
+      required: value => !!value || "Obrigatório.",
+      numberRule: v => {
+        if (parseInt(v) && v >= 1) return true;
+        return "O campo deve conter apenas múmero. Favor verificar!";
+      }
     }
   }),
   methods: {
@@ -83,16 +102,23 @@ export default {
         this.checked = true;
       });
     },
-    createDemand: function() {
-      const data = {
-        title: "New demand " + randomstring.generate(5),
-        text: "Test description " + randomstring.generate(5)
-      };
-
-      this.creatingDemand = false;
-      api.createDemand(this.demandData).then(() => {
-        this.loadDemands();
-      });
+    validate() {
+      console.log(this.$refs);
+      return this.$refs.form.validate();
+    },
+    createDemand: function(ev) {
+      ev.preventDefault();
+      if (this.validate()) {
+        this.creatingDemand = false;
+        api.createDemand(this.demandData).then(() => {
+          (this.demandData = {
+            title: "",
+            text: "",
+            quantity: 1
+          }),
+            this.loadDemands();
+        });
+      }
     },
     viewDemand: function(demandId) {
       api.getDemand(demandId).then(({ data }) => {
@@ -102,7 +128,7 @@ export default {
     updateDemand: function(demandId, data) {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
-      
+
       api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
