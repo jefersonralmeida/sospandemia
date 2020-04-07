@@ -1,6 +1,10 @@
 <template>
   <v-app>
     <div id="app" class="container-fluid h-100 w-100 p-0">
+      <v-snackbar :value="snackbar" top :color="snackbarError ? 'red' : 'success'" :timeout="timeout">
+        {{snackbarText}}
+        <v-btn text @click="snackbar = false">Close</v-btn>
+      </v-snackbar>
       <component :is="layout"></component>
     </div>
   </v-app>
@@ -19,9 +23,12 @@ export default {
     CompactLayout,
     NoLayout
   },
-  data() {
-    return {};
-  },
+  data: () => ({
+    snackbar: false, 
+    snackbarText: "",
+    snackbarError: false,
+    timeout: 2000
+  }),
   computed: {
     layout() {
       return this.$route.meta.layout || default_layout;
@@ -31,6 +38,16 @@ export default {
     if (!this.$store.profile && this.$store.getters.isLogged) {
       this.$store.dispatch("loadProfile");
     }
+  },
+  created() {
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "showMessage") {
+        this.snackbarText = state.notificationContent;
+        this.snackbarError = state.noticicationError;
+        this.snackbar = true;
+        setTimeout(()=>{this.snackbar = false}, this.timeout)
+      }
+    });
   }
 };
 </script>
