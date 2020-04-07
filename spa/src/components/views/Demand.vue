@@ -53,7 +53,12 @@
             :rules="[rules.required]"
           ></v-textarea>
           </div>
-          <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
+          <v-btn
+            @click="handleUpdateDemand"
+            color="success"
+            class="float-right mx-2"
+            :loading="loading"
+          >Salvar</v-btn>
           <button @click="handleUpdateCancellDemand" class="btn btn-danger float-right">Cancelar</button>
         </v-form>
       </div>
@@ -67,10 +72,12 @@
             @click="hidePopup('deleteModal')"
             class="btn btn-outline-danger float-right"
           >Cancelar</button>
-          <button
-            @click="onDeleteDemandCB(demand.id)"
-            class="btn btn-danger float-right mx-2"
-          >Remover</button>
+          <v-btn
+            @click="handleRemoveDemandConfirm"
+            color="red darken-3"
+            class="float-right mx-2  white--text"
+            :loading="loading"
+          >Remover</v-btn>
         </div>
       </div>
     </modal>
@@ -108,6 +115,7 @@ export default {
   data() {
     return {
       tempDemand: {},
+      loading: false,
       rules: {
       min: v => v.length >= 1 || "Min 15 caracteres",
       required: value => !!value || "Obrigatório.",
@@ -122,7 +130,8 @@ export default {
   methods: {
     showPopup(ModelName) {
       this.$modal.show(`${ModelName}-${this.demand.id}`);
-      this.tempDemand = JSON.parse(JSON.stringify(this.demand));
+      if (ModelName === "updateModal")
+        this.tempDemand = JSON.parse(JSON.stringify(this.demand));
     },
     validate() {
       console.log(this.$refs);
@@ -136,21 +145,34 @@ export default {
 
       this.showPopup("deleteModal");
     },
-    handleUpdateCancellDemand(ev){
+    handleUpdateCancellDemand(ev) {
       ev.preventDefault();
       this.hidePopup("updateModal");
     },
+    handleRemoveDemandConfirm(ev) {
+      this.loading = true;
+      this.onDeleteDemandCB(this.demand.id).then(() => {
+        this.loading = false;
+      });
+    },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-      
-      //Validar dados
 
+      //Validar dados
       this.demand.title = this.tempDemand.title;
       this.demand.text = this.tempDemand.text;
       this.demand.quantity = this.tempDemand.quantity;
 
-      this.onUpdateDemandCB(this.demand.id, this.demand);
-      this.hidePopup("updateModal");
+      this.loading = true;
+      console.log("Fired");
+      this.onUpdateDemandCB(this.demand.id, this.demand)
+        .then(ev => {
+          this.hidePopup("updateModal");
+        })
+        .catch(err => {})
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };
