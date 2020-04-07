@@ -115,10 +115,11 @@ export default {
         api.createDemand(this.demandData)
           .then(() => {
             this.creatingDemand = false;
+            this.$store.commit('showMessage', { content:"Demanda adicionada!", error:false })
             this.loadDemands();
           })
           .catch(error => {
-            console.dir(error.response.data)
+            this.$store.commit('showMessage', { content:"Erro ao adicionar a demanda.", error:true })
             for(let errPropriety in error.response.data.errors){
               console.log(this.$refs[errPropriety])
               this.$refs[errPropriety].errorMessages.push(error.response.data.errors[errPropriety][0])

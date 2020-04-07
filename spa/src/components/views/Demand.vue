@@ -142,8 +142,11 @@ export default {
         this.onUpdateDemandCB(this.demand.id, this.demand)
           .then(ev => {
             this.hidePopup("updateModal");
+            this.$store.commit('showMessage', { content:"Demanda salva!", error:false })
           })
-          .catch(err => {})
+          .catch(err => {
+            this.$store.commit('showMessage', { content:"Erro ao alterar demanda.", error:true })
+          })
           .finally(() => {
             this.loading = false;
           });
