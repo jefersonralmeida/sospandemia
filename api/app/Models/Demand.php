@@ -32,9 +32,6 @@ class Demand extends Model
             'title' => $this->title,
             'text' => $this->text,
             'entity' => $this->entity->name,
-            'city' => $this->entity->district->name,
-            'district_id' => $this->entity->district->id,
-            'state_id' => $this->entity->district->state->id,
         ];
     }
 
