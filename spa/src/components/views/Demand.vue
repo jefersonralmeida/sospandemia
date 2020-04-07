@@ -2,56 +2,32 @@
   <div>
     <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="400px">
       <div class="container mt-2">
-        <v-form class="ma-3" ref="form" >
+        <v-form class="ma-3" ref="form">
           <div class="form-group">
-            <label for="formEditTitle">Titulo</label>
-            <!--<input
-              v-model="tempDemand.title"
-              id="formEditTitle"
-              type="text"
-              class="form-control"
-              placeholder="Entre com o titulo"
-            />-->
             <v-text-field
-            v-model="tempDemand.title"
-            :counter="200"
-            :rules="[rules.required]"
-            label="Demanda"
-          ></v-text-field>
+              v-model="tempDemand.title"
+              :counter="200"
+              :rules="[rules.required]"
+              label="Demanda"
+            ></v-text-field>
           </div>
           <div class="form-group">
-            <label for="demandTitle">Quantidade</label>
-            <!--<input
+            <v-text-field
               type="number"
               v-model="tempDemand.quantity"
-              class="form-control"
-              placeholder="Quantidade necessaria para suprir a demanda"
-            />-->
-            <v-text-field
-            type="number"
-            v-model="tempDemand.quantity"
-            :rules="[rules.numberRule,rules.required]"
-            label="Quantidade"
-          ></v-text-field>
+              :rules="[rules.numberRule,rules.required]"
+              label="Quantidade"
+            ></v-text-field>
           </div>
           <div class="form-group">
-            <label for="formEditDescription">Descrição</label>
-            <!--<textarea
-              v-model="tempDemand.text"
-              type="text"
-              class="form-control"
-              id="formEditDescription"
-              rows="4"
-              style="resize: none"
-            ></textarea>-->
             <v-textarea
-            rows="3"
-            auto-grow
-            :counter="500"
-            label="Adicione um descrição"
-            v-model="tempDemand.text"
-            :rules="[rules.required]"
-          ></v-textarea>
+              rows="3"
+              auto-grow
+              :counter="500"
+              label="Adicione um descrição"
+              v-model="tempDemand.text"
+              :rules="[rules.required]"
+            ></v-textarea>
           </div>
           <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
           <button @click="handleUpdateCancellDemand" class="btn btn-danger float-right">Cancelar</button>
@@ -109,15 +85,14 @@ export default {
     return {
       tempDemand: {},
       rules: {
-      min: v => v.length >= 1 || "Min 15 caracteres",
-      required: value => !!value || "Obrigatório.",
-      numberRule: v => {
-        if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas múmero. Favor verificar!";
+        min: v => v.length >= 1 || "Min 15 caracteres",
+        required: value => !!value || "Obrigatório.",
+        numberRule: v => {
+          if (parseInt(v) && v >= 1) return true;
+          return "O campo deve conter apenas número. Favor verificar!";
+        }
       }
-    }
     };
-    
   },
   methods: {
     showPopup(ModelName) {
@@ -136,21 +111,22 @@ export default {
 
       this.showPopup("deleteModal");
     },
-    handleUpdateCancellDemand(ev){
+    handleUpdateCancellDemand(ev) {
       ev.preventDefault();
       this.hidePopup("updateModal");
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-      
       //Validar dados
 
-      this.demand.title = this.tempDemand.title;
-      this.demand.text = this.tempDemand.text;
-      this.demand.quantity = this.tempDemand.quantity;
+      if (this.validate()) {
+        this.demand.title = this.tempDemand.title;
+        this.demand.text = this.tempDemand.text;
+        this.demand.quantity = this.tempDemand.quantity;
 
-      this.onUpdateDemandCB(this.demand.id, this.demand);
-      this.hidePopup("updateModal");
+        this.onUpdateDemandCB(this.demand.id, this.demand);
+        this.hidePopup("updateModal");
+      }
     }
   }
 };

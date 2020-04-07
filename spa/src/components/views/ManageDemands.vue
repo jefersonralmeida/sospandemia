@@ -6,7 +6,6 @@
     <div v-if="creatingDemand">
       <v-form ref="form">
         <div class="form-group">
-          <label for="demandTitle">Título da Demanda</label>
           <v-text-field
             v-model="demandData.title"
             :counter="200"
@@ -15,7 +14,6 @@
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="demandTitle">Quantidade</label>
           <v-text-field
             type="number"
             v-model="demandData.quantity"
@@ -24,13 +22,6 @@
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="Description">Descrição</label>
-          <!--<textarea
-            type="text"
-            class="form-control"
-            placeholder="Adicione um descrição"
-            v-model="demandData.text"
-          />-->
           <v-textarea
             rows="3"
             auto-grow
