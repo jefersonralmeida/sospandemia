@@ -127,8 +127,12 @@ export default {
     handleRemoveDemandConfirm(ev) {
       this.loading = true;
       this.onDeleteDemandCB(this.demand.id).then(() => {
+        this.$store.commit('showMessage', { content:"Demanda removida com sucesso!", error:false })
+      }).catch(e => {
+        this.$store.commit('showMessage', { content:"Erro ao excluir demanda.", error:true })
+      }).finally(()=> {
         this.loading = false;
-      });
+      })
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
