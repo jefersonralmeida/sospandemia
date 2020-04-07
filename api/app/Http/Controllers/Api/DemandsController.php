@@ -10,6 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\Mime\DependencyInjection\AddMimeTypeGuesserPass;
 
 class DemandsController extends Controller
 {
@@ -17,13 +18,31 @@ class DemandsController extends Controller
     public function search(Request $request)
     {
         $query = $request->query('query');
+        $districtId = $request->query('district_id');
+        $stateId = $request->query('state_id');
 
         if (empty($query)) {
             return Demand::with('entity')->paginate();
         }
 
-        $result = Demand::search($query)->paginate();
-        $result->load('entity');
+        $keys = Demand::search($query)->keys();
+
+        $query = Demand::with('entity')->whereIn('entities.id', $keys);
+        if ($districtId !== null) {
+            $query
+                ->join('entities', 'entities.id', '=', 'demands.entity_id')
+                ->where('entities.district_id', '=', $districtId);
+        }
+
+        // se passar district_id, ignora o state_id
+        if ($districtId === null && $stateId !== null) {
+            $query
+                ->join('entities', 'entities.id', '=', 'demands.entity_id')
+                ->join('districts', 'districts.id', '=', 'entities.district_id')
+                ->where('districts.state_id', '=', $stateId);
+        }
+
+        $result = $query->paginate();
         return $result;
     }
 
