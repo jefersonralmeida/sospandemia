@@ -7,6 +7,7 @@
       <v-form ref="form">
         <div class="form-group">
           <v-text-field
+            ref="title"
             v-model="demandData.title"
             :counter="200"
             :rules="[rules.required]"
@@ -16,6 +17,7 @@
         </div>
         <div class="form-group">
           <v-text-field
+            ref="quantity"
             type="number"
             v-model="demandData.quantity"
             :rules="[rules.numberRule,rules.required]"
@@ -25,6 +27,7 @@
         </div>
         <div class="form-group">
           <v-textarea
+            ref="text"
             rows="3"
             auto-grow
             :counter="500"
@@ -113,6 +116,13 @@ export default {
           .then(() => {
             this.creatingDemand = false;
             this.loadDemands();
+          })
+          .catch(error => {
+            console.dir(error.response.data)
+            for(let errPropriety in error.response.data.errors){
+              console.log(this.$refs[errPropriety])
+              this.$refs[errPropriety].errorMessages.push(error.response.data.errors[errPropriety][0])
+            }
           })
           .finally(() => {
             this.creatingDemandLoading = false;
