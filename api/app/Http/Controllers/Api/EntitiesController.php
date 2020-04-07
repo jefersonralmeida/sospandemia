@@ -52,19 +52,19 @@ class EntitiesController extends Controller
         return $entity;
     }
 
-    public function invite(Entity $entity, User $user)
+    public function invite(Entity $entity, User $invitee)
     {
-        if ($entity->users->contains('id', $user->id)) {
-            throw new HttpException(400, 'Este usuário já é membro da entidade');
+        if ($entity->users->contains('id', $invitee->id)) {
+            abort(400, 'Este usuário já é membro da entidade');
         }
-        $entity->users()->attach($user->id);
+        $entity->users()->attach($invitee->id);
         return response(null, 204); // no content
     }
 
     public function leave(Entity $entity)
     {
         if ($entity->users->count() === 1) {
-            throw new HttpException(400, 'Você é o último membro dessa entidade. Não pode sair.');
+            abort(400, 'Você é o último membro dessa entidade. Não pode sair.');
         }
 
         $entity->users()->detach(Auth::user()->id);

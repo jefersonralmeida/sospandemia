@@ -27,7 +27,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('entities', 'EntitiesController@create');
     Route::get('entities/{entity}', 'EntitiesController@info');
     Route::put('entities/{entity}', 'EntitiesController@update')->middleware('can:update,entity');
-    Route::post('entities/{entity}/invite/{user}', 'EntitiesController@invite')->middleware('can:invite,entity');
+    Route::post('entities/{entity}/invite/{invitee}', 'EntitiesController@invite')->middleware('can:invite,entity');
     Route::post('entities/{entity}/leave', 'EntitiesController@leave')->middleware('can:leave,entity');
 
     // demands routes
