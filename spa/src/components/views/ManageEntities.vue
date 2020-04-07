@@ -9,7 +9,7 @@
       <form>
         <h3 class="py-2">Insira as informações referente à entidade</h3>
         <div class="row">
-          <div class="form-group col-8">
+          <div class="form-group col-sm-8 col-md-10">
             <label>Nome</label>
             <input
               type="text"
@@ -18,7 +18,7 @@
               placeholder="Nome da entidade"
             />
           </div>
-          <div class="form-group col">
+          <div class="form-group col-sm-4 col-md-2">
             <label>CNPJ</label>
             <input
               type="text"
@@ -37,17 +37,17 @@
             v-model="entityData.legal_name"
           />
         </div>
+        <div class="form-group">
+          <label for="Description">Endereço</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Ex: Rua Exemplo, 1029"
+            v-model="entityData.street_address"
+          />
+        </div>
         <div class="row">
-          <div class="form-group col-8">
-            <label for="Description">Endereço</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Ex: Rua Exemplo, 1029"
-              v-model="entityData.street_address"
-            />
-          </div>
-          <div class="form-group col-3">
+          <div class="form-group col-md-11 col-sm-10 col-9">
             <label>Cidade</label>
             <input
               type="text"
@@ -55,7 +55,7 @@
               v-model="entityData.city"
             />
           </div>
-          <div class="form-group col">
+          <div class="form-group col-md-1 col-sm-2 col-3">
             <label>Estado</label>
             <select class ="form-control" v-model="entityData.state">
                 <option v-for="state in states">{{state}}</option>

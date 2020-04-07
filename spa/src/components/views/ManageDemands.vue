@@ -6,43 +6,45 @@
     <div v-if="creatingDemand">
       <v-form ref="form">
         <div class="form-group">
-          <label for="demandTitle">Título da Demanda</label>
           <v-text-field
+            ref="title"
             v-model="demandData.title"
             :counter="200"
             :rules="[rules.required]"
             label="Demanda"
+            outlined
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="demandTitle">Quantidade</label>
           <v-text-field
+            ref="quantity"
             type="number"
             v-model="demandData.quantity"
             :rules="[rules.numberRule,rules.required]"
             label="Quantidade"
+            outlined
           ></v-text-field>
         </div>
         <div class="form-group">
-          <label for="Description">Descrição</label>
-          <!--<textarea
-            type="text"
-            class="form-control"
-            placeholder="Adicione um descrição"
-            v-model="demandData.text"
-          />-->
           <v-textarea
+            ref="text"
             rows="3"
             auto-grow
             :counter="500"
             label="Adicione um descrição"
             v-model="demandData.text"
             :rules="[rules.required]"
+            outlined
           ></v-textarea>
         </div>
         <div class="d-flex justify-content-end">
           <button class="btn btn-danger" @click="creatingDemand=false">Cancelar</button>
-          <button class="btn btn-success ml-1" @click="createDemand">Criar</button>
+          <v-btn
+            @click="createDemand"
+            color="success"
+            class="ml-1"
+            :loading="creatingDemandLoading"
+          >Criar</v-btn>
         </div>
       </v-form>
     </div>
@@ -80,17 +82,18 @@ export default {
     demands: [],
     creatingDemand: false,
     checked: false,
+    creatingDemandLoading: false,
     demandData: {
       title: "",
       text: "",
       quantity: 1
     },
     rules: {
-      min: v => v.length >= 1 || "Min 15 caracteres",
+      min: v => v.length >= 1 || "Minimo 15 caracteres",
       required: value => !!value || "Obrigatório.",
       numberRule: v => {
         if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas múmero. Favor verificar!";
+        return "O campo deve conter apenas números.";
       }
     }
   }),
@@ -106,18 +109,30 @@ export default {
       console.log(this.$refs);
       return this.$refs.form.validate();
     },
-    createDemand: function(ev) {
-      ev.preventDefault();
+    createDemand: function() {
       if (this.validate()) {
-        this.creatingDemand = false;
-        api.createDemand(this.demandData).then(() => {
-          (this.demandData = {
-            title: "",
-            text: "",
-            quantity: 1
-          }),
+        this.creatingDemandLoading = true;
+        api.createDemand(this.demandData)
+          .then(() => {
+            this.creatingDemand = false;
+            this.$store.commit('showMessage', { content:"Demanda adicionada!", error:false })
             this.loadDemands();
-        });
+          })
+          .catch(error => {
+            this.$store.commit('showMessage', { content:"Erro ao adicionar a demanda.", error:true })
+            for(let errPropriety in error.response.data.errors){
+              console.log(this.$refs[errPropriety])
+              this.$refs[errPropriety].errorMessages.push(error.response.data.errors[errPropriety][0])
+            }
+          })
+          .finally(() => {
+            this.creatingDemandLoading = false;
+            this.demandData = {
+              title: "",
+              text: "",
+              quantity: 1
+            };
+          });
       }
     },
     viewDemand: function(demandId) {
@@ -129,13 +144,13 @@ export default {
       // estou apenas pegando o valor atual...
       const current = this.demands.find(demand => demand.id === demandId);
 
-      api.updateDemand(demandId, data).then(response => {
+      return api.updateDemand(demandId, data).then(response => {
         console.log(response);
         this.loadDemands();
       });
     },
     deleteDemand: function(demandId) {
-      api.deleteDemand(demandId).then(response => {
+      return api.deleteDemand(demandId).then(response => {
         console.log(response);
         this.loadDemands();
       });

@@ -2,58 +2,39 @@
   <div>
     <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="400px">
       <div class="container mt-2">
-        <v-form class="ma-3" ref="form" >
+        <v-form class="ma-3" ref="form">
           <div class="form-group">
-            <label for="formEditTitle">Titulo</label>
-            <!--<input
-              v-model="tempDemand.title"
-              id="formEditTitle"
-              type="text"
-              class="form-control"
-              placeholder="Entre com o titulo"
-            />-->
             <v-text-field
-            v-model="tempDemand.title"
-            :counter="200"
-            :rules="[rules.required]"
-            label="Demanda"
-          ></v-text-field>
+              v-model="tempDemand.title"
+              :counter="200"
+              :rules="[rules.required]"
+              label="Demanda"
+            ></v-text-field>
           </div>
           <div class="form-group">
-            <label for="demandTitle">Quantidade</label>
-            <!--<input
+            <v-text-field
               type="number"
               v-model="tempDemand.quantity"
-              class="form-control"
-              placeholder="Quantidade necessaria para suprir a demanda"
-            />-->
-            <v-text-field
-            type="number"
-            v-model="tempDemand.quantity"
-            :rules="[rules.numberRule,rules.required]"
-            label="Quantidade"
-          ></v-text-field>
+              :rules="[rules.numberRule,rules.required]"
+              label="Quantidade"
+            ></v-text-field>
           </div>
           <div class="form-group">
-            <label for="formEditDescription">Descrição</label>
-            <!--<textarea
-              v-model="tempDemand.text"
-              type="text"
-              class="form-control"
-              id="formEditDescription"
-              rows="4"
-              style="resize: none"
-            ></textarea>-->
             <v-textarea
-            rows="3"
-            auto-grow
-            :counter="500"
-            label="Adicione um descrição"
-            v-model="tempDemand.text"
-            :rules="[rules.required]"
-          ></v-textarea>
+              rows="3"
+              auto-grow
+              :counter="500"
+              label="Adicione um descrição"
+              v-model="tempDemand.text"
+              :rules="[rules.required]"
+            ></v-textarea>
           </div>
-          <button @click="handleUpdateDemand" class="btn btn-success float-right mx-2">Salvar</button>
+          <v-btn
+            @click="handleUpdateDemand"
+            color="success"
+            class="float-right mx-2"
+            :loading="loading"
+          >Salvar</v-btn>
           <button @click="handleUpdateCancellDemand" class="btn btn-danger float-right">Cancelar</button>
         </v-form>
       </div>
@@ -67,10 +48,12 @@
             @click="hidePopup('deleteModal')"
             class="btn btn-outline-danger float-right"
           >Cancelar</button>
-          <button
-            @click="onDeleteDemandCB(demand.id)"
-            class="btn btn-danger float-right mx-2"
-          >Remover</button>
+          <v-btn
+            @click="handleRemoveDemandConfirm"
+            color="red darken-3"
+            class="float-right mx-2  white--text"
+            :loading="loading"
+          >Remover</v-btn>
         </div>
       </div>
     </modal>
@@ -108,21 +91,22 @@ export default {
   data() {
     return {
       tempDemand: {},
+      loading: false,
       rules: {
-      min: v => v.length >= 1 || "Min 15 caracteres",
-      required: value => !!value || "Obrigatório.",
-      numberRule: v => {
-        if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas múmero. Favor verificar!";
+        min: v => v.length >= 1 || "Min 15 caracteres",
+        required: value => !!value || "Obrigatório.",
+        numberRule: v => {
+          if (parseInt(v) && v >= 1) return true;
+          return "O campo deve conter apenas número. Favor verificar!";
+        }
       }
-    }
     };
-    
   },
   methods: {
     showPopup(ModelName) {
       this.$modal.show(`${ModelName}-${this.demand.id}`);
-      this.tempDemand = JSON.parse(JSON.stringify(this.demand));
+      if (ModelName === "updateModal")
+        this.tempDemand = JSON.parse(JSON.stringify(this.demand));
     },
     validate() {
       console.log(this.$refs);
@@ -136,21 +120,41 @@ export default {
 
       this.showPopup("deleteModal");
     },
-    handleUpdateCancellDemand(ev){
+    handleUpdateCancellDemand(ev) {
       ev.preventDefault();
       this.hidePopup("updateModal");
     },
+    handleRemoveDemandConfirm(ev) {
+      this.loading = true;
+      this.onDeleteDemandCB(this.demand.id).then(() => {
+        this.$store.commit('showMessage', { content:"Demanda removida com sucesso!", error:false })
+      }).catch(e => {
+        this.$store.commit('showMessage', { content:"Erro ao excluir demanda.", error:true })
+      }).finally(()=> {
+        this.loading = false;
+      })
+    },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-      
       //Validar dados
-
-      this.demand.title = this.tempDemand.title;
-      this.demand.text = this.tempDemand.text;
-      this.demand.quantity = this.tempDemand.quantity;
-
-      this.onUpdateDemandCB(this.demand.id, this.demand);
-      this.hidePopup("updateModal");
+      if (this.validate()) {
+        this.demand.title = this.tempDemand.title;
+        this.demand.text = this.tempDemand.text;
+        this.demand.quantity = this.tempDemand.quantity;
+        this.loading = true;
+        console.log("Fired");
+        this.onUpdateDemandCB(this.demand.id, this.demand)
+          .then(ev => {
+            this.hidePopup("updateModal");
+            this.$store.commit('showMessage', { content:"Demanda salva!", error:false })
+          })
+          .catch(err => {
+            this.$store.commit('showMessage', { content:"Erro ao alterar demanda.", error:true })
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      }
     }
   }
 };
