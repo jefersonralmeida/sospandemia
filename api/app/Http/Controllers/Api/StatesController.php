@@ -24,6 +24,8 @@ class StatesController extends Controller
             return [];
         }
 
+        $query = sanitizeSearch($query);
+
         return District::search($query)->where('state_id', $state->id)->orderBy('municipio', 'distrito')->get();
 
     }

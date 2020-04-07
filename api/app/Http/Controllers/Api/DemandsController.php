@@ -25,6 +25,8 @@ class DemandsController extends Controller
             return Demand::with('entity')->paginate();
         }
 
+        $query = sanitizeSearch($query);
+
         $keys = Demand::search($query)->keys();
 
         $query = Demand::with('entity')->whereIn('entities.id', $keys);
