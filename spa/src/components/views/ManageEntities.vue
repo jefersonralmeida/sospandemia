@@ -2,10 +2,14 @@
   <div class="container">
     <h1>Gerenciar Entidades</h1>
 
-    <button v-if="!creatingEntity" class="btn btn-success m-1" @click="creatingEntity=true"><span class="fa fa-plus-square"></span> Nova entidade</button>
-    <button v-if="!creatingEntity" class="btn btn-primary m-1"><span class="fa fa-sync"></span></button>
+    <button v-if="!creatingEntity" class="btn btn-success m-1" @click="handleOpenCreateEntityPanel">
+      <span class="fa fa-plus-square"></span> Nova entidade
+    </button>
+    <button v-if="!creatingEntity" class="btn btn-primary m-1">
+      <span class="fa fa-sync"></span>
+    </button>
     <div v-if="creatingEntity">
-      <hr/>
+      <hr />
       <form>
         <h3 class="py-2">Insira as informações referente à entidade</h3>
         <div class="row">
@@ -47,19 +51,33 @@
           />
         </div>
         <div class="row">
-          <div class="form-group col-md-11 col-sm-10 col-9">
-            <label>Cidade</label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="entityData.city"
-            />
+          <div class="col-md-1 col-sm-2 col-3">
+            <v-select
+              :items="states"
+              v-model="entityData.state"
+              :loading="!statesFetched"
+              :search-input.sync="search"
+              label="Estado"
+              outlined
+              item-text="uf"
+              item-value="id"
+            ></v-select>
           </div>
-          <div class="form-group col-md-1 col-sm-2 col-3">
-            <label>Estado</label>
-            <select class ="form-control" v-model="entityData.state">
-                <option v-for="state in states">{{state}}</option>
-            </select>
+          <div class="form-group col-md-11 col-sm-10 col-9">
+            <v-autocomplete
+              v-model="entityData.city"
+              :disabled="entityData.state == ''"
+              :items="cities"
+              item-text="name"
+              label="Cidade"
+              autocomplete="dskjalçkdwlçakdwlça"
+              placeholder="Digite o nome da cidade para buscar"
+              :search-input.sync="search"
+              outlined
+              hide-no-data
+              hide-selected
+              return-object
+            ></v-autocomplete>
           </div>
         </div>
         <div class="form-group">
@@ -77,9 +95,9 @@
         </div>
       </form>
     </div>
-    <hr/>
-    <entity-card 
-      v-for="entity in entities" 
+    <hr />
+    <entity-card
+      v-for="entity in entities"
       v-bind:key="entity.id"
       :entity="entity"
       :onUpdateEntityCB="updateEntity"
@@ -87,9 +105,7 @@
       :onSelectEntityCB="selectEntity"
       :isActiveEntityCB="isActiveEntity"
       :onInviteUserCB="inviteEntity"
-      >
-
-    </entity-card>
+    ></entity-card>
   </div>
 </template>
 
@@ -98,49 +114,58 @@ import api from "../../api";
 import Entity from "./Entity";
 
 export default {
-  name: 'SelectEntity',
-  components:{
-    "entity-card":Entity
+  name: "SelectEntity",
+  components: {
+    "entity-card": Entity
   },
-  data: () =>({
+  data: () => ({
     creatingEntity: false,
-    entityData:{
-      cnpj: "", 
-      name: "", 
-      legal_name: "", 
-      description: "", 
+    entityData: {
+      cnpj: "",
+      name: "",
+      legal_name: "",
+      description: "",
       street_address: "",
       city: "",
       state: ""
     },
-    states:[
-        "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT",
-        "PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"
-      ],
+    states: [],
+    cities: [],
+    statesFetched: false,
+    search: null,
+    debounce: null
   }),
   methods: {
     selectEntity: function(entityId, redirect = false) {
-      this.$store.commit('setEntity', entityId);
+      this.$store.commit("setEntity", entityId);
       if (redirect) {
-        this.$router.push('/gerenciar-demandas')
+        this.$router.push("/gerenciar-demandas");
       }
     },
-    handleCreateCancel: function(ev){
+    handleCreateCancel: function(ev) {
       ev.preventDefault();
       this.creatingEntity = false;
     },
-
+    handleOpenCreateEntityPanel() {
+      if (this.statesFetched == false) this.fetchStates();
+      this.creatingEntity = true;
+    },
     isActiveEntity: function(entityId) {
-      return this.$store.getters.activeEntityId === entityId ? "active" : '';
+      return this.$store.getters.activeEntityId === entityId ? "active" : "";
     },
 
-    createEntity: function(ev){
-      ev.preventDefault()
-      api.createEntity(this.entityData).then(res => {
-        console.log(res);
-        this.creatingEntity = false;
-        this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
-      }).catch(err=>{console.log(err);});
+    createEntity: function(ev) {
+      ev.preventDefault();
+      api
+        .createEntity({...this.entityData, district_id: this.entityData.city.id})
+        .then(res => {
+          console.log(res);
+          this.creatingEntity = false;
+          this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     updateEntity: function(entityId, data) {
       const current = this.entities.find(entity => entity.id === entityId);
@@ -149,21 +174,47 @@ export default {
       });
     },
 
-    leaveEntity: function(entityId){
-      api.leaveEntity(entityId).catch(err=>{
-        window.alert("Você é o último usuário permanecente nessa entidade, é necessário que pelo menos um usuário permaneça na entidade");
-      })
+    leaveEntity: function(entityId) {
+      api.leaveEntity(entityId).catch(err => {
+        window.alert(
+          "Você é o último usuário permanecente nessa entidade, é necessário que pelo menos um usuário permaneça na entidade"
+        );
+      });
     },
-    inviteEntity: function(entityId, userId){
-      api.inviteToEntity(entityId, userId)
+    inviteEntity: function(entityId, userId) {
+      api.inviteToEntity(entityId, userId);
     },
+    fetchStates() {
+      api.getStates().then(res => {
+        console.log(res);
+        this.states = res.data;
+        this.statesFetched = true;
+      });
+    },
+    fetchCities(stateId, query) {
+      return api.getDistricts(stateId, query);
+    }
+  },
+  watch: {
+    search(query) {
+      if(query.length <= 3) return
+      clearTimeout(this.debounce);
+      let that = this;
+      this.debounce = setTimeout(function() {
+        that
+          .fetchCities(that.entityData.state, query)
+          .then(res => {
+            that.cities = res.data;
+          })
+      }, 300);
+    }
   },
   computed: {
     entities: function() {
       return this.$store.getters.entities;
     }
-  },
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
