@@ -1,110 +1,111 @@
 <template>
   <div>
-    <modal :name="`updateModal-${entity.id}`" :adaptive="false" height="600px">
-      <div class="container mt-2">
-        <form>
-          <h3 class="py-2">Alterar informações</h3>
-          <div class="row">
-            <div class="form-group col-8">
-              <label>Nome</label>
-              <input
-                type="text"
-                v-model="tempEntity.name"
-                class="form-control"
-                placeholder="Nome da entidade"
-              />
-            </div>
-            <div class="form-group col">
-              <label>CNPJ</label>
-              <input
-                type="text"
-                v-model="tempEntity.cnpj"
-                disabled
-                class="form-control"
-                placeholder="informe o CNPJ"
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Razão Social</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Insira a razão social da entidade"
-              v-model="tempEntity.legal_name"
-            />
-          </div>
-          <div class="row">
-            <div class="form-group col-9">
-              <label>Endereço</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Ex: Rua Exemplo, 1029"
-                v-model="tempEntity.street_address"
-              />
-            </div>
-            <div class="form-group col">
-              <label>Estado</label>
-              <select class ="form-control" v-model="tempEntity.state">
-                <option v-for="state in states">{{state}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Cidade</label>
-            <input type="text" class="form-control" v-model="tempEntity.city" />
-          </div>
-          <div class="form-group">
-            <label>Descrição</label>
-            <textarea
-              type="text"
-              class="form-control"
-              placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
-              v-model="tempEntity.description"
-              style="resize: none"
-            />
-          </div>
-        </form>
-        <button @click="handleUpdateEntity" class="btn btn-success float-right mx-2">Salvar</button>
-        <button @click="handleUpdateCancelEntity" class="btn btn-danger float-right">Cancelar</button>
-      </div>
-    </modal>
+  
+  <v-row justify="center"> <!-- update -->
+    <v-dialog v-model="update" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Alterar Entidade</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-form>
+                <v-row>
+                  <v-col cols="12" sm="8" md="8">
+                    <v-text-field v-model="tempEntity.name" label="Nome"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="4" md="4">
+                    <v-text-field v-model="tempEntity.cnpj" disabled label="CNPJ"></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="tempEntity.legal_name"
+                      label="Razão Social"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field v-model="tempEntity.street_address" label="Endereço"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="3" md="2">
+                    <v-select
+                      v-model="tempEntity.state"
+                      :items="states"
+                      label="Estado"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="9" md="10">
+                    <v-text-field v-model="tempEntity.city" label="Cidade"></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea v-model="tempEntity.description" auto-grow label="Descrição"></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-form>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red" dark @click="update = false">Cancelar</v-btn>
+              <v-btn color="warning" @click="handleUpdateEntity"><span class="fa fa-edit"></span>Alterar</v-btn>
+            </v-card-actions>
+          </v-card>
+    </v-dialog>
+  </v-row>
 
-    <modal :name="`deleteModal-${entity.id}`" :width="300" :height="150">
-      <div class="container my-2 text-center">
-        <h5>Você tem certeza que deseja sair desta entidade?</h5>
-        <div class="d-flex justify-content-between mt-4">
-          <button
-            @click="hidePopup('deleteModal')"
-            class="btn btn-outline-danger float-right"
-          >Cancelar</button>
-          <button @click="onLeaveEntityCB(entity.id)" class="btn btn-danger float-right mx-2">Sair</button>
-        </div>
-      </div>
-    </modal>
-
-    <modal :name="`inviteModal-${entity.id}`" :width="500" :height="150">
-      <div class="container my-2 text-center">
-        <h5>Adicionar Usuário à entidade</h5>
-        <div class="form-group row">
-          <label class="col-form-label col-sm-2">Email</label>
-          <input 
-            type="text"
-            v-model="tempEntity.email"
-            class="form-control col mr-2"
-            placeholder="example@example.ex"
-          >
-        </div>
-        <div class="d-flex justify-content-end mt-4">
-          <button
-            @click="hidePopup('inviteModal')"
+  <v-row justify="center"> <!-- Sair -->
+    <v-dialog v-model="del" max-width="300px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Sair da entidade</span>
+        </v-card-title>
+        <v-card-text>
+          Deseja realmente sair da entidade {{ entity.name }}?
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            @click="del=false"
             class="btn btn-danger float-right"
-          >Cancelar</button>
-          <button @click="onInviteUserCB(entity.id, tempEntity.email)" class="btn btn-success float-right mx-2">Adicionar</button>
-        </div>
-      </div>
-    </modal>
+          >Cancelar</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn 
+            @click="handleExit" 
+            color="red"
+            dark
+          ><span class="fa fa-door-open"></span>Sair</v-btn>  
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
+
+  <v-row justify="center"> <!-- Invitar -->
+    <v-dialog v-model="invite" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Convidar Usuário</span>
+        </v-card-title>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="email" label="email" hint="ex: exemplo@exemplo.exp" required></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            @click="invite=false"
+            color="red"
+            dark
+          >Cancelar</v-btn>
+          <v-btn 
+            @click="handleInvite" 
+            color="primary"
+            dark
+          ><span class="fa fa-user-plus"></span>Convidar</v-btn>  
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 
     <div class="card mt-2">
       <div class="card-header">
@@ -156,17 +157,17 @@
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn class="btn btn-primary w-100" @click="showPopup('inviteModal')">
+            <v-btn class="btn btn-primary w-100" @click="invite=true">
               <span class="fa fa-user-plus"></span> Convidar Usuário
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn class="btn btn-warning w-100" @click="showPopup('updateModal')">
+            <v-btn class="btn btn-warning w-100" @click="openUpdateDialog">
               <span class="fa fa-edit"></span> Alterar
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn @click="handleLeaveEntity" class="btn btn-danger w-100">
+            <v-btn @click="del=true" class="btn btn-danger w-100">
               <span class="fa fa-door-open"></span> Sair
             </v-btn>
           </div>
@@ -211,27 +212,18 @@ export default {
         "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT",
         "PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"
       ],
+      update: false,
+      del: false,
+      invite: false,
+      email:"",
     };
   },
   methods: {
-    showPopup(ModelName) {
-      this.$modal.show(`${ModelName}-${this.entity.id}`);
+    openUpdateDialog(){
       this.tempEntity = JSON.parse(JSON.stringify(this.entity));
+      this.update = true;
     },
-    hidePopup(ModelName) {
-      this.$modal.hide(`${ModelName}-${this.entity.id}`);
-    },
-    handleLeaveEntity(ev) {
-      ev.preventDefault();
-
-      this.showPopup("deleteModal");
-    },
-    handleUpdateCancelEntity(ev) {
-      ev.preventDefault();
-      this.hidePopup("updateModal");
-    },
-    handleUpdateEntity(ev) {
-      ev.preventDefault();
+    handleUpdateEntity() {
 
       //Validar dados
 
@@ -244,7 +236,15 @@ export default {
       this.entity.description = this.tempEntity.description;
 
       this.onUpdateEntityCB(this.entity.id, this.entity);
-      this.hidePopup("updateModal");
+      this.update=false;
+    },
+    handleExit(){
+      this.onLeaveEntityCB(this.entity.id);
+      this.del=false;
+    },
+    handleInvite(){
+      this.onInviteUserCB(this.entity.id, this.email);
+      this.invite=false;
     }
   }
 };
