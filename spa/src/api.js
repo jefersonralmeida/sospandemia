@@ -177,6 +177,13 @@ const api = {
     inviteToEntity: function(entityId, userId){
         return this.httpClient().post(`entities/${entityId}/invite/${userId}`);
     },
+
+    getStates: function(){
+        return this.httpClient().get("states");
+    },
+    getDistricts: function(stateId, query){
+        return this.httpClient().get(`states/${stateId}/search-districts?query=${query}`);
+    }
 };
 
 export default api;
