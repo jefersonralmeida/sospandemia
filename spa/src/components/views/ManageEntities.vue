@@ -92,7 +92,6 @@
               :items="states"
               v-model="entityData.state"
               :loading="!statesFetched"
-              :search-input.sync="search"
               outlined
               item-text="uf"
               item-value="id"

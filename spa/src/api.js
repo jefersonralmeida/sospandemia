@@ -151,11 +151,15 @@ const api = {
         return this.httpClient().delete(`demands/${demandId}`);
     },
 
-    searchDemands: function(query) {
+    searchDemands: function(query, filterType, filterParam) {
+        let params = {
+            query
+        }
+        if(filterType)
+            params[filterType] = filterParam + ''
+        console.log(params)
         return this.httpClient().get('demands/search', {
-            params: {
-                query
-            }
+            params
         });
     },
 
