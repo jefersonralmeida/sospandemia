@@ -246,26 +246,20 @@ export default {
     },
     updateEntity: function(entityId, data) {
       const current = this.entities.find(entity => entity.id === entityId);
-      api.updateEntity(entityId, data).then(response => {
+      return api.updateEntity(entityId, data).then(response => {
         console.log(response);
         this.$store.dispatch("loadProfile");
       });
     },
 
     leaveEntity: function(entityId) {
-      api.leaveEntity(entityId)
+      return api.leaveEntity(entityId)
       .then(()=>{
         this.$store.dispatch("loadProfile");
-      })
-      .catch(err => {
-        console.log(err);
-        window.alert(
-          "Você é o último usuário permanecente nessa entidade, é necessário que pelo menos um usuário permaneça na entidade"
-        );
       });
     },
     inviteEntity: function(entityId, userId) {
-      api.inviteToEntity(entityId, userId);
+      return api.inviteToEntity(entityId, userId);
     },
     fetchStates() {
       api.getStates().then(res => {

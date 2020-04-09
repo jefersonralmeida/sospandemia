@@ -48,7 +48,7 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="3" md="2">
-                    <v-select
+                    <v-text-field
                       disabled
                       label="Estado"
                       :items="states"
@@ -58,14 +58,13 @@
                       outlined
                       item-text="uf"
                       item-value="id"
-                    ></v-select>
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="9" md="10">
-                    <v-autocomplete
+                    <v-text-field
                       disabled
                       ref="city"
                       v-model="tempEntity.city"
-                      :disabled="tempEntity.state == ''"
                       :items="cities"
                       item-text="name"
                       label="Cidade"
@@ -76,7 +75,7 @@
                       hide-no-data
                       hide-selected
                       return-object
-                    ></v-autocomplete>
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
@@ -84,8 +83,8 @@
                       rows="3"
                       auto-grow
                       :counter="500"
-                      label="Adicione um descrição"
-                      placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
+                      label="Adicione uma descrição"
+                      placeholder="(Mínimo de 10 caracteres) Adicione uma descrição sobre a entidade"
                       v-model="tempEntity.description"
                       :rules="[rules.required]"
                       outlined
@@ -98,7 +97,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="red" dark @click="update = false">Cancelar</v-btn>
-            <v-btn color="warning" @click="handleUpdateEntity">
+            <v-btn :loading="loading" color="warning" @click="handleUpdateEntity">
               <span class="fa fa-edit"></span>Alterar
             </v-btn>
           </v-card-actions>
@@ -117,7 +116,7 @@
           <v-card-actions>
             <v-btn @click="del=false" class="btn btn-danger float-right">Cancelar</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="handleExit" color="red" dark>
+            <v-btn :loading="loading" @click="handleExit" color="red" dark>
               <span class="fa fa-door-open"></span>Sair
             </v-btn>
           </v-card-actions>
@@ -135,14 +134,18 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field v-model="email" label="email" hint="ex: exemplo@exemplo.exp" required></v-text-field>
+                  <v-text-field  
+                    v-model="email" 
+                    label="Email"></v-text-field>
+                  <span class="text-muted small">Nota: o email inserido deve estar registrado! Caso não
+                  esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.</span>
               </v-col>
             </v-row>
           </v-container>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn @click="invite=false" color="red" dark>Cancelar</v-btn>
-            <v-btn @click="handleInvite" color="primary" dark>
+            <v-btn :loading="loading" @click="handleInvite" color="primary" dark>
               <span class="fa fa-user-plus"></span>Convidar
             </v-btn>
           </v-card-actions>
@@ -252,6 +255,7 @@ export default {
       tempEntity: {},
       states: [],
       cities: [],
+      loading:false,
       search: null,
       debounce: null,
       update: false,
@@ -276,7 +280,7 @@ export default {
       let teste = this.entity.city.split(' - ');
       this.tempEntity.city = teste[0];
       this.tempEntity.state = teste[1];
-      console.log(this.tempEntity);
+      console.log(this.tempEntity, this.entity);
       this.update = true;
     },
     validate() {
@@ -287,26 +291,53 @@ export default {
       ev.preventDefault();
       //Validar dados
       if (this.validate()) {
+        //this.entity.cnpj = this.tempEntity.cnpj;
+        //this.entity.city = this.tempEntity.city;
+        //this.entity.state = this.tempEntity.state;
         this.entity.name = this.tempEntity.name;
         this.entity.legal_name = this.tempEntity.legal_name;
-        //this.entity.cnpj = this.tempEntity.cnpj;
         this.entity.street_address = this.tempEntity.street_address;
-        this.entity.city = this.tempEntity.city;
-        this.entity.state = this.tempEntity.state;
         this.entity.description = this.tempEntity.description;
-        console.log(this.tempEntity, this.entity)
-
-        this.onUpdateEntityCB(this.entity.id, this.entity);
-        this.update = false;
+        //console.log(this.tempEntity, this.entity)
+        this.loading = true;
+        this.onUpdateEntityCB(this.entity.id, this.entity)
+        .then(()=>{
+          this.$store.commit('showMessage', { content:"Entidade alterada com sucesso!", error:false })
+        })
+        .catch(e=>{
+          this.$store.commit('showMessage', { content:"Erro", error:true })
+        })
+        .finally(()=>{
+          this.loading = false;
+          this.update = false;
+        });
       }
     },
     handleExit() {
-      this.onLeaveEntityCB(this.entity.id);
-      this.del = false;
+      this.loading = true;
+      this.onLeaveEntityCB(this.entity.id).then(()=>{
+        this.$store.commit('showMessage', { content:`Você saiu da entidade ${this.entity.name}!`, error:false })
+      }).catch(e=>{
+        this.$store.commit('showMessage', { content:"Você é o último usuário remanescente na entidade, não é possível sair.", error:true })
+      }).finally(()=>{
+        this.loading = false;
+        this.del = false;
+      });
     },
     handleInvite() {
-      this.onInviteUserCB(this.entity.id, this.email);
-      this.invite = false;
+      //VALIDAR!!!!!!!!
+      this.loading = true;
+      this.onInviteUserCB(this.entity.id, this.email)
+      .then(()=>{
+        this.$store.commit('showMessage', { content:`Usuário adicionado com sucesso!`, error:false })
+      })
+      .catch(e=>{
+        this.$store.commit('showMessage', { content:`Erro`, error:true })
+      })
+      .finally(()=>{
+        this.loading = false;
+        this.invite = false;
+      });
     },
     fetchStates() {
       api.getStates().then(res => {
