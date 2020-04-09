@@ -12,10 +12,6 @@
               <v-form ref="form">
                 <v-row>
                   <v-col cols="12" sm="8" md="8">
-                    <!--<v-text-field 
-                      v-model="tempEntity.name" 
-                      label="Nome">
-                    </v-text-field>-->
                     <v-text-field
                       ref="name"
                       v-model="tempEntity.name"
@@ -30,9 +26,6 @@
                     <v-text-field v-model="tempEntity.cnpj" disabled label="CNPJ"></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <!--<v-text-field 
-                    v-model="tempEntity.legal_name" 
-                    label="Razão Social"></v-text-field>-->
                     <v-text-field
                       ref="legal_name"
                       v-model="tempEntity.legal_name"
@@ -44,9 +37,6 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <!--<v-text-field
-                    v-model="tempEntity.street_address" 
-                    label="Endereço"></v-text-field>-->
                     <v-text-field
                       ref="address"
                       v-model="tempEntity.street_address"
@@ -58,17 +48,37 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="3" md="2">
-                    <v-select v-model="tempEntity.state" :items="states" label="Estado"></v-select>
+                    <v-select
+                      disabled
+                      label="Estado"
+                      :items="states"
+                      v-model="tempEntity.state"
+                      :loading="!statesFetched"
+                      :search-input.sync="search"
+                      outlined
+                      item-text="uf"
+                      item-value="id"
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="9" md="10">
-                    <v-text-field v-model="tempEntity.city" label="Cidade"></v-text-field>
+                    <v-autocomplete
+                      disabled
+                      ref="city"
+                      v-model="tempEntity.city"
+                      :disabled="tempEntity.state == ''"
+                      :items="cities"
+                      item-text="name"
+                      label="Cidade"
+                      autocomplete="dskjalçkdwlçakdwlça"
+                      placeholder="Digite o nome da cidade para buscar"
+                      :search-input.sync="search"
+                      outlined
+                      hide-no-data
+                      hide-selected
+                      return-object
+                    ></v-autocomplete>
                   </v-col>
                   <v-col cols="12">
-                    <!--<v-textarea 
-                    v-model="tempEntity.description" 
-                    auto-grow 
-                    label="Descrição">
-                    </v-textarea>-->
                     <v-textarea
                       ref="description"
                       rows="3"
@@ -163,7 +173,7 @@
         <hr />
         {{ entity.description }}
         <hr />
-        {{ entity.street_address }} - {{ entity.city}} - {{entity.state}}
+        {{ entity.street_address }} - {{ entity.city}}  
       </div>
       <div class="card-footer">
         <div class="row">
@@ -209,6 +219,7 @@
 </template>
 
 <script>
+import api from "./../../api";
 export default {
   props: {
     entity: {
@@ -239,38 +250,14 @@ export default {
   data() {
     return {
       tempEntity: {},
-      states: [
-        "AC",
-        "AL",
-        "AM",
-        "AP",
-        "BA",
-        "CE",
-        "DF",
-        "ES",
-        "GO",
-        "MA",
-        "MG",
-        "MS",
-        "MT",
-        "PA",
-        "PB",
-        "PE",
-        "PI",
-        "PR",
-        "RJ",
-        "RN",
-        "RO",
-        "RR",
-        "RS",
-        "SC",
-        "SE",
-        "SP",
-        "TO"
-      ],
+      states: [],
+      cities: [],
+      search: null,
+      debounce: null,
       update: false,
       del: false,
       invite: false,
+      statesFetched: false,
       email: "",
       rules: {
         min: v => v.length >= 1 || "Minimo 15 caracteres",
@@ -285,6 +272,11 @@ export default {
   methods: {
     openUpdateDialog() {
       this.tempEntity = JSON.parse(JSON.stringify(this.entity));
+      if (this.statesFetched == false) this.fetchStates();
+      let teste = this.entity.city.split(' - ');
+      this.tempEntity.city = teste[0];
+      this.tempEntity.state = teste[1];
+      console.log(this.tempEntity);
       this.update = true;
     },
     validate() {
@@ -302,6 +294,7 @@ export default {
         this.entity.city = this.tempEntity.city;
         this.entity.state = this.tempEntity.state;
         this.entity.description = this.tempEntity.description;
+        console.log(this.tempEntity, this.entity)
 
         this.onUpdateEntityCB(this.entity.id, this.entity);
         this.update = false;
@@ -314,8 +307,42 @@ export default {
     handleInvite() {
       this.onInviteUserCB(this.entity.id, this.email);
       this.invite = false;
+    },
+    fetchStates() {
+      api.getStates().then(res => {
+        console.log(res);
+        this.states = res.data;
+        this.states.sort((a,b)=>{
+          const stateA = a.uf;
+          const stateB = b.uf;
+          let comparison = 0;
+          if (stateA > stateB) {
+            comparison = 1;
+          } else if (stateA < stateB) {
+            comparison = -1;
+          }
+          return comparison;
+        });
+        console.log(this.states)
+        this.statesFetched = true;
+      });
+    },
+    fetchCities(stateId, query) {
+      return api.getDistricts(stateId, query);
     }
-  }
+  },
+  watch: {
+    search(query) {
+      if (query.length <= 3) return;
+      clearTimeout(this.debounce);
+      let that = this;
+      this.debounce = setTimeout(function() {
+        that.fetchCities(that.tempEntity.state, query).then(res => {
+          that.cities = res.data;
+        });
+      }, 300);
+    }
+  },
 };
 </script>
 

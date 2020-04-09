@@ -86,7 +86,7 @@
           ></v-text-field>
         </div>
         <div class="row">
-          <div class="col-md-1 col-sm-2 col-3">
+          <div class="col-md-2 col-sm-3 col-3">
             <v-select
               label="Estado"
               :items="states"
@@ -98,7 +98,7 @@
               item-value="id"
             ></v-select>
           </div>
-          <div class="form-group col-md-11 col-sm-10 col-9">
+          <div class="form-group col-md-10 col-sm-9 col-9">
             <v-autocomplete
               ref="city"
               v-model="entityData.city"
@@ -214,8 +214,8 @@ export default {
     },
 
     createEntity: function(ev) {
+      ev.preventDefault();
       if (this.validate()) {
-        ev.preventDefault();
         api
           .createEntity({
             ...this.entityData,
@@ -224,7 +224,7 @@ export default {
           .then(res => {
             console.log(res);
             this.creatingEntity = false;
-            this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+            //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
           })
           .catch(err => {
             console.log(err);
@@ -240,6 +240,7 @@ export default {
               city: "",
               description: ""
             };
+            this.$store.dispatch("loadProfile");
           });
       }  
     },
@@ -247,11 +248,17 @@ export default {
       const current = this.entities.find(entity => entity.id === entityId);
       api.updateEntity(entityId, data).then(response => {
         console.log(response);
+        this.$store.dispatch("loadProfile");
       });
     },
 
     leaveEntity: function(entityId) {
-      api.leaveEntity(entityId).catch(err => {
+      api.leaveEntity(entityId)
+      .then(()=>{
+        this.$store.dispatch("loadProfile");
+      })
+      .catch(err => {
+        console.log(err);
         window.alert(
           "Você é o último usuário permanecente nessa entidade, é necessário que pelo menos um usuário permaneça na entidade"
         );
@@ -264,6 +271,18 @@ export default {
       api.getStates().then(res => {
         console.log(res);
         this.states = res.data;
+        this.states.sort((a,b)=>{
+          const stateA = a.uf;
+          const stateB = b.uf;
+          let comparison = 0;
+          if (stateA > stateB) {
+            comparison = 1;
+          } else if (stateA < stateB) {
+            comparison = -1;
+          }
+          return comparison;
+        });
+        console.log(this.states)
         this.statesFetched = true;
       });
     },
