@@ -35,6 +35,7 @@ class CreateDemandRequest extends FormRequest
         return [
             'title' => 'required',
             'text' => 'required',
+            'quantity' => 'filled|int|min:0'
         ];
     }
 }

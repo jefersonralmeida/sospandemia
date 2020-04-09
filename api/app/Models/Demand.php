@@ -25,12 +25,13 @@ class Demand extends Model
 
     public function toSearchableArray()
     {
+        $this->load('entity');
+        $this->load('entity.district');
         return [
             'id' => $this->id,
             'title' => $this->title,
             'text' => $this->text,
-            'city' => $this->entity->city,
-            'state' => $this->entity->state,
+            'entity' => $this->entity->name,
         ];
     }
 

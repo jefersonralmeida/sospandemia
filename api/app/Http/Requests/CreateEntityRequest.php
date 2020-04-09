@@ -45,8 +45,7 @@ class CreateEntityRequest extends FormRequest
             'legal_name' => 'required|string|min:4',
             'description' => 'required|string|min:10',
             'street_address' => 'required|string:10',
-            'city' => 'required',
-            'state' => ['required', Rule::in(config('constants.states'))],
+            'district_id' => 'required|int|exists:districts,id',
         ];
     }
 }

@@ -45,8 +45,7 @@ class UpdateEntityRequest extends FormRequest
             'legal_name' => 'filled|string|min:4',
             'description' => 'filled|string|min:10',
             'street_address' => 'filled|string:10',
-            'city' => 'filled',
-            'state' => ['required', Rule::in(config('constants.states'))],
+            'district_id' => 'filled|int|exists:districts,id'
         ];
     }
 }

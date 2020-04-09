@@ -11,7 +11,6 @@ use App\Models\Entity;
 use App\Models\User;
 use Auth;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EntitiesController extends Controller
 {
@@ -35,6 +34,7 @@ class EntitiesController extends Controller
 
     public function info(Entity $entity)
     {
+        $entity->load('district');
         return $entity;
     }
 

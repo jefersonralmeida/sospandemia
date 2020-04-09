@@ -48,6 +48,10 @@ const store = new Vuex.Store({
         },
         uiLoading (state) {
             state.uiLoaded = false;
+        },
+        showMessage (state, payload) {
+            state.notificationContent = payload.content
+            state.noticicationError = payload.error
         }
     },
     actions: {
