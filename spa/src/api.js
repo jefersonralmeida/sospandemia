@@ -131,8 +131,8 @@ const api = {
         return this.httpClient().get('profile');
     },
 
-    indexDemandsByEntity: function() {
-        return this.httpClient().get(`entities/${store.getters.activeEntityId}/demands`);
+    indexDemandsByEntity: function(page) {
+        return this.httpClient().get(`entities/${store.getters.activeEntityId}/demands?page=${page}`);
     },
 
     createDemand: function(data) {

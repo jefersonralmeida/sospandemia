@@ -63,6 +63,16 @@
       :onDeleteDemandCB="deleteDemand"
       class="mt-2"
     ></demand-card>
+    
+  <div class="text-center mt-2" v-if="checked">
+    <v-pagination
+      v-model="current_page"
+      @input="loadDemands"
+      :length="last_page"
+    ></v-pagination>
+  </div>
+  <loading-widget v-if="loading"></loading-widget>
+
   </div>
 </template>
 
@@ -80,6 +90,8 @@ export default {
   },
   data: () => ({
     demands: [],
+    current_page:1,
+    last_page:1,
     creatingDemand: false,
     checked: false,
     creatingDemandLoading: false,
@@ -99,8 +111,10 @@ export default {
   }),
   methods: {
     loadDemands: function() {
-      api.indexDemandsByEntity().then(response => {
+      api.indexDemandsByEntity(this.current_page).then(response => {
         console.log(response);
+        //this.current_page = response.data.current_page;
+        this.last_page = response.data.last_page;
         this.demands = response.data.data;
         this.checked = true;
       });
