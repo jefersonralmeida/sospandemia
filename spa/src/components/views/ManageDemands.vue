@@ -64,13 +64,14 @@
       class="mt-2"
     ></demand-card>
     
-  <div class="text-center">
+  <div class="text-center mt-2" v-if="checked">
     <v-pagination
       v-model="current_page"
       @input="loadDemands"
       :length="last_page"
     ></v-pagination>
   </div>
+  <loading-widget v-if="loading"></loading-widget>
 
   </div>
 </template>
