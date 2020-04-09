@@ -1,110 +1,154 @@
 <template>
   <div>
-    <modal :name="`updateModal-${entity.id}`" :adaptive="false" height="600px">
-      <div class="container mt-2">
-        <form>
-          <h3 class="py-2">Alterar informações</h3>
-          <div class="row">
-            <div class="form-group col-8">
-              <label>Nome</label>
-              <input
-                type="text"
-                v-model="tempEntity.name"
-                class="form-control"
-                placeholder="Nome da entidade"
-              />
-            </div>
-            <div class="form-group col">
-              <label>CNPJ</label>
-              <input
-                type="text"
-                v-model="tempEntity.cnpj"
-                disabled
-                class="form-control"
-                placeholder="informe o CNPJ"
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Razão Social</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Insira a razão social da entidade"
-              v-model="tempEntity.legal_name"
-            />
-          </div>
-          <div class="row">
-            <div class="form-group col-9">
-              <label>Endereço</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Ex: Rua Exemplo, 1029"
-                v-model="tempEntity.street_address"
-              />
-            </div>
-            <div class="form-group col">
-              <label>Estado</label>
-              <select class ="form-control" v-model="tempEntity.state">
-                <option v-for="state in states">{{state}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Cidade</label>
-            <input type="text" class="form-control" v-model="tempEntity.city" />
-          </div>
-          <div class="form-group">
-            <label>Descrição</label>
-            <textarea
-              type="text"
-              class="form-control"
-              placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
-              v-model="tempEntity.description"
-              style="resize: none"
-            />
-          </div>
-        </form>
-        <button @click="handleUpdateEntity" class="btn btn-success float-right mx-2">Salvar</button>
-        <button @click="handleUpdateCancelEntity" class="btn btn-danger float-right">Cancelar</button>
-      </div>
-    </modal>
+    <v-row justify="center">
+      <!-- update -->
+      <v-dialog v-model="update" max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Alterar Entidade</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-form ref="form">
+                <v-row>
+                  <v-col cols="12" sm="8" md="8">
+                    <v-text-field
+                      ref="name"
+                      v-model="tempEntity.name"
+                      :counter="200"
+                      :rules="[rules.required]"
+                      label="Nome"
+                      placeholder="Nome da entidade"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="4" md="4">
+                    <v-text-field v-model="tempEntity.cnpj" disabled label="CNPJ"></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      ref="legal_name"
+                      v-model="tempEntity.legal_name"
+                      :counter="300"
+                      :rules="[rules.required]"
+                      label="Razão Social"
+                      placeholder="Insira a razão social da entidade"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      ref="address"
+                      v-model="tempEntity.street_address"
+                      :counter="300"
+                      :rules="[rules.required]"
+                      label="Endereço"
+                      placeholder="Ex: Rua Exemplo, 1029"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="3" md="2">
+                    <v-select
+                      disabled
+                      label="Estado"
+                      :items="states"
+                      v-model="tempEntity.state"
+                      :loading="!statesFetched"
+                      :search-input.sync="search"
+                      outlined
+                      item-text="uf"
+                      item-value="id"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="9" md="10">
+                    <v-autocomplete
+                      disabled
+                      ref="city"
+                      v-model="tempEntity.city"
+                      :disabled="tempEntity.state == ''"
+                      :items="cities"
+                      item-text="name"
+                      label="Cidade"
+                      autocomplete="dskjalçkdwlçakdwlça"
+                      placeholder="Digite o nome da cidade para buscar"
+                      :search-input.sync="search"
+                      outlined
+                      hide-no-data
+                      hide-selected
+                      return-object
+                    ></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      ref="description"
+                      rows="3"
+                      auto-grow
+                      :counter="500"
+                      label="Adicione um descrição"
+                      placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
+                      v-model="tempEntity.description"
+                      :rules="[rules.required]"
+                      outlined
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red" dark @click="update = false">Cancelar</v-btn>
+            <v-btn color="warning" @click="handleUpdateEntity">
+              <span class="fa fa-edit"></span>Alterar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
-    <modal :name="`deleteModal-${entity.id}`" :width="300" :height="150">
-      <div class="container my-2 text-center">
-        <h5>Você tem certeza que deseja sair desta entidade?</h5>
-        <div class="d-flex justify-content-between mt-4">
-          <button
-            @click="hidePopup('deleteModal')"
-            class="btn btn-outline-danger float-right"
-          >Cancelar</button>
-          <button @click="onLeaveEntityCB(entity.id)" class="btn btn-danger float-right mx-2">Sair</button>
-        </div>
-      </div>
-    </modal>
+    <v-row justify="center">
+      <!-- Sair -->
+      <v-dialog v-model="del" max-width="300px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Sair da entidade</span>
+          </v-card-title>
+          <v-card-text>Deseja realmente sair da entidade {{ entity.name }}?</v-card-text>
+          <v-card-actions>
+            <v-btn @click="del=false" class="btn btn-danger float-right">Cancelar</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn @click="handleExit" color="red" dark>
+              <span class="fa fa-door-open"></span>Sair
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
-    <modal :name="`inviteModal-${entity.id}`" :width="500" :height="150">
-      <div class="container my-2 text-center">
-        <h5>Adicionar Usuário à entidade</h5>
-        <div class="form-group row">
-          <label class="col-form-label col-sm-2">Email</label>
-          <input 
-            type="text"
-            v-model="tempEntity.email"
-            class="form-control col mr-2"
-            placeholder="example@example.ex"
-          >
-        </div>
-        <div class="d-flex justify-content-end mt-4">
-          <button
-            @click="hidePopup('inviteModal')"
-            class="btn btn-danger float-right"
-          >Cancelar</button>
-          <button @click="onInviteUserCB(entity.id, tempEntity.email)" class="btn btn-success float-right mx-2">Adicionar</button>
-        </div>
-      </div>
-    </modal>
+    <v-row justify="center">
+      <!-- Invitar -->
+      <v-dialog v-model="invite" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Convidar Usuário</span>
+          </v-card-title>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field v-model="email" label="email" hint="ex: exemplo@exemplo.exp" required></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="invite=false" color="red" dark>Cancelar</v-btn>
+            <v-btn @click="handleInvite" color="primary" dark>
+              <span class="fa fa-user-plus"></span>Convidar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
 
     <div class="card mt-2">
       <div class="card-header">
@@ -129,7 +173,7 @@
         <hr />
         {{ entity.description }}
         <hr />
-        {{ entity.street_address }} - {{ entity.city}} - {{entity.state}}
+        {{ entity.street_address }} - {{ entity.city}}  
       </div>
       <div class="card-footer">
         <div class="row">
@@ -139,16 +183,14 @@
               v-if="!isActiveEntityCB(entity.id)"
               @click="onSelectEntityCB(entity.id)"
             >
-            <span class="fa fa-check-double"></span> Ativar
+              <span class="fa fa-check-double"></span> Ativar
             </v-btn>
             <v-btn
               class="btn btn-success w-100"
               v-if="isActiveEntityCB(entity.id)"
               @click="onSelectEntityCB(entity.id)"
               disabled
-            >
-            Ativo
-            </v-btn>
+            >Ativo</v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
             <v-btn class="btn btn-primary w-100" @click="onSelectEntityCB(entity.id, true)">
@@ -156,17 +198,17 @@
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn class="btn btn-primary w-100" @click="showPopup('inviteModal')">
+            <v-btn class="btn btn-primary w-100" @click="invite=true">
               <span class="fa fa-user-plus"></span> Convidar Usuário
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn class="btn btn-warning w-100" @click="showPopup('updateModal')">
+            <v-btn class="btn btn-warning w-100" @click="openUpdateDialog">
               <span class="fa fa-edit"></span> Alterar
             </v-btn>
           </div>
           <div class="col-md col-sm-6 col-6 p-1">
-            <v-btn @click="handleLeaveEntity" class="btn btn-danger w-100">
+            <v-btn @click="del=true" class="btn btn-danger w-100">
               <span class="fa fa-door-open"></span> Sair
             </v-btn>
           </div>
@@ -177,6 +219,7 @@
 </template>
 
 <script>
+import api from "./../../api";
 export default {
   props: {
     entity: {
@@ -207,46 +250,99 @@ export default {
   data() {
     return {
       tempEntity: {},
-      states:[
-        "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT",
-        "PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"
-      ],
+      states: [],
+      cities: [],
+      search: null,
+      debounce: null,
+      update: false,
+      del: false,
+      invite: false,
+      statesFetched: false,
+      email: "",
+      rules: {
+        min: v => v.length >= 1 || "Minimo 15 caracteres",
+        required: value => !!value || "Obrigatório.",
+        numberRule: v => {
+          if (parseInt(v) && v >= 1) return true;
+          return "O campo deve conter apenas números.";
+        }
+      }
     };
   },
   methods: {
-    showPopup(ModelName) {
-      this.$modal.show(`${ModelName}-${this.entity.id}`);
+    openUpdateDialog() {
       this.tempEntity = JSON.parse(JSON.stringify(this.entity));
+      if (this.statesFetched == false) this.fetchStates();
+      let teste = this.entity.city.split(' - ');
+      this.tempEntity.city = teste[0];
+      this.tempEntity.state = teste[1];
+      console.log(this.tempEntity);
+      this.update = true;
     },
-    hidePopup(ModelName) {
-      this.$modal.hide(`${ModelName}-${this.entity.id}`);
-    },
-    handleLeaveEntity(ev) {
-      ev.preventDefault();
-
-      this.showPopup("deleteModal");
-    },
-    handleUpdateCancelEntity(ev) {
-      ev.preventDefault();
-      this.hidePopup("updateModal");
+    validate() {
+      console.log(this.$refs);
+      return this.$refs.form.validate();
     },
     handleUpdateEntity(ev) {
       ev.preventDefault();
-
       //Validar dados
+      if (this.validate()) {
+        this.entity.name = this.tempEntity.name;
+        this.entity.legal_name = this.tempEntity.legal_name;
+        //this.entity.cnpj = this.tempEntity.cnpj;
+        this.entity.street_address = this.tempEntity.street_address;
+        this.entity.city = this.tempEntity.city;
+        this.entity.state = this.tempEntity.state;
+        this.entity.description = this.tempEntity.description;
+        console.log(this.tempEntity, this.entity)
 
-      this.entity.name = this.tempEntity.name;
-      this.entity.legal_name = this.tempEntity.legal_name;
-      //this.entity.cnpj = this.tempEntity.cnpj;
-      this.entity.street_address = this.tempEntity.street_address;
-      this.entity.city = this.tempEntity.city;
-      this.entity.state = this.tempEntity.state;
-      this.entity.description = this.tempEntity.description;
-
-      this.onUpdateEntityCB(this.entity.id, this.entity);
-      this.hidePopup("updateModal");
+        this.onUpdateEntityCB(this.entity.id, this.entity);
+        this.update = false;
+      }
+    },
+    handleExit() {
+      this.onLeaveEntityCB(this.entity.id);
+      this.del = false;
+    },
+    handleInvite() {
+      this.onInviteUserCB(this.entity.id, this.email);
+      this.invite = false;
+    },
+    fetchStates() {
+      api.getStates().then(res => {
+        console.log(res);
+        this.states = res.data;
+        this.states.sort((a,b)=>{
+          const stateA = a.uf;
+          const stateB = b.uf;
+          let comparison = 0;
+          if (stateA > stateB) {
+            comparison = 1;
+          } else if (stateA < stateB) {
+            comparison = -1;
+          }
+          return comparison;
+        });
+        console.log(this.states)
+        this.statesFetched = true;
+      });
+    },
+    fetchCities(stateId, query) {
+      return api.getDistricts(stateId, query);
     }
-  }
+  },
+  watch: {
+    search(query) {
+      if (query.length <= 3) return;
+      clearTimeout(this.debounce);
+      let that = this;
+      this.debounce = setTimeout(function() {
+        that.fetchCities(that.tempEntity.state, query).then(res => {
+          that.cities = res.data;
+        });
+      }, 300);
+    }
+  },
 };
 </script>
 
