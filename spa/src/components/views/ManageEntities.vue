@@ -137,8 +137,8 @@
           ></v-textarea>
         </div>
         <div class="d-flex justify-content-end">
-          <button class="btn btn-danger" @click="handleCreateCancel">Cancelar</button>
-          <button class="btn btn-success ml-1" @click="createEntity">Criar</button>
+          <v-btn color="red" dark @click="handleCreateCancel">Cancelar</v-btn>
+          <v-btn color="success" :loading="loading" class="ml-1" @click="createEntity">Criar</v-btn>
         </div>
       </v-form>
     </div>
@@ -186,6 +186,7 @@ export default {
     },
     states: [],
     cities: [],
+    loading: false,
     statesFetched: false,
     search: null,
     debounce: null
@@ -216,30 +217,33 @@ export default {
     createEntity: function(ev) {
       ev.preventDefault();
       if (this.validate()) {
+        this.loading=true;
         api
           .createEntity({
             ...this.entityData,
             district_id: this.entityData.city.id
           })
           .then(res => {
-            console.log(res);
             this.creatingEntity = false;
-            //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => {
-            this.creatingDemandLoading = false;
-            this.demandData = {
+            console.log(res);
+            this.entityData = {
               name: "",
               cnpj: "",
               legal_name: "",
               address: "",
-              Estado: "",
+              state: "",
               city: "",
               description: ""
             };
+            this.$store.commit('showMessage', { content:`Entidade criada com sucesso!`, error:false })
+            //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+          })
+          .catch(err => {
+            this.$store.commit('showMessage', { content:err, error:true })
+            console.log(err);
+          })
+          .finally(() => {
+            this.loading = false;
             this.$store.dispatch("loadProfile");
           });
       }  
