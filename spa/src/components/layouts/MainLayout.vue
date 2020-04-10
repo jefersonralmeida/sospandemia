@@ -59,9 +59,14 @@
                                         <a class="dropdown-item" href="#" @click="logout()"><span class="fa fa-user-times"></span>  Sair</a>
                                     </div>
                                 </li>
-                                <li class="nav-item" v-else>
-                                    <a class="nav-link" :href="loginUrl"><span class="fa fa-user"></span> Login</a>
-                                </li>
+                                <template v-else>
+                                    <li class="nav-item">
+                                        <a class="nav-link" :href="loginUrl"><span class="fa fa-user"></span> Login</a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" :href="registerUrl"><span aria-hidden="true" class="fa fa-sign-in-alt"></span> Registrar</a>
+                                    </li>
+                                </template>
                             </ul>
 
                         </div>
@@ -127,6 +132,9 @@
             },
             loginUrl: function () {
                 return api.baseURL() + '/auth/login';
+            },
+            registerUrl: function () {
+                return api.baseURL() + '/auth/register';
             },
             uiLoaded: function () {
                 return this.$store.state.uiLoaded;
