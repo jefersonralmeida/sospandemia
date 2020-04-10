@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './components/views/Home';
-import Error404 from "./components/errors/Error404";
 import CreateDemand from "./components/views/CreateDemand";
 import store from './store';
 import api from "./api";
@@ -10,6 +9,7 @@ import ManageEntities from "./components/views/ManageEntities";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
 import ManageEntitiesLocal from "./components/views/ManageEntitiesLocal";
+import GenericError from "./components/errors/GenericError";
 
 Vue.use(Router);
 
@@ -79,6 +79,21 @@ const routes = [
         }
     },
     {
+        path: '/503',
+        name: '503',
+        title: '503',
+        meta: {
+            layout: "compact-layout",
+            guestAllowed: true,
+        },
+        component: GenericError,
+        props: {
+            errorCode: '503',
+            errorTitle: 'Serviço Indisponível',
+            errorMessage: 'O sistema está em manutenção. Tente novamente mais tarde.',
+        }
+    },
+    {
         path: '*',
         name: '404',
         title: '404',
@@ -86,7 +101,12 @@ const routes = [
             layout: "compact-layout",
             guestAllowed: true,
         },
-        component: Error404,
+        component: GenericError,
+        props: {
+            errorCode: '404',
+            errorTitle: 'Página não encontrada',
+            errorMessage: 'O endereço que você está acessando não é válido',
+        }
     },
 ];
 

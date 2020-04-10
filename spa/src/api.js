@@ -45,6 +45,9 @@ const api = {
                     // case 403: // Forbidden
                     //     // TODO
                     //     break;
+                    case 503:
+                        router.push('/503');
+                        break;
                 }
                 return Promise.reject(error);
             }
@@ -62,7 +65,10 @@ const api = {
         const currentDomain = window.location.hostname;
         const currentDomainProtocol = window.location.protocol;
         const currentDomainPort = window.location.port;
-        const redirectUrlPrefix = `${currentDomainProtocol}//${currentDomain}:${currentDomainPort}`;
+        let redirectUrlPrefix = `${currentDomainProtocol}//${currentDomain}`;
+        if (currentDomainPort) {
+            redirectUrlPrefix += `:${currentDomainPort}`;
+        }
 
         const redirectToAuthorizePage = (clientId, redirectUrl) => {
             const state = randomstring.generate();
