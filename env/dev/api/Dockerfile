@@ -8,7 +8,7 @@ RUN ln -s -f /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 COPY conf/docker-php-opcache.ini $PHP_INI_DIR/conf.d/
 
 # install the php extensions
-RUN apt-get install -y libpq-dev libzip-dev unzip librdkafka-dev libzookeeper-mt-dev cron rsync procps libpng-dev libjpeg-dev zlib1g-dev npm --no-install-recommends && \
+RUN apt-get install -y libpq-dev libzip-dev unzip librdkafka-dev libzookeeper-mt-dev cron rsync procps libpng-dev libjpeg-dev zlib1g-dev nodejs --no-install-recommends && \
     docker-php-ext-install \
         pdo \
         pdo_pgsql \
@@ -23,16 +23,6 @@ RUN docker-php-ext-configure gd \
 RUN pecl install -o -f redis && \
     rm -rf /tmp/pear && \
     docker-php-ext-enable redis
-
-# kafka extension
-RUN pecl install -o -f rdkafka && \
-    rm -rf /tmp/pear && \
-    docker-php-ext-enable rdkafka
-
-# zookeeper extension 
-RUN pecl install -o -f zookeeper && \
-    rm -rf /tmp/pear && \
-    docker-php-ext-enable zookeeper
 
 # install xdebug
 RUN pecl install xdebug; \
@@ -50,3 +40,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"; \
 # install prestissimo for composer parallel execution
 RUN composer global require hirak/prestissimo
 
+RUN php -r "copy('https://npmjs.org/install.sh', 'npm-install.sh');"; \
+    bash npm-install.sh; \
+    php -r "unlink('npm-install.sh');";

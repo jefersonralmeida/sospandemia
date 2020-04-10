@@ -5,8 +5,6 @@ RUN apt-get clean && apt-get update
 
 RUN ln -s -f /usr/share/zoneinfo/America/Sao_Paulo  /etc/localtime
 
-COPY conf/docker-php-opcache.ini $PHP_INI_DIR/conf.d/
-
 # install the php extensions
 RUN apt-get install -y libpq-dev libzip-dev unzip cron rsync procps libpng-dev libjpeg-dev zlib1g-dev npm --no-install-recommends && \
     docker-php-ext-install \
