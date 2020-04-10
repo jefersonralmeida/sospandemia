@@ -1,0 +1,43 @@
+version: '3.5'
+services:
+
+  p_proxy:
+    build:
+      context: "./env/prod/proxy"
+    ports:
+      - "80:80"
+    depends_on:
+      - p_spa
+      - p_api
+
+  p_spa:
+    build:
+      context: "./env/prod/spa"
+
+  p_web:
+    build:
+      context: "./env/prod/api"
+      dockerfile: web.Dockerfile
+    working_dir: /var/www
+
+  p_api:
+    build:
+      context: "./env/prod/api"
+      dockerfile: api.Dockerfile
+    working_dir: /var/www
+    volumes:
+      - p_storage-volume:/var/www/storage
+
+  p_db:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - p_database-volume:/var/lib/postgresql/data
+
+  p_redis:
+    image: redis:5
+
+volumes:
+  p_database-volume:
+  p_storage-volume:
