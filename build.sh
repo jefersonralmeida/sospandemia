@@ -7,7 +7,7 @@ echo '### ENSURE THE DEV CONTAINERS ARE DOWN ###';
 $dc down
 
 echo '### INSTALL SPA DEPENDENCIES ###'
-$dc exec spa npm install
+$dc run spa npm install
 
 echo '### BUILD THE SPA DIST VERSION ###'
 $dc run spa npm run build --mode=production
