@@ -64,14 +64,13 @@
       class="mt-2"
     ></demand-card>
     
-  <div class="text-center mt-2" v-if="checked">
+  <div class="text-center mt-2" v-if="checked && last_page>1">
     <v-pagination
       v-model="current_page"
       @input="loadDemands"
       :length="last_page"
     ></v-pagination>
   </div>
-  <loading-widget v-if="loading"></loading-widget>
 
   </div>
 </template>
@@ -174,8 +173,11 @@ export default {
     },
     deleteDemand: function(demandId) {
       return api.deleteDemand(demandId).then(response => {
-        console.log(response);
-        this.loadDemands();
+        console.log("teste",this.demands.length);
+        if(this.demands.length == 1 && this.current_page>1){
+          this.current_page--;
+        }
+        this.loadDemands()
       });
     }
   },
