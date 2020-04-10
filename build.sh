@@ -29,6 +29,10 @@ $dc exec api rsync -av --delete . /var/dist/build \
 --exclude server.php \
 --exclude webpack.mix.js;
 
+echo '### MANAGE .env FILES ###'
+$dc exec api rm -f /var/dist/build/.env*;
+$dc exec api cp ./.env.prod /var/dist/build/.env;
+
 
 echo '### INSTALL API NPM DEPENDENCIES ###'
 $dc exec api npm install --cwd=/var/dist/build --prefix=/var/dist/build
