@@ -21,6 +21,7 @@
             :items="states"
             v-model="filterOptions.state"
             :loading="!statesFetched"
+            @change="search(query)"
             outlined
             item-text="uf"
             item-value="id"
@@ -37,6 +38,7 @@
             autocomplete="dskjalçkdwlçakdwlça"
             placeholder="Digite o nome da cidade para buscar"
             :search-input.sync="searchCity"
+            @change="search(query)"
             outlined
             hide-no-data
             hide-selected
@@ -74,6 +76,13 @@
         >{{ demand.entity.name }} - {{ demand.entity.city }} - {{ demand.entity.state}}</div>
       </div>
     </div>
+    <div class="text-center mt-2" v-if="widgetLoading==false && last_page>1">
+    <v-pagination
+      v-model="current_page"
+      @input="search"
+      :length="last_page"
+    ></v-pagination>
+  </div>
   </div>
 </template>
 
@@ -87,6 +96,8 @@ export default {
   components: { LoadingWidget },
   data() {
     return {
+      current_page:1,
+      last_page:1,
       query: "",
       widgetLoading: false,
       demands: [],
@@ -126,15 +137,18 @@ export default {
           filterParam = this.filterOptions.state;
         }
         api
-          .searchDemands(this.query, filterType, filterParam)
+          .searchDemands(this.query, 1, filterType, filterParam)
           .then(({ data }) => {
             console.log(data)
+            this.current_page = 1;
             this.demands = data.data;
+            this.last_page = data.last_page;
             this.widgetLoading = false;
           });
       } else {
-        api.searchDemands(this.query).then(({ data }) => {
-            console.log(data)
+        api.searchDemands(this.query,this.current_page).then(({ data }) => {
+          console.log(data)
+          this.last_page = data.last_page;  
           this.demands = data.data;
           this.widgetLoading = false;
         });
@@ -170,6 +184,7 @@ export default {
   },
   watch: {
     query: _.debounce(function() {
+      this.current_page = 1;
       this.search();
     }, 300),
     searchCity(query) {
