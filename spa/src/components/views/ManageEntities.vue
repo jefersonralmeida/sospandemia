@@ -297,6 +297,11 @@ export default {
           that.cities = res.data;
         });
       }, 300);
+    },
+    entities: function(){
+      if(this.entities.length==1){
+        this.selectEntity(this.entities[0].id);
+      }
     }
   },
   computed: {
