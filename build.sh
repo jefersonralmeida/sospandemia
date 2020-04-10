@@ -3,9 +3,6 @@
 dc="docker-compose";
 dcp="docker-compose -f docker-compose-prod.yml";
 
-echo '### ENSURE THE DEV CONTAINERS ARE DOWN ###';
-$dc down
-
 echo '### INSTALL SPA DEPENDENCIES ###'
 $dc run spa npm install
 
@@ -55,4 +52,22 @@ $dcp run p_api php artisan view:cache
 echo '### CACHING THE ROUTES ###'
 $dcp run p_api php artisan route:cache
 
-# TODO - bring the env up, run migrations, compile routes and view, generate key pair, run indexing remove artisan, remove migrations, remove routes, remove views
+echo '### CACHING THE CONFIG FILES ###'
+$dcp run p_api php artisan config:cache
+
+
+echo '### CREATE INDEXES ###'
+$dcp run p_api php artisan scout:import "App\Models\Demand";
+$dcp run p_api php artisan scout:import "App\Models\District";
+
+echo '### PUT THE SYSTEM ON MAINTENANCE MODE ###'
+$dcp run p_api php artisan down
+
+echo '### RUNNING MIGRATIONS ###'
+$dcp run p_api php artisan migrate
+
+echo '### REPLACING THE RUNNING CONTAINERS ###'
+$dcp up -d
+
+echo '### REMOVE MAINTENANCE MODE ###'
+$dcp run p_api php artisan up
