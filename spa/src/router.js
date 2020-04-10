@@ -2,14 +2,12 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './components/views/Home';
 import Error404 from "./components/errors/Error404";
-import CreateDemand from "./components/views/CreateDemand";
 import store from './store';
 import api from "./api";
 import LoadingMessage from "./components/views/LoadingMessage";
 import ManageEntities from "./components/views/ManageEntities";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
-import ManageEntitiesLocal from "./components/views/ManageEntitiesLocal";
 
 Vue.use(Router);
 
@@ -36,25 +34,10 @@ const routes = [
         },
     },
     {
-        path: '/nova-demanda',
-        name: 'nova-demanda',
-        title: 'Nova Demanda',
-        component: CreateDemand,
-    },
-    {
         path: '/gerenciar-demandas',
         name: 'gerenciar-demandas',
         title: 'Gerenciar Demandas',
         component: ManageDemands,
-    },
-    {
-        path: '/gerenciar-entidades-local',
-        name: 'gerenciar-entidades-local',
-        title: 'Gerenciar Entidades Local',
-        component: ManageEntitiesLocal,
-        meta: {
-            guestAllowed: true,
-        },
     },
     {
         path: '/oauth-callback',
