@@ -55,7 +55,10 @@
       </small>
     </div>
     <hr />
-    <loading-widget v-if="demands.length === 0"></loading-widget>
+    <loading-widget v-if="widgetLoading==true"></loading-widget>
+    <p
+      v-else-if="widgetLoading==false && demands.length === 0"
+    >Não há demandas correspondente à busca!</p>
     <div class="results" v-else>
       <div class="card m-3" v-for="demand in demands">
         <div class="card-header">
@@ -85,6 +88,7 @@ export default {
   data() {
     return {
       query: "",
+      widgetLoading: false,
       demands: [],
       showFilter: false,
       statesFetched: false,
@@ -106,7 +110,8 @@ export default {
     }
   },
   methods: {
-    search: function(query) {
+    search: function(query) { 
+      this.widgetLoading = true;
       if (this.showFilter && this.filterOptions.state != null) {
         let filterType;
         let filterParam;
@@ -125,11 +130,13 @@ export default {
           .then(({ data }) => {
             console.log(data)
             this.demands = data.data;
+            this.widgetLoading = false;
           });
       } else {
         api.searchDemands(this.query).then(({ data }) => {
             console.log(data)
           this.demands = data.data;
+          this.widgetLoading = false;
         });
       }
     },
