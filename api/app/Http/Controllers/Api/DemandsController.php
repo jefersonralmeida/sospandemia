@@ -29,7 +29,7 @@ class DemandsController extends Controller
 
         $keys = Demand::search($query)->keys();
 
-        $query = Demand::with('entity')->whereIn('id', $keys);
+        $query = Demand::with('entity')->whereIn('demands.id', $keys);
         if ($districtId !== null) {
             $query
                 ->join('entities', 'entities.id', '=', 'demands.entity_id')
@@ -44,7 +44,7 @@ class DemandsController extends Controller
                 ->where('districts.state_id', '=', $stateId);
         }
 
-        $result = $query->first();
+        $result = $query->paginate();
         return $result;
     }
 
