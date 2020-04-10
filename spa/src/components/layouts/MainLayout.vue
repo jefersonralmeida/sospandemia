@@ -22,7 +22,7 @@
                                     </router-link>
                                 </li>
                                 <!-- link para acessar "gerenciar entidade" -->
-                                <li class="nav-item" :class="activeClass('gerenciar-entidades-local')">
+                                <li class="nav-item" :class="activeClass('gerenciar-entidades-local')" v-if="isLogged">
                                     <router-link class="nav-link" to="/gerenciar-entidades">Gerenciar Entidades
                                     </router-link>
                                 </li>
