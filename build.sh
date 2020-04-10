@@ -55,6 +55,8 @@ $dcp run p_api php artisan route:cache
 echo '### CACHING THE CONFIG FILES ###'
 $dcp run p_api php artisan config:cache
 
+echo '### CREATE INDEXES ###'
+$dcp run p_api php artisan db:importDistricts;
 
 echo '### CREATE INDEXES ###'
 $dcp run p_api php artisan scout:import "App\Models\Demand";
