@@ -64,7 +64,7 @@ echo '### PUT THE SYSTEM ON MAINTENANCE MODE ###'
 $dcp run p_api php artisan down
 
 echo '### RUNNING MIGRATIONS ###'
-$dcp run p_api php artisan migrate
+$dcp run p_api php artisan migrate --force
 
 echo '### REPLACING THE RUNNING CONTAINERS ###'
 $dcp up -d
