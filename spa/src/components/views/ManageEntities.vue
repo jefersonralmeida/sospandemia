@@ -300,7 +300,7 @@ export default {
     },
     entities: function(){
       if(this.entities.length==1){
-        this.selectEntity(this.entities[0].id);
+        this.selectEntity(this.entities[0].id,true);
       }
     }
   },
