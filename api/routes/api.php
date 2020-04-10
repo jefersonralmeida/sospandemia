@@ -13,6 +13,10 @@
 
 Route::get('demands/search', 'DemandsController@search');
 
+// states routes
+Route::get('states', 'StatesController@index');
+Route::get('states/{state}/search-districts', 'StatesController@searchDistricts');
+
 Route::middleware('auth:api')->group(function() {
 
     // auth routes
@@ -20,10 +24,6 @@ Route::middleware('auth:api')->group(function() {
 
     // profile routes
     Route::get('profile', 'ProfileController@info');
-
-    // states routes
-    Route::get('states', 'StatesController@index');
-    Route::get('states/{state}/search-districts', 'StatesController@searchDistricts');
 
     // entities routes
     Route::get('entities/{entity}/demands', 'EntitiesController@indexDemands');
