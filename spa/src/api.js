@@ -157,9 +157,9 @@ const api = {
         return this.httpClient().delete(`demands/${demandId}`);
     },
 
-    searchDemands: function(query, filterType, filterParam) {
+    searchDemands: function(query, page, filterType, filterParam) {
         let params = {
-            query
+            query, page
         }
         if(filterType)
             params[filterType] = filterParam + ''
