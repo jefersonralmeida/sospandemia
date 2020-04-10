@@ -36,25 +36,10 @@ const routes = [
         },
     },
     {
-        path: '/nova-demanda',
-        name: 'nova-demanda',
-        title: 'Nova Demanda',
-        component: CreateDemand,
-    },
-    {
         path: '/gerenciar-demandas',
         name: 'gerenciar-demandas',
         title: 'Gerenciar Demandas',
         component: ManageDemands,
-    },
-    {
-        path: '/gerenciar-entidades-local',
-        name: 'gerenciar-entidades-local',
-        title: 'Gerenciar Entidades Local',
-        component: ManageEntitiesLocal,
-        meta: {
-            guestAllowed: true,
-        },
     },
     {
         path: '/oauth-callback',
