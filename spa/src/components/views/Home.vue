@@ -135,9 +135,10 @@ export default {
           filterParam = this.filterOptions.state;
         }
         api
-          .searchDemands(this.query, this.current_page, filterType, filterParam)
+          .searchDemands(this.query, 1, filterType, filterParam)
           .then(({ data }) => {
             console.log(data)
+            this.current_page = 1;
             this.demands = data.data;
             this.last_page = data.last_page;
             this.widgetLoading = false;
@@ -181,6 +182,7 @@ export default {
   },
   watch: {
     query: _.debounce(function() {
+      this.current_page = 1;
       this.search();
     }, 300),
     searchCity(query) {
