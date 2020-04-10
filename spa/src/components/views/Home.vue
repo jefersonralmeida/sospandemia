@@ -21,6 +21,7 @@
             :items="states"
             v-model="filterOptions.state"
             :loading="!statesFetched"
+            @change="search(query)"
             outlined
             item-text="uf"
             item-value="id"
@@ -37,6 +38,7 @@
             autocomplete="dskjalçkdwlçakdwlça"
             placeholder="Digite o nome da cidade para buscar"
             :search-input.sync="searchCity"
+            @change="search(query)"
             outlined
             hide-no-data
             hide-selected
