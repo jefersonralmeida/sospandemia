@@ -109,7 +109,7 @@
               placeholder="Digite o nome da cidade para buscar"
               :search-input.sync="search"
               outlined
-              hide-no-data
+              :no-data-text="entityData.noDataText"
               hide-selected
               return-object
             ></v-autocomplete>
@@ -173,7 +173,8 @@ export default {
       description: "",
       street_address: "",
       city: "",
-      state: ""
+      state: "",
+      noDataText: "Continue digitando para encontrar uma cidade.",
     },
     rules: {
       min: v => v.length >= 1 || "Minimo 15 caracteres",
@@ -209,7 +210,6 @@ export default {
       return this.$store.getters.activeEntityId === entityId ? "active" : "";
     },
     validate() {
-      console.log(this.$refs);
       return this.$refs.form.validate();
     },
 
@@ -224,7 +224,6 @@ export default {
           })
           .then(res => {
             this.creatingEntity = false;
-            console.log(res);
             this.entityData = {
               name: "",
               cnpj: "",
@@ -239,7 +238,6 @@ export default {
           })
           .catch(err => {
             this.$store.commit('showMessage', { content:err, error:true })
-            console.log(err);
           })
           .finally(() => {
             this.loading = false;
@@ -250,7 +248,6 @@ export default {
     updateEntity: function(entityId, data) {
       const current = this.entities.find(entity => entity.id === entityId);
       return api.updateEntity(entityId, data).then(response => {
-        console.log(response);
         this.$store.dispatch("loadProfile");
       });
     },
@@ -266,7 +263,6 @@ export default {
     },
     fetchStates() {
       api.getStates().then(res => {
-        console.log(res);
         this.states = res.data;
         this.states.sort((a,b)=>{
           const stateA = a.uf;
@@ -279,7 +275,6 @@ export default {
           }
           return comparison;
         });
-        console.log(this.states)
         this.statesFetched = true;
       });
     },
@@ -289,12 +284,17 @@ export default {
   },
   watch: {
     search(query) {
-      if (query.length <= 3) return;
+      if(query === null) return
+      if (query.length <= 3) {
+        this.entityData.noDataText = "Continue digitando para encontrar uma cidade."
+        return;
+      }
       clearTimeout(this.debounce);
       let that = this;
       this.debounce = setTimeout(function() {
         that.fetchCities(that.entityData.state, query).then(res => {
           that.cities = res.data;
+          that.entityData.noDataText = "Nenhuma cidade encontrada. Verifique a busca ou seja mais específico"
         });
       }, 300);
     },

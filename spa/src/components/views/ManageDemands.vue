@@ -69,6 +69,7 @@
       v-model="current_page"
       @input="loadDemands"
       :length="last_page"
+      next-icon="mdi-skip-next"
     ></v-pagination>
   </div>
 
