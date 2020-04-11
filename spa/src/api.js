@@ -163,7 +163,6 @@ const api = {
         }
         if(filterType)
             params[filterType] = filterParam + ''
-        console.log(params)
         return this.httpClient().get('demands/search', {
             params
         });

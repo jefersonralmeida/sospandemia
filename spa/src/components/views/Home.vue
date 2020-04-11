@@ -39,8 +39,8 @@
             placeholder="Digite o nome da cidade para buscar"
             :search-input.sync="searchCity"
             @change="search(query)"
+            :no-data-text="filterOptions.noDataText"
             outlined
-            hide-no-data
             hide-selected
             return-object
           ></v-autocomplete>
@@ -109,7 +109,8 @@ export default {
       debounce: null,
       filterOptions: {
         state: null,
-        city: null
+        city: null,
+        noDataText: "Continue digitando para encontrar uma cidade."
       }
     };
   },
@@ -139,15 +140,12 @@ export default {
         api
           .searchDemands(this.query, 1, filterType, filterParam)
           .then(({ data }) => {
-            console.log(data)
-            this.current_page = 1;
             this.demands = data.data;
             this.last_page = data.last_page;
             this.widgetLoading = false;
           });
       } else {
         api.searchDemands(this.query,this.current_page).then(({ data }) => {
-          console.log(data)
           this.last_page = data.last_page;  
           this.demands = data.data;
           this.widgetLoading = false;
@@ -174,7 +172,6 @@ export default {
           }
           return comparison;
         });
-        console.log(this.states);
         this.statesFetched = true;
       });
     },
@@ -188,13 +185,18 @@ export default {
       this.search();
     }, 300),
     searchCity(query) {
-      console.log(query)
-      if (query.length <= 3) return;
+      if(query === null) return
+      if (query.length <= 3) {
+        this.filterOptions.noDataText = "Continue digitando para encontrar uma cidade."
+        return;
+      }
       clearTimeout(this.debounce);
       let that = this;
       this.debounce = setTimeout(function() {
         that.fetchCities(that.filterOptions.state, query).then(res => {
           that.cities = res.data;
+          if(res.data.length === 0)
+            that.filterOptions.noDataText = "Nenhuma cidade encontrada. Verifique a busca ou seja mais específico"
         });
       }, 300);
     }
