@@ -1,5 +1,5 @@
-include /etc/letsencrypt/options-ssl-nginx.conf;
-ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+include /etc/letsencrypt/conf/options-ssl-nginx.conf;
+ssl_dhparam /etc/letsencrypt/conf/ssl-dhparams.pem;
 
 server {
     listen 80;

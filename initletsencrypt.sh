@@ -47,6 +47,8 @@ fi
 echo "### Creating dummy certificate for $domain ..."
 path="/etc/letsencrypt/live/$domain"
 mkdir -p "$data_path/conf/live/$domain"
+$dcp run --rm --entrypoint "mkdir -p $path" certbot
+$dcp run --rm --entrypoint "chmod -R 777 $path" certbot
 $dcp run --rm --entrypoint "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '$path/privkey.pem' -out '$path/fullchain.pem' -subj '/CN=localhost'" certbot
 echo
 
@@ -55,7 +57,7 @@ $dcp up --force-recreate -d p_proxy
 echo
 
 echo "### Deleting dummy certificate for $domain ..."
-$dcp run --rm --entrypoint "rm -Rf /etc/letsencrypt/live/$domain && rm -Rf /etc/letsencrypt/archive/$domain && rm -Rf /etc/letsencrypt/renewal/$domain.conf" certbot
+$dcp run --rm --entrypoint "rm -Rf $path && rm -Rf /etc/letsencrypt/archive/$domain && rm -Rf /etc/letsencrypt/renewal/$domain.conf" certbot
 echo
 
 
@@ -74,4 +76,4 @@ $dcp run --rm --entrypoint "certbot certonly --webroot -w /var/www/certbot $stag
 echo
 
 echo "### Reloading nginx ..."
-$dcp exec p_proxy nginx -s reload
+$dcp up --force-recreate -d p_proxy
