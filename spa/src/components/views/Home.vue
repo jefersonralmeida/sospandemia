@@ -140,7 +140,6 @@ export default {
         api
           .searchDemands(this.query, 1, filterType, filterParam)
           .then(({ data }) => {
-            this.current_page = 1;
             this.demands = data.data;
             this.last_page = data.last_page;
             this.widgetLoading = false;
