@@ -4,7 +4,7 @@
         <loading-screen v-if="!uiLoaded"></loading-screen>
         <div class="row h-100 no-gutters" v-else>
             <div class="col">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
                     <div class="container p-0">
                         <router-link class="navbar-brand p-0" to="/">
                             <img src="../../assets/logo_app.png" height="50" alt="">

@@ -1,62 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title')</title>
+    <title>@yield('title')</title>
 
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <!-- Scripts -->
+    <script src="{{ asset('auth/js/app.js') }}" defer></script>
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-            .full-height {
-                height: 100vh;
-            }
+    <!-- Styles -->
+    <link href="{{ asset('auth/css/app.css') }}" rel="stylesheet">
+    <style>
+        .error-code {
+            color: #DDD;
+        }
+        .error-desc {
+            text-align: center;
+            color: #999;
+        }
+    </style>
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+</head>
+<body>
+<div>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <a class="navbar-brand p-0" href="{{ uiRoute() }}">
+                            <img src="{{ asset('auth/logo.png') }}" height="50" alt="">
+                        </a>
+                    </div>
 
-            .position-ref {
-                position: relative;
-            }
+                    <div class="card-body compact-body">
+                        <div>
+                            <h3 style="text-align: center;">
+                                <span class="error-code">@yield('code')</span> Ops! @yield('title')
+                            </h3>
+                            <hr/>
+                            <p class="error-desc m-4">
+                                @yield('message')
+                            </p>
+                        </div>
+                    </div>
 
-            .code {
-                border-right: 2px solid;
-                font-size: 26px;
-                padding: 0 15px 0 15px;
-                text-align: center;
-            }
-
-            .message {
-                font-size: 18px;
-                text-align: center;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            <div class="code">
-                @yield('code')
-            </div>
-
-            <div class="message" style="padding: 10px;">
-                @yield('message')
+                    <div class="card-footer">
+                        <a class="nav-link p-0" href="{{ uiRoute() }}">
+                            Home
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
