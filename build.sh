@@ -4,16 +4,16 @@ dc="docker-compose";
 dcp="docker-compose -f docker-compose-prod.yml";
 
 echo '### INSTALL SPA DEPENDENCIES ###'
-$dc run ---rm spa npm install
+$dc run --rm spa npm install
 
 echo '### BUILD THE SPA DIST VERSION ###'
-$dc run ---rm spa npm run build --mode=production
+$dc run --rm spa npm run build --mode=production
 
 echo '### ENSURE THAT THE API BUILD FOLDER EXISTS ###'
-$dc run ---rm api mkdir -p /var/dist/build
+$dc run --rm api mkdir -p /var/dist/build
 
 echo '### COPY FILES TO THE API BUILD FOLDER ###'
-$dc run ---rm api rsync -av --delete . /var/dist/build \
+$dc run --rm api rsync -av --delete . /var/dist/build \
 --exclude vendor \
 --exclude node_modules \
 --exclude storage/* \
@@ -24,18 +24,18 @@ $dc run ---rm api rsync -av --delete . /var/dist/build \
 --exclude webpack.mix.js;
 
 echo '### MANAGE .env FILES ###'
-$dc run ---rm api rm -f /var/dist/build/.env*;
-$dc run ---rm api cp ./.env.prod /var/dist/build/.env;
+$dc run --rm api rm -f /var/dist/build/.env*;
+$dc run --rm api cp ./.env.prod /var/dist/build/.env;
 
 
 echo '### INSTALL API NPM DEPENDENCIES ###'
-$dc run ---rm api npm install --cwd=/var/dist/build --prefix=/var/dist/build
+$dc run --rm api npm install --cwd=/var/dist/build --prefix=/var/dist/build
 
 echo '### BUILD THE API ASSETS ###'
-$dc run ---rm api npm run prod --cwd=/var/dist/build --prefix=/var/dist/build
+$dc run --rm api npm run prod --cwd=/var/dist/build --prefix=/var/dist/build
 
 echo '### EXECUTE COMPOSER ON API ###'
-$dc run ---rm api composer install --working-dir=/var/dist/build --no-ansi --no-dev --no-interaction --no-progress --no-suggest --optimize-autoloader
+$dc run --rm api composer install --working-dir=/var/dist/build --no-ansi --no-dev --no-interaction --no-progress --no-suggest --optimize-autoloader
 
 echo '### REMOVE TEMPORARY CONTAINERS ###'
 $dc down
@@ -44,13 +44,13 @@ echo '### BUILD THE PROD ENV ###'
 $dcp build
 
 echo '### SET STORAGE PERMISSIONS ###'
-$dcp run ---rm p_api chown -R www-data: storage
+$dcp run --rm p_api chown -R www-data: storage
 
 echo '### CACHING THE VIEWS ###'
-$dcp run ---rm p_api php artisan view:cache
+$dcp run --rm p_api php artisan view:cache
 
 echo '### CACHING THE ROUTES ###'
-$dcp run ---rm p_api php artisan route:cache
+$dcp run --rm p_api php artisan route:cache
 
 echo '### CACHING THE CONFIG FILES ###'
 $dcp run --rm p_api php artisan config:cache
