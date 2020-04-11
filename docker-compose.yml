@@ -39,7 +39,7 @@ services:
     working_dir: /var/www
 
   db:
-    image: postgres:12
+    image: mdillon/postgis:11
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:

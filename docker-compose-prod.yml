@@ -29,7 +29,7 @@ services:
       - p_storage-volume:/var/www/storage
 
   p_db:
-    image: postgres:12
+    image: mdillon/postgis:11
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:

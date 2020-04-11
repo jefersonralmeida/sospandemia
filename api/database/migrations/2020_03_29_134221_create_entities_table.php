@@ -21,7 +21,7 @@ class CreateEntitiesTable extends Migration
             $table->string('description');
             $table->string('street_address');
             $table->bigInteger('district_id');
-            //$table->point('location')->nullable();
+            $table->point('location')->nullable();
             $table->timestamps();
         });
     }
