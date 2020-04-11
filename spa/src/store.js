@@ -21,6 +21,7 @@ const store = new Vuex.Store({
             codeVerifier: null,
         },
         profile: null,
+        uiLoaded: true,
     },
     mutations: {
         setEntity (state, entityId) {
@@ -42,6 +43,16 @@ const store = new Vuex.Store({
             state.oauthToken = null;
             state.profile = null;
         },
+        uiLoaded (state) {
+            state.uiLoaded = true;
+        },
+        uiLoading (state) {
+            state.uiLoaded = false;
+        },
+        showMessage (state, payload) {
+            state.notificationContent = payload.content
+            state.noticicationError = payload.error
+        }
     },
     actions: {
         findOrganization({state, commit}, domain) {
@@ -61,7 +72,6 @@ const store = new Vuex.Store({
         },
         loadProfile({commit}) {
             api.profile().then(response => {
-                console.log(response.data);
                 commit('setProfile', response.data);
             });
         }

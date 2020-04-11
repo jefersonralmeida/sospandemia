@@ -20,9 +20,8 @@ class CreateEntitiesTable extends Migration
             $table->string('legal_name');
             $table->string('description');
             $table->string('street_address');
-            $table->string('city');
-            $table->string('state', 2);
-            //$table->polygon('location')->nullable();
+            $table->bigInteger('district_id');
+            $table->point('location')->nullable();
             $table->timestamps();
         });
     }

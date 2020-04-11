@@ -45,6 +45,9 @@ const api = {
                     // case 403: // Forbidden
                     //     // TODO
                     //     break;
+                    case 503:
+                        router.push('/503');
+                        break;
                 }
                 return Promise.reject(error);
             }
@@ -62,7 +65,10 @@ const api = {
         const currentDomain = window.location.hostname;
         const currentDomainProtocol = window.location.protocol;
         const currentDomainPort = window.location.port;
-        const redirectUrlPrefix = `${currentDomainProtocol}//${currentDomain}:${currentDomainPort}`;
+        let redirectUrlPrefix = `${currentDomainProtocol}//${currentDomain}`;
+        if (currentDomainPort) {
+            redirectUrlPrefix += `:${currentDomainPort}`;
+        }
 
         const redirectToAuthorizePage = (clientId, redirectUrl) => {
             const state = randomstring.generate();
@@ -109,7 +115,7 @@ const api = {
         axios.post(`${this.baseURL()}/oauth/token`, requestData). then(response => {
             store.commit('setOauthToken', response.data);
             store.dispatch('loadProfile').then(response => {
-                router.push('/selecionar-entidade');
+                router.push('/gerenciar-demandas');
             });
         });
     },
@@ -131,13 +137,61 @@ const api = {
         return this.httpClient().get('profile');
     },
 
-    autoLoginHash: function() {
-        return this.httpClient().get('profile/auto-login-hash');
+    indexDemandsByEntity: function(page) {
+        return this.httpClient().get(`entities/${store.getters.activeEntityId}/demands?page=${page}`);
     },
 
-    usersSearch: function(searchQuery) {
-        searchQuery = encodeURI(searchQuery);
-        return this.httpClient().get(`users/search/${searchQuery}`);
+    createDemand: function(data) {
+        return this.httpClient().post(`entities/${store.getters.activeEntityId}/new-demand`, data);
+    },
+
+    getDemand: function(demandId) {
+        return this.httpClient().get(`demands/${demandId}`);
+    },
+
+    updateDemand: function(demandId, data) {
+        return this.httpClient().put(`demands/${demandId}`, data);
+    },
+
+    deleteDemand: function(demandId) {
+        return this.httpClient().delete(`demands/${demandId}`);
+    },
+
+    searchDemands: function(query, page, filterType, filterParam) {
+        let params = {
+            query, page
+        }
+        if(filterType)
+            params[filterType] = filterParam + ''
+        return this.httpClient().get('demands/search', {
+            params
+        });
+    },
+
+
+    createEntity: function(data) {
+        return this.httpClient().post('entities/', data);
+    },
+
+    getEntity: function(entityId) {
+        return this.httpClient().get(`entities/${entityId}`);
+    },
+
+    updateEntity: function(entityId, data) {
+        return this.httpClient().put(`entities/${entityId}`, data);
+    },
+    leaveEntity: function(entityId) {
+        return this.httpClient().post(`entities/${entityId}/leave`);
+    },
+    inviteToEntity: function(entityId, userId){
+        return this.httpClient().post(`entities/${entityId}/invite/${userId}`);
+    },
+
+    getStates: function(){
+        return this.httpClient().get("states");
+    },
+    getDistricts: function(stateId, query){
+        return this.httpClient().get(`states/${stateId}/search-districts?query=${query}`);
     }
 };
 

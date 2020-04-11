@@ -28,11 +28,11 @@ A primeira execução do ambiente é de suma importância. Demora mais tempo, e 
  melhor automatizada). Siga as instruções com cuidado:
 
 - Clone esse repositório
-- Sempre trabalhe no branch `develop`:
+- Acesse a pasta clonada (via linha de comando)
+- Sempre trabalhe no branch `development`. Ele é o branch padrão, mas caso não esteja nele, rode: 
 ```
 git checkout development
 ```
-- Acesse a pasta clonada (via linha de comando)
 - Dentro da pasta `api` copie o arquivo `.env.example` para `.env`
 - Altere os conteúdos de .env (configurações do mailtrap)
 - Dentro da pasta `spa` copie o arquivo `.env.example` para `.env`
@@ -46,6 +46,7 @@ dc exec api composer install
 dc exec api npm install
 dc exec api npm run dev
 dc exec api php artisan migrate
+dc exec api php artisan passport:keys
 dc exec spa npm install
 dc restart
 ```
@@ -72,7 +73,7 @@ Todos os endereços expostos pelos containers estão no `localhost`, cada um em 
   favoridos do browser utilizado para desenvolvimento:
 
 - Vue UI (http://localhost:8090) - Interface de gerenciamento do projeto VueJS
-- SPA (http://localhost:8090) - Endereço da SPA (Frontend)
+- SPA (http://localhost:8091) - Endereço da SPA (Frontend)
 - API (http://localhost:8092) - Endereço da API e autenticação (Backend)
 - Open API/Swagger UI (http://localhost:8093) - Endereço da documentação de especificação da API
 - PgAdmin (http://localhost:8094) - Painel de administração do PostgreSQL
@@ -105,4 +106,25 @@ Manter os logs na tela:
 dc logs -f <container_name>
 ```
  
+### Dados de teste
+
+O projeto não contem testes automatizados. Dado a urgência do projeto, optou-se por não usar esse método.
+
+Mas foi incluído alguns dados de teste no projeto, para que o desenvolvedor não começe do zero:
+
+Para renovar o banco de dados com os dados de teste, basta rodar (inclusive na primeira vez):
+```
+dc exec api php artisan migrate:fresh --seed
+```
+
+ATENÇÃO: Toda vez que esse comando é executado, qualquer dado incluído no sistema é perdido. Ele volta ao "estado de 
+fábrica".
+
+Dois usuários são incluídos nesses dados de teste:
+- jonsnow@thewall.north
+- renly@storm.end
+
+A senha para ambos é `password`.
+
+
 

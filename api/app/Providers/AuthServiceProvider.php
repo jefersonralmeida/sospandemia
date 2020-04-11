@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Demand;
+use App\Models\OAuthClient;
+use App\Models\Policies\DemandPolicy;
+use Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
+use Route;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -14,7 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+
     ];
 
     /**
@@ -26,6 +30,27 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::routes();
+        //Passport::routes();
+
+        // replaced Passport:routes() with this method to have control over the middleware
+        $this->mapOauthRoutes();
+
+        Passport::useClientModel(OAuthClient::class);
+
+        $this->mapGates();
+    }
+
+    protected function mapOauthRoutes()
+    {
+        Route::prefix('oauth')
+            ->namespace('Laravel\Passport\Http\Controllers')
+            ->group(base_path('routes/oauth.php'));
+    }
+
+    protected function mapGates()
+    {
+        Gate::define('create-demand', function ($user, $entity) {
+            dd($entity);
+        });
     }
 }

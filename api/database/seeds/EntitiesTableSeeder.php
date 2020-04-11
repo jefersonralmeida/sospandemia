@@ -21,8 +21,7 @@ class EntitiesTableSeeder extends Seeder
                 'legal_name' => 'Castle of the night watch Ltda',
                 'description' => 'The main castle of the night watch',
                 'street_address' => 'Middle of the wall',
-                'city' => "Mole's Town",
-                'state' => 'PR',
+                'district_id' => 411990505, // ponta grossa
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -33,8 +32,7 @@ class EntitiesTableSeeder extends Seeder
                 'legal_name' => 'Winterfel Inc.',
                 'description' => 'Castle of Winterfel, ancestral seat of house Stark',
                 'street_address' => 'Kings Road, sn',
-                'city' => 'Winter Town',
-                'state' => 'PR',
+                'district_id' => 410690205, // curitiba
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -45,8 +43,7 @@ class EntitiesTableSeeder extends Seeder
                 'legal_name' => 'Storm End Inc.',
                 'description' => "Storm's End castle, ancestral seat of house Baratheon",
                 'street_address' => 'Shipbreaker Bay, sn',
-                'city' => 'Storms End Town',
-                'state' => 'SC',
+                'district_id' => 411200905, // jaguariaíva
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -57,8 +54,7 @@ class EntitiesTableSeeder extends Seeder
                 'legal_name' => 'Order of maesters',
                 'description' => 'The maesters Citadel',
                 'street_address' => 'The citadel Av. 560',
-                'city' => 'Oldtown',
-                'state' => 'RS',
+                'district_id' => 411370005, // londrina
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
@@ -69,8 +65,7 @@ class EntitiesTableSeeder extends Seeder
                 'legal_name' => 'The Eyrie Andals Inc.',
                 'description' => 'The Eyrie Castle, ancestral seat of house Arryn',
                 'street_address' => 'Mountains of the Moon, sn',
-                'city' => 'Vale of Arryn',
-                'state' => 'SP',
+                'district_id' => 230350105, // cascavel
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
