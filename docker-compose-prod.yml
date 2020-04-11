@@ -41,6 +41,8 @@ services:
     working_dir: /var/www
     volumes:
       - p_storage-volume:/var/www/storage
+    depends_on:
+      - p_db
 
   p_db:
     image: mdillon/postgis:11
