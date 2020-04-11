@@ -4,6 +4,8 @@ services:
   p_proxy:
     build:
       context: "./env/prod/proxy"
+      args:
+        server_name_arg: ${NGINX_SERVER_NAME:-sospandemia.org}
     ports:
       - "80:80"
       - "443:443"
@@ -13,11 +15,9 @@ services:
     volumes:
       - ./env/prod/proxy/certbot/data:/etc/letsencrypt
       - ./env/prod/proxy/certbot/www:/var/www/certbot
-    environment:
-      - SERVER_NAME=${NGINX_SERVER_NAME:-sospandemia.org}
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
-  p_certbot:
+  certbot:
     image: certbot/certbot
     volumes:
       - ./env/prod/proxy/certbot/data:/etc/letsencrypt
