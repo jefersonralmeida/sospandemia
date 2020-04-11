@@ -6,9 +6,23 @@ services:
       context: "./env/prod/proxy"
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - p_spa
       - p_api
+    volumes:
+      - ./env/prod/proxy/certbot/data:/etc/letsencrypt
+      - ./env/prod/proxy/certbot/www:/var/www/certbot
+    environment:
+      - SERVER_NAME=${NGINX_SERVER_NAME:sospandemia.org}
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  p_certbot:
+    image: certbot/certbot
+    volumes:
+      - ./env/prod/proxy/certbot/data:/etc/letsencrypt
+      - ./env/prod/proxy/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   p_spa:
     build:
