@@ -24,8 +24,7 @@ $dc run --rm api rsync -av --delete . /var/dist/build \
 --exclude tests \
 --exclude phpunit.xml \
 --exclude README.md \
---exclude server.php \
---exclude webpack.mix.js;
+--exclude server.php;
 
 echo
 echo '### MANAGE .env FILES ###'
