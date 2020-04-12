@@ -53,6 +53,15 @@ echo '### BUILD THE PROD ENV ###'
 $dcp build
 
 echo
+echo '### CREATE STORAGE DIR STRUCTURE ###'
+$dcp run --rm p_api mkdir -p storage/app/public
+$dcp run --rm p_api mkdir -p storage/framework/cache/data
+$dcp run --rm p_api mkdir -p storage/framework/sessions
+$dcp run --rm p_api mkdir -p storage/framework/views
+$dcp run --rm p_api mkdir -p storage/indexes
+$dcp run --rm p_api mkdir -p storage/logs
+
+echo
 echo '### SET STORAGE PERMISSIONS ###'
 $dcp run --rm p_api chown -R www-data: storage
 
@@ -67,6 +76,10 @@ $dcp run --rm p_api php artisan route:cache
 echo
 echo '### CACHING THE CONFIG FILES ###'
 $dcp run --rm p_api php artisan config:cache
+
+echo
+echo '### ENSURING PASSPORT KEYS ###'
+$dcp run --rm p_api php artisan passport:keys --quiet
 
 echo
 echo '### RUNNING MIGRATIONS ###'
