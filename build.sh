@@ -69,6 +69,10 @@ echo '### CACHING THE CONFIG FILES ###'
 $dcp run --rm p_api php artisan config:cache
 
 echo
+echo '### RUNNING MIGRATIONS ###'
+$dcp run --rm p_api php artisan migrate --force
+
+echo
 echo '### IMPORTING THE DISTRICTS DATABASE ###'
 $dcp run --rm p_api php artisan db:importDistricts;
 
@@ -80,10 +84,6 @@ $dcp run --rm p_api php artisan scout:import "App\Models\District";
 echo
 echo '### PUT THE SYSTEM ON MAINTENANCE MODE ###'
 $dcp run --rm p_api php artisan down
-
-echo
-echo '### RUNNING MIGRATIONS ###'
-$dcp run --rm p_api php artisan migrate --force
 
 echo
 echo '### REPLACING THE RUNNING CONTAINERS ###'
