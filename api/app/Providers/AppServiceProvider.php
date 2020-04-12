@@ -26,5 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Carbon::setLocale('pt_BR');
+
+        $secure = config('app.secure', config('app.env') === 'production');
+        if($secure) {
+            \URL::forceScheme('https');
+        }
     }
 }
