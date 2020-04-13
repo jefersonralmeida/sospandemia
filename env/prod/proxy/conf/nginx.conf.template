@@ -28,14 +28,20 @@ server {
     location /api/ {
         proxy_pass http://p_web:80;
         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
     }
     location /auth/ {
         proxy_pass http://p_web:80;
         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
     }
     location /oauth/ {
         proxy_pass http://p_web:80;
         proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
     }
     error_log  /var/log/nginx/vue-app-error.log;
     access_log /var/log/nginx/vue-app-access.log;
