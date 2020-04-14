@@ -337,6 +337,7 @@ export default {
       .finally(()=>{
         this.loading = false;
         this.invite = false;
+        this.email = "";
       });
     },
     fetchStates() {
