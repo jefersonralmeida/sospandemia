@@ -16,16 +16,35 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Collection|User[] $users
  * @property Collection|Demand[] $demands
  * @property District $district
+ * @property int entity_type_id
  */
 class Entity extends Model
 {
 
-    protected $fillable = ['cnpj', 'name', 'legal_name', 'description', 'street_address', 'district_id'];
+    protected $fillable = [
+        'cnpj',
+        'name',
+        'legal_name',
+        'description',
+        'street_address',
+        'district_id',
+        'entity_type_id',
+        'entity_type_document',
+    ];
 
     protected $hidden = ['district_id', 'district'];
 
-    protected $appends = ['city'];
+    protected $appends = ['entity_type', 'entity_type_document_label', 'city'];
 
+    public function getEntityTypeAttribute()
+    {
+        return config("entity_types.{$this->entity_type_id}.type");
+    }
+
+    public function getEntityTypeDocumentLabelAttribute()
+    {
+        return config("entity_types.{$this->entity_type_id}.entity_type_document");
+    }
 
     public function getCityAttribute()
     {
