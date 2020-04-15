@@ -8,6 +8,7 @@ import ManageEntities from "./components/views/ManageEntities";
 import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
 import GenericError from "./components/errors/GenericError";
+import Equipe from "./components/views/Equipe";
 
 Vue.use(Router);
 
@@ -25,6 +26,12 @@ const routes = [
         },
     },
     {
+        path: '/gerenciar-demandas',
+        name: 'gerenciar-demandas',
+        title: 'Gerenciar Demandas',
+        component: ManageDemands,
+    },
+    {
         path: '/gerenciar-entidades',
         name: 'gerenciar_entidades',
         title: 'Gerenciar Entidades',
@@ -34,11 +41,15 @@ const routes = [
         },
     },
     {
-        path: '/gerenciar-demandas',
-        name: 'gerenciar-demandas',
-        title: 'Gerenciar Demandas',
-        component: ManageDemands,
+        path: '/sobre-nos',
+        name: 'sobre-nos',
+        title: 'Equipe',
+        component: Equipe,
+        meta: {
+            guestAllowed: true,
+        },
     },
+    
     {
         path: '/oauth-callback',
         meta: {
@@ -91,6 +102,8 @@ const routes = [
             errorMessage: 'O endereço que você está acessando não é válido',
         }
     },
+    
+   
 ];
 
 const router = new Router({
