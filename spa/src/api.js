@@ -186,6 +186,12 @@ const api = {
     inviteToEntity: function(entityId, userId){
         return this.httpClient().post(`entities/${entityId}/invite/${userId}`);
     },
+    getEntityByCNES: function(cnes){
+        return this.httpClient().get(`entities/type-search/1?cnes=${cnes}`);
+    },
+    getEntityTypes: function(){
+        return this.httpClient().get(`entity-types`);  
+    },
 
     getStates: function(){
         return this.httpClient().get("states");
