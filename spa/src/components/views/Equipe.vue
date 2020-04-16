@@ -78,7 +78,6 @@
                 <div class="card-body">
 
                   <a href="http://lattes.cnpq.br/5694972079639390" target="_blank" class="card-link"><h5 class="card-title">Sani de Carvalho Rutz da Silva</h5></a>
-                  <br>
                   <small class="text-muted">Licenciada em Matemática (UEPG), Mestre em Matemática Aplicada e Doutora em Ciência dos Materiais pela Universidade Federal do Rio Grande do Sul (UFRGS). Em pesquisas, tem como ênfase as temáticas: Ensino de Matemática, Educação Matemática Inclusiva, Uso de Tecnologias no ensino de Matemática. Recebeu o Prêmio Tese de CAPES (orientador) no ano de 2018, melhor tese na Área de Ensino, intitulada O Soroban na formação de conceitos matemáticos por pessoas com deficiência intelectual: implicações na aprendizagem e no desenvolvimento. Editor Chefe da Revista Brasileira de Ensino de Ciência e Tecnologia (RBECT).</small>
                  
                 </div>
