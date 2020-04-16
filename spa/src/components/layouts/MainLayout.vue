@@ -113,6 +113,64 @@
         </div>
       </div>
       <div class="container">
+
+          <div class="d-lg-none">
+              <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="../../assets/logo_app.png" height="50" />
+            <small class="d-block mb-3 text-muted">© 2020</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Apoio</h5>
+            <ul class="list-unstyled text-small">
+              <li>
+                <a class="text-muted" href="http://www.utfpr.edu.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_utfpr.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a class="text-muted" href="http://www.uepg.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_uepg.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href="https://www.facebook.com/escritoriodecriatividade/"
+                  target="_blank"
+                >
+                  <img class="mb-2" src="../../assets/logo_criatividade.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href=" jeferson@webage.solutions" target="_blank"> <img class="mb-2" src="../../assets/logo_webAge.png" height="15" />
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Sobre</h5>
+            <ul class="list-unstyled text-small">
+              <li>
+                <router-link to="sobre-nos">Equipe</router-link>
+              </li>
+              <li>
+                <a class="text-muted" href="#">Privacidade</a>
+              </li>
+              <li>
+                <a class="text-muted" href="#">Termos</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
+
+          </div>
+
       <div class="d-none d-lg-block">
         <div class="row">
           <div class="col-12 col-md">
@@ -139,6 +197,12 @@
                   target="_blank"
                 >
                   <img class="mb-2" src="../../assets/logo_criatividade.png" height="40" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href=" jeferson@webage.solutions" target="_blank"> <img class="mb-2" src="../../assets/logo_webAge.png" height="40" />
                 </a>
               </li>
             </ul>
