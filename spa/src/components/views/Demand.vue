@@ -61,7 +61,9 @@
 
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{ demand.title }}</h5>
+        <div class="card-title">
+        <h5>{{ demand.title }}</h5>
+        </div>
         <p class="card-text">{{ demand.text }}</p>
       </div>
       <div class="d-flex card-footer text-muted small">
