@@ -1,11 +1,12 @@
 <template>
   <div class="home">
     <div class="form-group">
-      <input
+      <v-text-field
         type="email"
-        class="form-control w-50 m-auto"
+        class="w-50 m-auto"
         aria-describedby="emailHelp"
         placeholder="Busca..."
+        outlined
         v-model="query"
       />
       <small id="emailHelp" class="form-text text-muted">Começe a digitar para filtar os resultados.</small>
