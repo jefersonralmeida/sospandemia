@@ -116,11 +116,11 @@
 
           <div class="d-lg-none">
               <div class="row">
-          <div class="col-12 col-md">
-            <img class="mb-2" src="../../assets/logo_app.png" height="50" />
+          <div class="col-3 col-md-2">
+            <img class="mb-2" src="../../assets/logo_app.png" height="30" />
             <small class="d-block mb-3 text-muted">© 2020</small>
           </div>
-          <div class="col-6 col-md">
+          <div class="col-4 col-md">
             <h5>Apoio</h5>
             <ul class="list-unstyled text-small">
               <li>
@@ -150,7 +150,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-6 col-md">
+          <div class="col-4 col-md">
             <h5>Sobre</h5>
             <ul class="list-unstyled text-small">
               <li>
