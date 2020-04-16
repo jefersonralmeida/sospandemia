@@ -28,6 +28,7 @@
                 <img class="card-img-top" src="../../assets/joao.jpeg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">João Algusto Castilho</small>
+                  <br>
                   <small class="text-muted">Cursando Ciência da Computação na UTFPR.</small>
                   <!--<p class="card-text">Cursando Ciência da Computação na UTFPR.</p>-->
                   
@@ -39,6 +40,7 @@
                 <img class="card-img-top" src="../../assets/edson.jpg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Edson Luiz</small>
+                  <br>
                   <small class="text-muted">Cursando Ciência da Computação na UTFPR</small>
                 </div>
               </div>
@@ -48,6 +50,7 @@
                 <img class="card-img-top" src="../../assets/jeferson.jpeg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Jeferson Rodrigo Almeida</small>
+                  <br>
                   <small class="text-muted">Graduação em Engenharia da Computação - UEPG,  possui MBA em Gestão de Projetos e proprietário da empresa WebAge Solutions.</small>
                 </div>
               </div>
@@ -58,6 +61,7 @@
                 <img class="card-img-top" src="../../assets/hernani.jpg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Hernani Batista da Cruz</small>
+                  <br>
                   <small class="text-muted">Bacharel em Física e Tecnólogo em Sistemas para Internet. Mestre em Ensino de Física e Doutorando em Ensino de Ciência e Tecnologia - UTFPR.</small>
                  
                 </div>
@@ -68,6 +72,7 @@
                 <img class="card-img-top" src="../../assets/diego.jpeg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Diego Schlosser </small>
+                  <br>
                   <small class="text-muted">Graduado em Análise e Desenvolvimento de Sistemas pela Universidade Tecnológica Federal do Paraná - Câmpus Medianeira. Especialista em Tecnologias da Informação e Comunicação na Educação. Mestre em Ensino de Ciência e Tecnologia pela Universidade Tecnológica Federal do Paraná, Câmpus Ponta Grossa.</small>
                  
                 </div>
@@ -78,6 +83,7 @@
                 <img class="card-img-top" src="../../assets/sani.jpeg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Sani de Carvalho Rutz da Silva </small>
+                  <br>
                   <small class="text-muted">.</small>
                  
                 </div>
@@ -91,6 +97,7 @@
                 <img class="card-img-top" src="../../assets/ricardo.jpg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Ricardo Zanetti Gomes</small>
+                  <br>
                   <small class="text-muted">.</small>
                  
                 </div>
@@ -101,6 +108,7 @@
                 <img class="card-img-top" src="../../assets/max.jpg" alt="Card image cap">
                 <div class="card-body">
                   <small class="text-muted">Max Mauro</small>
+                  <br>
                   <small class="text-muted">.</small>
                  
                 </div>
