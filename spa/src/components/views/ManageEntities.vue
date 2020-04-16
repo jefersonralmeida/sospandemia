@@ -12,20 +12,22 @@
       v-model="entityType"
       :items="entityTypes"
       outlined
+      @change="resetForm"
     ></v-select>
 
     <div v-if="creatingEntity && entityType=='Unidade de Saúde'">
       <hr />
       <h3 class="py-2">Insira as informações referente à entidade</h3>
-      <v-form>
+      <v-form ref="formUS">
         <div class="row">
           <div class="form-group col-6">
             <v-text-field
               v-model="cnes"
               label="CNES"
               placeholder="informe o CNES"
+              :rules="[rules.numberRule,rules.required]"
               outlined
-              @input="getEntityByCNES"
+              @change="getEntityByCNES"
             ></v-text-field>
           </div>
           <div class="form-group col-6">
@@ -33,6 +35,7 @@
               v-model="entityData.cnpj"
               label="CNPJ"
               placeholder="informe o CNPJ"
+              :rules="[rules.numberRule,rules.required]"
               outlined
             ></v-text-field>
           </div>
@@ -41,6 +44,7 @@
           <v-text-field
             v-model="entityData.name"
             outlined
+            :rules="[rules.required,rules.min]"
             disabled
             label="Nome"
           ></v-text-field>
@@ -49,6 +53,7 @@
           <v-text-field
             v-model="entityData.legal_name"
             outlined
+            :rules="[rules.required,rules.min]"
             disabled
             label="Razão Social"
           ></v-text-field>
@@ -57,6 +62,7 @@
           <div class="form-group col-8 col-md-10">
             <v-text-field
               v-model="cnesResponse.district_name"
+              :rules="[rules.required]"
               outlined
               disabled
               label="Cidade"
@@ -65,6 +71,7 @@
           <div class="form-group col-4 col-md-2">
             <v-text-field
               v-model="cnesResponse.uf"
+              :rules="[rules.required]"
               outlined
               disabled
               label="Estado"
@@ -75,8 +82,7 @@
           <v-text-field
             ref="address"
             v-model="entityData.street_address"
-            :counter="300"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.min]"
             label="Endereço"
             placeholder="Ex: Rua Exemplo, 1029"
             outlined
@@ -86,8 +92,10 @@
           <v-select
               v-model="entityData.city"
               :disabled="entityData.state == ''"
+              :rules="[rules.required]"
               :items="cities"
               item-text="name"
+              item-value="id"
               label="Cidade"
               outlined
             ></v-select>
@@ -103,7 +111,7 @@
           <v-textarea
             rows="3"
             auto-grow
-            :counter="500"
+            :rules="[rules.required, rules.min]"
             label="Adicione um descrição"
             placeholder="(Mínimo de 10 caracteres) Adicione uma descrição, descrevendo por exemplo o que a entidade faz, pelo que é responsável, etc."
             v-model="entityData.description"
@@ -118,7 +126,7 @@
     </div>
     <div v-if="creatingEntity && entityType=='Outras'">
       <hr />
-      <v-form ref="form">
+      <v-form ref="formOutros">
         <h3 class="py-2">Insira as informações referente à entidade</h3>
         <div class="row">
           <div class="form-group col-sm-8 col-md-10 col-12">
@@ -158,13 +166,6 @@
           </div>
         </div>
         <div class="form-group">
-          <!--<label>Razão Social</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Insira a razão social da entidade"
-            v-model="entityData.legal_name"
-          />-->
           <v-text-field
             ref="legal_name"
             v-model="entityData.legal_name"
@@ -176,18 +177,11 @@
           ></v-text-field>
         </div>
         <div class="form-group">
-          <!--<label for="Description">Endereço</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Ex: Rua Exemplo, 1029"
-            v-model="entityData.street_address"
-          />-->
           <v-text-field
             ref="address"
             v-model="entityData.street_address"
             :counter="300"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.min]"
             label="Endereço"
             placeholder="Ex: Rua Exemplo, 1029"
             outlined
@@ -290,12 +284,9 @@ export default {
       noDataText: "Continue digitando para encontrar uma cidade.",
     },
     rules: {
-      min: v => v.length >= 1 || "Minimo 15 caracteres",
+      min: v => v != null && v.length >= 1 || "Minimo 15 caracteres",
       required: value => !!value || "Obrigatório.",
-      numberRule: v => {
-        if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas números.";
-      }
+      numberRule: v => (parseInt(v) && v >= 1) || "O campo deve conter apenas números."
     },
     states: [],
     cities: [],
@@ -324,75 +315,80 @@ export default {
       return this.$store.getters.activeEntityId === entityId ? "active" : "";
     },
     validate() {
-      return this.$refs.form.validate();
+      if(this.entityType=='Unidade de Saúde')
+        return this.$refs.formUS.validate();
+      else
+        return this.$refs.formOutros.validate();
     },
     getEntityTypes: function(){
       return api.getEntityTypes().then(res=>{
-        console.log("daqui",res.data);
         this.entityTypes = Object.values(res.data);
       })
     },
     createEntity: function(type,ev) {
       ev.preventDefault();
       if (type==1){
-        this.loading=true;
-        api.createEntity({
-          entity_type_id:type,
-          entity_type_document:this.cnes,
-          ...this.entityData,
-          district_id:this.entityData.city.id
-        }).then(res => {
-            this.creatingEntity = false;
-            this.entityData = {
-              name: "",
-              cnpj: "",
-              legal_name: "",
-              address: "",
-              state: "",
-              city: "",
-              description: ""
-            };
-            this.$store.commit('showMessage', { content:`Entidade criada com sucesso!`, error:false })
-            //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
-          })
-          .catch(err => {
-            this.$store.commit('showMessage', { content:err, error:true })
-          })
-          .finally(() => {
-            this.loading = false;
-            this.$store.dispatch("loadProfile");
-          });
-      }
-      if (this.validate()) {
-        this.loading=true;
-        api
-          .createEntity({
+        if (this.validate()) {
+          this.loading=true;
+          api.createEntity({
+            entity_type_id:type,
+            entity_type_document:this.cnes,
             ...this.entityData,
-            entity_type_id: type,
-            district_id: this.entityData.city.id
-          })
-          .then(res => {
-            this.creatingEntity = false;
-            this.entityData = {
-              name: "",
-              cnpj: "",
-              legal_name: "",
-              address: "",
-              state: "",
-              city: "",
-              description: ""
-            };
-            this.$store.commit('showMessage', { content:`Entidade criada com sucesso!`, error:false })
-            //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
-          })
-          .catch(err => {
-            this.$store.commit('showMessage', { content:err, error:true })
-          })
-          .finally(() => {
-            this.loading = false;
-            this.$store.dispatch("loadProfile");
-          });
-      }  
+            district_id: this.entityData.city
+          }).then(res => {
+              this.creatingEntity = false;
+              this.entityData = {
+                name: "",
+                cnpj: "",
+                legal_name: "",
+                address: "",
+                state: "",
+                city: "",
+                description: ""
+              };
+              this.$store.commit('showMessage', { content:`Entidade criada com sucesso!`, error:false })
+              //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+            })
+            .catch(err => {
+              this.$store.commit('showMessage', { content:err, error:true })
+            })
+            .finally(() => {
+              this.loading = false;
+              this.$store.dispatch("loadProfile");
+            });
+        }
+      }else{
+        if (this.validate()) {
+          this.loading=true;
+          api
+            .createEntity({
+              ...this.entityData,
+              entity_type_id: type,
+              district_id: this.entityData.city.id
+            })
+            .then(res => {
+              this.creatingEntity = false;
+              this.entityData = {
+                name: "",
+                cnpj: "",
+                legal_name: "",
+                address: "",
+                state: "",
+                city: "",
+                description: ""
+              };
+              this.$store.commit('showMessage', { content:`Entidade criada com sucesso!`, error:false })
+              //this.entities.push(this.entityData); //SOLUCAO PROVISORIA!
+            })
+            .catch(err => {
+              this.$store.commit('showMessage', { content:err, error:true })
+            })
+            .finally(() => {
+              this.loading = false;
+              this.$store.dispatch("loadProfile");
+            });
+        }  
+      }
     },
     updateEntity: function(entityId, data) {
       const current = this.entities.find(entity => entity.id === entityId);
@@ -411,10 +407,13 @@ export default {
       return api.inviteToEntity(entityId, userId);
     },
     getEntityByCNES: function(){
-      if (this.cnes.length!=7){
-        this.cnesResponse = {};
-        return;
-      }
+      try{
+        if (this.cnes.length!=7){
+          this.cnesResponse = {};
+          return;
+        }
+      }catch(e){}
+
       return api.getEntityByCNES(this.cnes).then(res=>{
         this.cnesResponse = res.data;
         this.entityData.name = res.data.name;
@@ -425,8 +424,9 @@ export default {
             this.cities = res.data;
           }
         )
-        console.log("cnes",this.cnesResponse);
-      });
+      }).catch(e => {
+        this.$store.commit('showMessage', { content:`Problemas ao identificar o CNES!`, error:true })
+      })
     },
     fetchStates() {
       api.getStates().then(res => {
@@ -447,6 +447,25 @@ export default {
     },
     fetchCities(stateId, query) {
       return api.getDistricts(stateId, query);
+    },
+    resetForm: function(){
+      try{
+        this.$refs.formUS.reset()
+        this.$refs.formOutros.reset();
+      }catch(e){
+
+      }
+      /*
+      this.entityData={
+        cnpj: "",
+        name: "",
+        legal_name: "",
+        description: "",
+        street_address: "",
+        city: "",
+        state: "",
+        noDataText: "Continue digitando para encontrar uma cidade.",
+      }*/
     }
   },
   watch: {
@@ -469,7 +488,7 @@ export default {
       if(this.entities.length==1){
         this.selectEntity(this.entities[0].id,true);
       }
-    }
+    },
   },
   computed: {
     entities: function() {
