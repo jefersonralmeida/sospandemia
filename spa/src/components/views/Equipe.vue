@@ -6,12 +6,10 @@
         <p class="lead text-muted">Adicionar texto</p>
       </div>
     </section>
+    <h1>Devs</h1>
     <div class="album py-5">
       <div class="container">
         <div class="row">
-          <div class="col-12">
-            <h1>Devs</h1>
-          </div>
           <div class="col-4">
             <div class="card mb-4 shadow-sm">
               <img class="card-img-top" src="../../assets/logo_app.png" alt="Card image cap" />
@@ -21,9 +19,13 @@
               </div>
             </div>
           </div>
-          <div class="col-12">
-            <h1>Devs</h1>
-          </div>
+        </div>
+      </div>
+    </div>
+    <h1>Devs</h1>
+    <div class="album py-5">
+      <div class="container">
+        <div class="row">
           <div class="col-4">
             <div class="card mb-4 shadow-sm">
               <img class="card-img-top" src="../../assets/logo_app.png" alt="Card image cap" />
