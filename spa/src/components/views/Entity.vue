@@ -154,11 +154,17 @@
       <div class="card-header">
         <h3>
           {{ entity.name }}&nbsp;
-          <span
-            style="font-size: 14px;"
-            class="badge badge-pill badge-success"
+          <v-chip
+            class="mx-2"
+            small
+          >
+            {{entity.entity_type}}
+          </v-chip>
+          <v-chip
+            small
             v-if="isActiveEntityCB(entity.id)"
-          >Ativo</span>
+            color="success"
+          >Ativo</v-chip>
         </h3>
       </div>
       <div class="card-body">
@@ -169,6 +175,10 @@
         <p>
           <strong>Razão Social:</strong>
           {{ entity.legal_name }}
+        </p>
+        <p v-if="entity.entity_type_document !== null">
+          <strong>{{entity.entity_type_document_label}}:</strong>
+          {{ entity.entity_type_document }}
         </p>
         <hr />
         {{ entity.description }}
