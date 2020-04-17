@@ -111,8 +111,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="container">
+
+        <div class="container">
 
           <div class="d-lg-none">
               <div class="row">
@@ -218,9 +218,10 @@
         </div>
       </div>
     </div>
+      </div>
     </div>
 
-    
+
   </div>
 </template>
 
