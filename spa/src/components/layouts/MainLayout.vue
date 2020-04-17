@@ -157,10 +157,7 @@
                 <router-link to="sobre-nos">Equipe</router-link>
               </li>
               <li>
-                <a class="text-muted" href="#">Privacidade</a>
-              </li>
-              <li>
-                <a class="text-muted" href="#">Termos</a>
+                <router-link to="termos-de-uso-e-privacidade">Termo de uso e privacidade</router-link>
               </li>
             </ul>
           </div>
