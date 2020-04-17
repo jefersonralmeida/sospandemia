@@ -27,8 +27,8 @@
               <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="../../assets/joao.jpeg" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#" class="card-link"><h5 class="card-title">João Algusto Castilho</h5></a>
-                  <small class="text-muted">Cursando Ciência da Computação na UTFPR.</small>
+                  <a href="https://www.linkedin.com/in/joao-augusto-grobe-castilho/" target="_blank" class="card-link"><h5 class="card-title">João Augusto Grobe Castilho</h5></a>
+                  <small class="text-muted">Atualmente cursando Ciência da Computação na Universidade Tecnológica Federal do Paraná, atuou como autônomo prestando serviços de TI e suporte tecnico, manutenção de computadores; Além disso, trabalhou como Instrutor na Microlins-Ponta Grossa. </small>
                   
                 </div>
               </div>
@@ -37,8 +37,8 @@
               <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="../../assets/edson.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#" class="card-link"><h5 class="card-title">Edson Luiz</h5></a>
-                  <small class="text-muted">Cursando Ciência da Computação na UTFPR</small>
+                  <a href="https://www.linkedin.com/in/edson-silva-32b354186" target="_blank" class="card-link"><h5 class="card-title">Edson Luiz da Silva Junior</h5></a>
+                  <small class="text-muted">Atualmente cursando Ciência da Computação na Universidade Tecnológica Federal do Paraná.</small>
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@
               <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="../../assets/jeferson.jpeg" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#" class="card-link"><h5 class="card-title">Jeferson Rodrigo Almeida</h5></a>
+                  <a href="https://www.linkedin.com/in/jeferson-rodrigo-almeida-6b403232/" target="_blank" class="card-link"><h5 class="card-title">Jeferson Rodrigo Almeida</h5></a>
                   <small class="text-muted">Graduação em Engenharia da Computação - UEPG,  possui MBA em Gestão de Projetos e proprietário da empresa WebAge Solutions.</small>
                 </div>
               </div>
@@ -57,7 +57,7 @@
                 <img class="card-img-top" src="../../assets/hernani.jpg" alt="Card image cap">
                 <div class="card-body">
                   <a href="http://lattes.cnpq.br/6098604503176841" target="_blank" class="card-link"><h5 class="card-title">Hernani Batista da Cruz</h5></a>
-                  <small class="text-muted">Bacharel em Física e Tecnólogo em Sistemas para Internet. Mestre em Ensino de Física e Doutorando em Ensino de Ciência e Tecnologia - UTFPR.</small>
+                  <small class="text-muted">Bacharel e Licenciado em Física e Tecnólogo em Sistemas para Internet. Mestre em Ensino de Física e Doutorando em Ensino de Ciência e Tecnologia - UTFPR.</small>
                  
                 </div>
               </div>
@@ -67,7 +67,7 @@
                 <img class="card-img-top" src="../../assets/diego.jpeg" alt="Card image cap">
                 <div class="card-body">
                   <a href="#" target="_blank" class="card-link"><h5 class="card-title">Diego Schlosser</h5></a>
-                  <small class="text-muted">Graduado em Análise e Desenvolvimento de Sistemas pela Universidade Tecnológica Federal do Paraná - Câmpus Medianeira. Especialista em Tecnologias da Informação e Comunicação na Educação. Mestre em Ensino de Ciência e Tecnologia pela Universidade Tecnológica Federal do Paraná, Câmpus Ponta Grossa.</small>
+                  <small class="text-muted">Graduado em Análise e Desenvolvimento de Sistemas pela UTFPR - Câmpus Medianeira. Especialista em Tecnologias da Informação e Comunicação na Educação. Mestre em Ensino de Ciência e Tecnologia pela UTFPR - Câmpus Ponta Grossa.</small>
                  
                 </div>
               </div>
@@ -78,20 +78,17 @@
                 <div class="card-body">
 
                   <a href="http://lattes.cnpq.br/5694972079639390" target="_blank" class="card-link"><h5 class="card-title">Sani de Carvalho Rutz da Silva</h5></a>
-                  <small class="text-muted">Licenciada em Matemática (UEPG), Mestre em Matemática Aplicada e Doutora em Ciência dos Materiais pela Universidade Federal do Rio Grande do Sul (UFRGS). Em pesquisas, tem como ênfase as temáticas: Ensino de Matemática, Educação Matemática Inclusiva, Uso de Tecnologias no ensino de Matemática. Recebeu o Prêmio Tese de CAPES (orientador) no ano de 2018, melhor tese na Área de Ensino, intitulada O Soroban na formação de conceitos matemáticos por pessoas com deficiência intelectual: implicações na aprendizagem e no desenvolvimento. Editor Chefe da Revista Brasileira de Ensino de Ciência e Tecnologia (RBECT).</small>
+                  <small class="text-muted">Licenciada em Matemática (UEPG), Mestre em Matemática Aplicada e Doutora em Ciência dos Materiais pela Universidade Federal do Rio Grande do Sul (UFRGS). Editor Chefe da Revista Brasileira de Ensino de Ciência e Tecnologia (RBECT).</small>
                  
                 </div>
               </div>
             </div>
-
-            
-
             <div class="col-md-4">
               <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="../../assets/ricardo.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#" target="_blank" class="card-link"><h5 class="card-title">Ricardo Zanetti Gomes</h5></a>
-                  <small class="text-muted">.</small>
+                  <a href="https://www.linkedin.com/in/ricardo-zanetti-gomes-a972266b/" target="_blank" class="card-link"><h5 class="card-title">Ricardo Zanetti Gomes</h5></a>
+                  <small class="text-muted">Graduação em Medicina. Medico na Universidade Estadual de Ponta Grossa.</small>
                  
                 </div>
               </div>
@@ -100,8 +97,8 @@
               <div class="card mb-4 shadow-sm">
                 <img class="card-img-top" src="../../assets/max.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#" target="_blank" class="card-link"><h5 class="card-title">Max Mauro</h5></a>
-                  <small class="text-muted">.</small>
+                  <a href="http://lattes.cnpq.br/6212006974231025" target="_blank" class="card-link"><h5 class="card-title">Max Mauro Dias Santos</h5></a>
+                  <small class="text-muted">Possui mais de 20 anos de experiência na indústria e academia. Atualmente é Professor do DAELE (Departamento de Eletrônica) da UTFPR-PG (Ponta Grossa)</small>
                  
                 </div>
               </div>
