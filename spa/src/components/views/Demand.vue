@@ -1,14 +1,14 @@
 <template>
   <div>
-    <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="400px">
+    <modal :name="`updateModal-${demand.id}`" :adaptive="false" height="450px">
       <div class="container mt-2">
         <v-form class="ma-3" ref="form">
           <div class="form-group">
             <v-text-field
               v-model="tempDemand.title"
-              :counter="200"
               :rules="[rules.required]"
               label="Demanda"
+              outlined
             ></v-text-field>
           </div>
           <div class="form-group">
@@ -17,14 +17,15 @@
               v-model="tempDemand.quantity"
               :rules="[rules.numberRule,rules.required]"
               label="Quantidade"
+              outlined
             ></v-text-field>
           </div>
           <div class="form-group">
             <v-textarea
               rows="3"
               auto-grow
-              :counter="500"
               label="Adicione um descrição"
+              outlined
               v-model="tempDemand.text"
               :rules="[rules.required]"
             ></v-textarea>
@@ -60,7 +61,9 @@
 
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">{{ demand.title }}</h5>
+        <div class="card-title">
+        <h5>{{ demand.title }}</h5>
+        </div>
         <p class="card-text">{{ demand.text }}</p>
       </div>
       <div class="d-flex card-footer text-muted small">

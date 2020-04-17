@@ -15,7 +15,6 @@
                     <v-text-field
                       ref="name"
                       v-model="tempEntity.name"
-                      :counter="200"
                       :rules="[rules.required]"
                       label="Nome"
                       placeholder="Nome da entidade"
@@ -23,13 +22,12 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="4" md="4">
-                    <v-text-field v-model="tempEntity.cnpj" disabled label="CNPJ"></v-text-field>
+                    <v-text-field outlined v-model="tempEntity.cnpj" disabled label="CNPJ"></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
                       ref="legal_name"
                       v-model="tempEntity.legal_name"
-                      :counter="300"
                       :rules="[rules.required]"
                       label="Razão Social"
                       placeholder="Insira a razão social da entidade"
@@ -40,7 +38,6 @@
                     <v-text-field
                       ref="address"
                       v-model="tempEntity.street_address"
-                      :counter="300"
                       :rules="[rules.required]"
                       label="Endereço"
                       placeholder="Ex: Rua Exemplo, 1029"
@@ -82,7 +79,6 @@
                       ref="description"
                       rows="3"
                       auto-grow
-                      :counter="500"
                       label="Adicione uma descrição"
                       placeholder="(Mínimo de 10 caracteres) Adicione uma descrição sobre a entidade"
                       v-model="tempEntity.description"
@@ -136,6 +132,7 @@
               <v-col cols="12">
                   <v-text-field  
                     v-model="email" 
+                    outlined
                     label="Email"></v-text-field>
                   <span class="text-muted small">Nota: o email inserido deve estar registrado! Caso não
                   esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.</span>
@@ -157,11 +154,17 @@
       <div class="card-header">
         <h3>
           {{ entity.name }}&nbsp;
-          <span
-            style="font-size: 14px;"
-            class="badge badge-pill badge-success"
+          <v-chip
+            class="mx-2"
+            small
+          >
+            {{entity.entity_type}}
+          </v-chip>
+          <v-chip
+            small
             v-if="isActiveEntityCB(entity.id)"
-          >Ativo</span>
+            color="success"
+          >Ativo</v-chip>
         </h3>
       </div>
       <div class="card-body">
@@ -172,6 +175,10 @@
         <p>
           <strong>Razão Social:</strong>
           {{ entity.legal_name }}
+        </p>
+        <p v-if="entity.entity_type_document !== null">
+          <strong>{{entity.entity_type_document_label}}:</strong>
+          {{ entity.entity_type_document }}
         </p>
         <hr />
         {{ entity.description }}
@@ -337,6 +344,7 @@ export default {
       .finally(()=>{
         this.loading = false;
         this.invite = false;
+        this.email = "";
       });
     },
     fetchStates() {

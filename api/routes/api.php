@@ -26,6 +26,8 @@ Route::middleware('auth:api')->group(function() {
     Route::get('profile', 'ProfileController@info');
 
     // entities routes
+    Route::get('entity-types', 'EntitiesController@indexEntityTypes');
+    Route::get('entities/type-search/{type}', 'EntitiesController@typeSearch');
     Route::get('entities/{entity}/demands', 'EntitiesController@indexDemands');
     Route::post('entities/{entity}/new-demand', 'EntitiesController@createDemand')->middleware('can:createDemand,entity');
     Route::post('entities', 'EntitiesController@create');

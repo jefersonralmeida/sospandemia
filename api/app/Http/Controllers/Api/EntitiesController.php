@@ -8,9 +8,12 @@ use App\Http\Requests\CreateEntityRequest;
 use App\Http\Requests\UpdateEntityRequest;
 use App\Models\Demand;
 use App\Models\Entity;
+use App\Models\EntityTypes\EntityTypeContract;
 use App\Models\User;
 use Auth;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EntitiesController extends Controller
 {
@@ -23,6 +26,27 @@ class EntitiesController extends Controller
     public function indexDemands(Entity $entity)
     {
         return $entity->demands()->paginate();
+    }
+
+    public function indexEntityTypes()
+    {
+        $types = config('entity_types');
+        krsort($types);
+        return array_map(fn(array $item) => $item['type'], $types);
+    }
+
+    public function typeSearch(Request $request, int $type)
+    {
+        $typeClass = config("entity_types.$type.class");
+        if ($typeClass === null) {
+            throw new NotFoundHttpException('Tipo de entidade inválido');
+        }
+
+        /** @var EntityTypeContract $entityClass */
+        $entityType = app($typeClass);
+
+        return $entityType->search($request->query->all());
+
     }
 
     public function createDemand(Entity $entity, CreateDemandRequest $request)
