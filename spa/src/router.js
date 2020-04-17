@@ -9,6 +9,7 @@ import OAuthCallback from "./components/views/OAuthCallback";
 import ManageDemands from "./components/views/ManageDemands";
 import GenericError from "./components/errors/GenericError";
 import Equipe from "./components/views/Equipe";
+import Terms from "./components/views/terms";
 
 Vue.use(Router);
 
@@ -45,6 +46,16 @@ const routes = [
         name: 'sobre-nos',
         title: 'Equipe',
         component: Equipe,
+        meta: {
+            guestAllowed: true,
+        },
+        
+    },
+    {
+        path: '/termos-de-uso-e-privacidade',
+        name: 'termos-de-uso-e-privacidade',
+        title: 'Termo de uso e privacidade',
+        component: Terms,
         meta: {
             guestAllowed: true,
         },
