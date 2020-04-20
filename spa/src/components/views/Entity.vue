@@ -272,7 +272,6 @@ export default {
       invite: false,
       statesFetched: false,
       email: "",
-      }
     };
   },
   methods: {
