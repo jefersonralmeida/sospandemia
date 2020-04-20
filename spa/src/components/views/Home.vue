@@ -29,27 +29,12 @@
           ></v-select>
         </v-col>
         <v-col cols="10">
-          <v-autocomplete
-            ref="city"
-            v-model="filterOptions.city"
-            :disabled="filterOptions.state == ''"
-            :items="cities"
-            item-text="name"
-            label="Cidade"
-            autocomplete="dskjalçkdwlçakdwlça"
-            placeholder="Digite o nome da cidade para buscar"
-            :search-input.sync="searchCity"
-            @change="search(query)"
-            :no-data-text="filterOptions.noDataText"
-            outlined
-            hide-selected
-            return-object
-          ></v-autocomplete>
+          <DistrictSelector :stateId="filterOptions.state" :disabled="filterOptions.state == 0"  :onChangeCB="onCityChange"/>
         </v-col>
       </v-row>
       <small id="emailHelp" class="form-text text-muted">
         Buscando resultados em
-        <span v-if="filterOptions.state === null">Brasil.</span>
+        <span v-if="filterOptions.state === 0">Brasil.</span>
         <span
           v-else-if="this.filterOptions.city != null &&
           typeof this.filterOptions.city == 'object'"
@@ -91,10 +76,11 @@
 import api from "../../api";
 import _ from "lodash";
 import LoadingWidget from "../widgets/LoadingWidget";
+import DistrictSelector from "../widgets/DistrictSelector";
 
 export default {
   name: "Home",
-  components: { LoadingWidget },
+  components: { LoadingWidget, DistrictSelector },
   data() {
     return {
       current_page:1,
@@ -105,13 +91,9 @@ export default {
       showFilter: false,
       statesFetched: false,
       states: [],
-      cities: [],
-      searchCity: null,
-      debounce: null,
       filterOptions: {
-        state: null,
+        state: 0,
         city: null,
-        noDataText: "Continue digitando para encontrar uma cidade."
       }
     };
   },
@@ -125,7 +107,7 @@ export default {
   methods: {
     search: function(query) { 
       this.widgetLoading = true;
-      if (this.showFilter && this.filterOptions.state != null) {
+      if (this.showFilter && this.filterOptions.state != 0) {
         let filterType;
         let filterParam;
         if (
@@ -176,8 +158,8 @@ export default {
         this.statesFetched = true;
       });
     },
-    fetchCities(stateId, query) {
-      return api.getDistricts(stateId, query);
+    onCityChange(city){
+      this.filterOptions.city = city
     }
   },
   watch: {
@@ -185,22 +167,6 @@ export default {
       this.current_page = 1;
       this.search();
     }, 300),
-    searchCity(query) {
-      if(query === null) return
-      if (query.length <= 3) {
-        this.filterOptions.noDataText = "Continue digitando para encontrar uma cidade."
-        return;
-      }
-      clearTimeout(this.debounce);
-      let that = this;
-      this.debounce = setTimeout(function() {
-        that.fetchCities(that.filterOptions.state, query).then(res => {
-          that.cities = res.data;
-          if(res.data.length === 0)
-            that.filterOptions.noDataText = "Nenhuma cidade encontrada. Verifique a busca ou seja mais específico"
-        });
-      }, 300);
-    }
   },
   mounted: function() {
     this.search();

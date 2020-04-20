@@ -45,17 +45,15 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="3" md="2">
-                    <v-text-field
-                      disabled
+                    <v-select
                       label="Estado"
                       :items="states"
                       v-model="tempEntity.state"
                       :loading="!statesFetched"
-                      :search-input.sync="search"
                       outlined
                       item-text="uf"
                       item-value="id"
-                    ></v-text-field>
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="9" md="10">
                     <v-text-field
@@ -130,12 +128,11 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                  <v-text-field  
-                    v-model="email" 
-                    outlined
-                    label="Email"></v-text-field>
-                  <span class="text-muted small">Nota: o email inserido deve estar registrado! Caso não
-                  esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.</span>
+                <v-text-field v-model="email" outlined label="Email"></v-text-field>
+                <span class="text-muted small">
+                  Nota: o email inserido deve estar registrado! Caso não
+                  esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.
+                </span>
               </v-col>
             </v-row>
           </v-container>
@@ -154,17 +151,8 @@
       <div class="card-header">
         <h3>
           {{ entity.name }}&nbsp;
-          <v-chip
-            class="mx-2"
-            small
-          >
-            {{entity.entity_type}}
-          </v-chip>
-          <v-chip
-            small
-            v-if="isActiveEntityCB(entity.id)"
-            color="success"
-          >Ativo</v-chip>
+          <v-chip class="mx-2" small>{{entity.entity_type}}</v-chip>
+          <v-chip small v-if="isActiveEntityCB(entity.id)" color="success">Ativo</v-chip>
         </h3>
       </div>
       <div class="card-body">
@@ -183,7 +171,7 @@
         <hr />
         {{ entity.description }}
         <hr />
-        {{ entity.street_address }} - {{ entity.city}}  
+        {{ entity.street_address }} - {{ entity.city}}
       </div>
       <div class="card-footer">
         <div class="row">
@@ -264,9 +252,7 @@ export default {
       tempEntity: {},
       states: [],
       cities: [],
-      loading:false,
-      search: null,
-      debounce: null,
+      loading: false,
       update: false,
       del: false,
       invite: false,
@@ -278,7 +264,7 @@ export default {
     openUpdateDialog() {
       this.tempEntity = JSON.parse(JSON.stringify(this.entity));
       if (this.statesFetched == false) this.fetchStates();
-      let teste = this.entity.city.split(' - ');
+      let teste = this.entity.city.split(" - ");
       this.tempEntity.city = teste[0];
       this.tempEntity.state = teste[1];
       console.log(this.tempEntity, this.entity);
@@ -302,50 +288,66 @@ export default {
         //console.log(this.tempEntity, this.entity)
         this.loading = true;
         this.onUpdateEntityCB(this.entity.id, this.entity)
-        .then(()=>{
-          this.$store.commit('showMessage', { content:"Entidade alterada com sucesso!", error:false })
-        })
-        .catch(e=>{
-          this.$store.commit('showMessage', { content:"Erro", error:true })
-        })
-        .finally(()=>{
-          this.loading = false;
-          this.update = false;
-        });
+          .then(() => {
+            this.$store.commit("showMessage", {
+              content: "Entidade alterada com sucesso!",
+              error: false
+            });
+          })
+          .catch(e => {
+            this.$store.commit("showMessage", { content: "Erro", error: true });
+          })
+          .finally(() => {
+            this.loading = false;
+            this.update = false;
+          });
       }
     },
     handleExit() {
       this.loading = true;
-      this.onLeaveEntityCB(this.entity.id).then(()=>{
-        this.$store.commit('showMessage', { content:`Você saiu da entidade ${this.entity.name}!`, error:false })
-      }).catch(e=>{
-        this.$store.commit('showMessage', { content:"Você é o último usuário remanescente na entidade, não é possível sair.", error:true })
-      }).finally(()=>{
-        this.loading = false;
-        this.del = false;
-      });
+      this.onLeaveEntityCB(this.entity.id)
+        .then(() => {
+          this.$store.commit("showMessage", {
+            content: `Você saiu da entidade ${this.entity.name}!`,
+            error: false
+          });
+        })
+        .catch(e => {
+          this.$store.commit("showMessage", {
+            content:
+              "Você é o último usuário remanescente na entidade, não é possível sair.",
+            error: true
+          });
+        })
+        .finally(() => {
+          this.loading = false;
+          this.del = false;
+        });
     },
     handleInvite() {
       //VALIDAR!!!!!!!!
       this.loading = true;
       this.onInviteUserCB(this.entity.id, this.email)
-      .then(()=>{
-        this.$store.commit('showMessage', { content:`Usuário adicionado com sucesso!`, error:false })
-      })
-      .catch(e=>{
-        this.$store.commit('showMessage', { content:`Erro`, error:true })
-      })
-      .finally(()=>{
-        this.loading = false;
-        this.invite = false;
-        this.email = "";
-      });
+        .then(() => {
+          this.$store.commit("showMessage", {
+            content: `Usuário adicionado com sucesso!`,
+            error: false
+          });
+        })
+        .catch(e => {
+          this.$store.commit("showMessage", { content: `Erro`, error: true });
+        })
+        .finally(() => {
+          this.loading = false;
+          this.invite = false;
+          this.email = "";
+        });
     },
     fetchStates() {
       api.getStates().then(res => {
         console.log(res);
         this.states = res.data;
-        this.states.sort((a,b)=>{
+        this.states.sort((a, b) => {
           const stateA = a.uf;
           const stateB = b.uf;
           let comparison = 0;
@@ -356,25 +358,10 @@ export default {
           }
           return comparison;
         });
-        console.log(this.states)
+        console.log(this.states);
         this.statesFetched = true;
       });
     },
-    fetchCities(stateId, query) {
-      return api.getDistricts(stateId, query);
-    }
-  },
-  watch: {
-    search(query) {
-      if (query.length <= 3) return;
-      clearTimeout(this.debounce);
-      let that = this;
-      this.debounce = setTimeout(function() {
-        that.fetchCities(that.tempEntity.state, query).then(res => {
-          that.cities = res.data;
-        });
-      }, 300);
-    }
   },
 };
 </script>
