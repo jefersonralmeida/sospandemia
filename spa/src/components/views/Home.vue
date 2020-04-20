@@ -19,6 +19,16 @@
           Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
           filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
         </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="red darken-1"
+              text
+              @click="help = false"
+            >
+              Fechar
+            </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     <div class="form-group">
