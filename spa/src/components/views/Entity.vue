@@ -230,7 +230,9 @@
 
 <script>
 import api from "./../../api";
+import rules from "../../util/rules";
 export default {
+  mixins: [rules],
   props: {
     entity: {
       type: Object,
@@ -270,14 +272,6 @@ export default {
       invite: false,
       statesFetched: false,
       email: "",
-      rules: {
-        min: v => v.length >= 1 || "Minimo 15 caracteres",
-        required: value => !!value || "Obrigatório.",
-        numberRule: v => {
-          if (parseInt(v) && v >= 1) return true;
-          return "O campo deve conter apenas números.";
-        }
-      }
     };
   },
   methods: {
