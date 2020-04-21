@@ -17,11 +17,40 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
-          <router-link to="sobre-nos">Equipe</router-link>
+          email: contato@sospandemia.org
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
-          email: contato@sospandemia.org
+          <ul class="list-inline text-small">
+            <li>Apoio</li>
+              <li>
+                <a class="text-muted" href="http://www.utfpr.edu.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_utfpr.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a class="text-muted" href="http://www.uepg.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_uepg.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href="https://www.facebook.com/escritoriodecriatividade/"
+                  target="_blank"
+                >
+                  <img class="mb-2" src="../../assets/logo_criatividade.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href=" jeferson@webage.solutions" target="_blank"> <img class="mb-2" src="../../assets/logo_webAge.png" height="15" />
+                </a>
+              </li>
+              <li><router-link to="sobre-nos">Equipe</router-link></li>
+            </ul>
+
         </v-card-text>
 
         <v-card-text v-if="donation">
