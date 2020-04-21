@@ -10,6 +10,7 @@
             <v-form ref="form">
               <div class="form-group">
                 <v-text-field
+                  ref="title"
                   v-model="tempDemand.title"
                   :rules="[rules.required]"
                   label="Demanda"
@@ -52,6 +53,7 @@
               <div class="form-group">
                 <v-textarea
                   rows="4"
+                  ref="description"
                   label="Adicione um descrição"
                   outlined
                   v-model="tempDemand.text"
@@ -112,8 +114,9 @@
 
 <script>
 import rules from "../../util/rules";
+import validation from "../../util/validation";
 export default {
-  mixins: [rules],
+  mixins: [rules, validation],
   props: {
     demand: {
       type: Object,
@@ -145,8 +148,7 @@ export default {
       this.tempDemand = JSON.parse(JSON.stringify(this.demand));
       this.update = true;
     },
-    validate() {
-      console.log(this.$refs);
+    isValidForm() {
       return this.$refs.form.validate();
     },
     hidePopup(ModelName) {
@@ -182,34 +184,27 @@ export default {
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-      //Validar dados
-      if (this.validate()) {
-        /* this.demand.title = this.tempDemand.title;
-        this.demand.text = this.tempDemand.text;
-        this.demand.quantity = this.tempDemand.quantity;
-        this.demand.unit = this.tempDemand.unit;
-        this.demand.contact_info = this.tempDemand.contact_info; */
-        this.loading = true;
-        console.log("Fired");
-        this.onUpdateDemandCB(this.demand.id, this.tempDemand)
-          .then(ev => {
-            this.hidePopup("updateModal");
-            this.$store.commit("showMessage", {
-              content: "Demanda salva!",
-              error: false
-            });
-          })
-          .catch(err => {
-            this.$store.commit("showMessage", {
-              content: "Erro ao alterar demanda.",
-              error: true
-            });
-          })
-          .finally(() => {
-            this.loading = false;
-            this.update = false;
+      if (!this.isValidForm()) return;
+      this.loading = true;
+      this.onUpdateDemandCB(this.demand.id, this.tempDemand)
+        .then(ev => {
+          this.hidePopup("updateModal");
+          this.$store.commit("showMessage", {
+            content: "Demanda salva!",
+            error: false
           });
-      }
+          this.update = false;
+        })
+        .catch(err => {
+          this.$store.commit("showMessage", {
+            content: "Erro ao alterar demanda.",
+            error: true
+          });
+          this.handleResponseError(err, this.$refs);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };
