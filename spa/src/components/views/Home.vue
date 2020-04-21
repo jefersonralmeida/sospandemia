@@ -15,6 +15,44 @@
         <v-card-text>
           Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
         </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>
+          email: contato@sospandemia.org
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>
+          <ul class="list-inline text-small">
+            <li>Apoio</li>
+              <li>
+                <a class="text-muted" href="http://www.utfpr.edu.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_utfpr.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a class="text-muted" href="http://www.uepg.br/" target="_blank">
+                  <img class="mb-2" src="../../assets/logo_uepg.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href="https://www.facebook.com/escritoriodecriatividade/"
+                  target="_blank"
+                >
+                  <img class="mb-2" src="../../assets/logo_criatividade.png" height="15" />
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-muted"
+                  href=" jeferson@webage.solutions" target="_blank"> <img class="mb-2" src="../../assets/logo_webAge.png" height="15" />
+                </a>
+              </li>
+              <li><router-link to="sobre-nos">Equipe</router-link></li>
+            </ul>
+
+        </v-card-text>
+
         <v-card-text v-if="donation">
           Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
           filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
