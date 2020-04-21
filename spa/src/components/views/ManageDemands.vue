@@ -82,7 +82,9 @@ import api from "../../api";
 import randomstring from "randomstring";
 import LoadingWidget from "../widgets/LoadingWidget";
 
+import rules from "../../util/rules";
 export default {
+  mixins: [rules],
   name: "ManageDemandsLocal",
   components: {
     "demand-card": Demand,
@@ -100,14 +102,6 @@ export default {
       text: "",
       quantity: 1
     },
-    rules: {
-      min: v => v.length >= 1 || "Minimo 15 caracteres",
-      required: value => !!value || "Obrigatório.",
-      numberRule: v => {
-        if (parseInt(v) && v >= 1) return true;
-        return "O campo deve conter apenas números.";
-      }
-    }
   }),
   methods: {
     loadDemands: function() {
