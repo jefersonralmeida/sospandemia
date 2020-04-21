@@ -1,5 +1,36 @@
 <template>
   <div class="home">
+    <p>
+      Primeira vez utilizando o sistema? <a @click="help=true">Clique aqui!</a>
+    </p>
+    <v-dialog v-model="help" max-width="600px">
+      <v-card class="">
+        <v-card-title class="headline">
+          Bem vindo ao SOS Pandemia!
+        </v-card-title>
+        <v-card-text>
+          Gostaria de cadastrar minha entidade para receber ajuda, <a>como proceder?</a> <!-- adicionar link do video aqui @Hernani -->
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>
+          Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
+        </v-card-text>
+        <v-card-text v-if="donation">
+          Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
+          filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="red darken-1"
+              text
+              @click="help = false"
+            >
+              Fechar
+            </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <div class="form-group">
       <v-text-field
         type="email"
@@ -83,6 +114,8 @@ export default {
   components: { LoadingWidget, DistrictSelector },
   data() {
     return {
+      help:false,
+      donation:false,
       current_page:1,
       last_page:1,
       query: "",
@@ -163,6 +196,11 @@ export default {
     }
   },
   watch: {
+    help: function(val){
+      if(val == false){
+        this.donation = false;
+      }
+    },
     query: _.debounce(function() {
       this.current_page = 1;
       this.search();

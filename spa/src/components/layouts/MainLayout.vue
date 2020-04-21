@@ -159,6 +159,7 @@
               <li>
                 <router-link to="termos-de-uso-e-privacidade">Termo de uso e privacidade</router-link>
               </li>
+              <li>contato@sospandemia.org</li>
             </ul>
           </div>
         </div>
@@ -213,6 +214,7 @@
              <li>
                 <router-link to="termos-de-uso-e-privacidade">Termo de uso e privacidade</router-link>
               </li>
+              <li>contato@sospandemia.org</li>
             </ul>
           </div>
         </div>
