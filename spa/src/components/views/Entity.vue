@@ -44,35 +44,24 @@
                       outlined
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="3" md="2">
-                    <v-text-field
-                      disabled
+                  <v-col cols="12">
+                    <v-select
                       label="Estado"
                       :items="states"
-                      v-model="tempEntity.state"
+                      v-model="tempEntity.state_id"
                       :loading="!statesFetched"
-                      :search-input.sync="search"
                       outlined
                       item-text="uf"
                       item-value="id"
-                    ></v-text-field>
+                    ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="9" md="10">
-                    <v-text-field
-                      disabled
-                      ref="city"
-                      v-model="tempEntity.city"
-                      :items="cities"
-                      item-text="name"
-                      label="Cidade"
-                      autocomplete="dskjalçkdwlçakdwlça"
-                      placeholder="Digite o nome da cidade para buscar"
-                      :search-input.sync="search"
-                      outlined
-                      hide-no-data
-                      hide-selected
-                      return-object
-                    ></v-text-field>
+                  <v-col cols="12">
+                    <DistrictSelector
+                      :stateId="tempEntity.state_id"
+                      :disabled="tempEntity.state_id == 0"
+                      :onChangeCB="onCityChange"
+                      :defaultValue="{name:tempEntity.city, id:tempEntity.district_id}"
+                    />
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
@@ -130,12 +119,11 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                  <v-text-field  
-                    v-model="email" 
-                    outlined
-                    label="Email"></v-text-field>
-                  <span class="text-muted small">Nota: o email inserido deve estar registrado! Caso não
-                  esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.</span>
+                <v-text-field v-model="email" outlined label="Email"></v-text-field>
+                <span class="text-muted small">
+                  Nota: o email inserido deve estar registrado! Caso não
+                  esteja, favor entrar em contato com o dono do email, e solicitar ao mesmo para se registrar no sistema.
+                </span>
               </v-col>
             </v-row>
           </v-container>
@@ -154,17 +142,8 @@
       <div class="card-header">
         <h3>
           {{ entity.name }}&nbsp;
-          <v-chip
-            class="mx-2"
-            small
-          >
-            {{entity.entity_type}}
-          </v-chip>
-          <v-chip
-            small
-            v-if="isActiveEntityCB(entity.id)"
-            color="success"
-          >Ativo</v-chip>
+          <v-chip class="mx-2" small>{{entity.entity_type}}</v-chip>
+          <v-chip small v-if="isActiveEntityCB(entity.id)" color="success">Ativo</v-chip>
         </h3>
       </div>
       <div class="card-body">
@@ -183,7 +162,7 @@
         <hr />
         {{ entity.description }}
         <hr />
-        {{ entity.street_address }} - {{ entity.city}}  
+        {{ entity.street_address }} - {{ entity.city}}
       </div>
       <div class="card-footer">
         <div class="row">
@@ -231,8 +210,11 @@
 <script>
 import api from "./../../api";
 import rules from "../../util/rules";
+import DistrictSelector from "../widgets/DistrictSelector";
+
 export default {
   mixins: [rules],
+  components: { DistrictSelector },
   props: {
     entity: {
       type: Object,
@@ -264,88 +246,108 @@ export default {
       tempEntity: {},
       states: [],
       cities: [],
-      loading:false,
-      search: null,
-      debounce: null,
+      loading: false,
       update: false,
       del: false,
       invite: false,
       statesFetched: false,
-      email: "",
+      email: ""
     };
+  },
+  computed: {
+    entityPayload() {
+      let entity = this.tempEntity;
+      let payload = {
+        entity_type_id: entity.entity_type_id,
+        cnpj: entity.cnpj,
+        name: entity.name,
+        legal_name: entity.legal_name,
+        description: entity.description,
+        street_address: entity.street_address,
+        district_id: entity.district_id
+      };
+      if (entity.entity_type_document)
+        payload.entity_type_document = entity.entity_type_document;
+
+      return payload;
+    }
   },
   methods: {
     openUpdateDialog() {
       this.tempEntity = JSON.parse(JSON.stringify(this.entity));
       if (this.statesFetched == false) this.fetchStates();
-      let teste = this.entity.city.split(' - ');
+      let teste = this.entity.city.split(" - ");
       this.tempEntity.city = teste[0];
       this.tempEntity.state = teste[1];
-      console.log(this.tempEntity, this.entity);
       this.update = true;
     },
     validate() {
-      console.log(this.$refs);
       return this.$refs.form.validate();
     },
     handleUpdateEntity(ev) {
       ev.preventDefault();
-      //Validar dados
       if (this.validate()) {
-        //this.entity.cnpj = this.tempEntity.cnpj;
-        //this.entity.city = this.tempEntity.city;
-        //this.entity.state = this.tempEntity.state;
-        this.entity.name = this.tempEntity.name;
-        this.entity.legal_name = this.tempEntity.legal_name;
-        this.entity.street_address = this.tempEntity.street_address;
-        this.entity.description = this.tempEntity.description;
-        //console.log(this.tempEntity, this.entity)
         this.loading = true;
-        this.onUpdateEntityCB(this.entity.id, this.entity)
-        .then(()=>{
-          this.$store.commit('showMessage', { content:"Entidade alterada com sucesso!", error:false })
-        })
-        .catch(e=>{
-          this.$store.commit('showMessage', { content:"Erro", error:true })
-        })
-        .finally(()=>{
-          this.loading = false;
-          this.update = false;
-        });
+        this.onUpdateEntityCB(this.entity.id, this.entityPayload)
+          .then(() => {
+            this.$store.commit("showMessage", {
+              content: "Entidade alterada com sucesso!",
+              error: false
+            });
+          })
+          .catch(e => {
+            this.$store.commit("showMessage", { content: "Erro", error: true });
+          })
+          .finally(() => {
+            this.loading = false;
+            this.update = false;
+          });
       }
     },
     handleExit() {
       this.loading = true;
-      this.onLeaveEntityCB(this.entity.id).then(()=>{
-        this.$store.commit('showMessage', { content:`Você saiu da entidade ${this.entity.name}!`, error:false })
-      }).catch(e=>{
-        this.$store.commit('showMessage', { content:"Você é o último usuário remanescente na entidade, não é possível sair.", error:true })
-      }).finally(()=>{
-        this.loading = false;
-        this.del = false;
-      });
+      this.onLeaveEntityCB(this.entity.id)
+        .then(() => {
+          this.$store.commit("showMessage", {
+            content: `Você saiu da entidade ${this.entity.name}!`,
+            error: false
+          });
+        })
+        .catch(e => {
+          this.$store.commit("showMessage", {
+            content:
+              "Você é o último usuário remanescente na entidade, não é possível sair.",
+            error: true
+          });
+        })
+        .finally(() => {
+          this.loading = false;
+          this.del = false;
+        });
     },
     handleInvite() {
       //VALIDAR!!!!!!!!
       this.loading = true;
       this.onInviteUserCB(this.entity.id, this.email)
-      .then(()=>{
-        this.$store.commit('showMessage', { content:`Usuário adicionado com sucesso!`, error:false })
-      })
-      .catch(e=>{
-        this.$store.commit('showMessage', { content:`Erro`, error:true })
-      })
-      .finally(()=>{
-        this.loading = false;
-        this.invite = false;
-        this.email = "";
-      });
+        .then(() => {
+          this.$store.commit("showMessage", {
+            content: `Usuário adicionado com sucesso!`,
+            error: false
+          });
+        })
+        .catch(e => {
+          this.$store.commit("showMessage", { content: `Erro`, error: true });
+        })
+        .finally(() => {
+          this.loading = false;
+          this.invite = false;
+          this.email = "";
+        });
     },
     fetchStates() {
       api.getStates().then(res => {
-        console.log(res);
         this.states = res.data;
-        this.states.sort((a,b)=>{
+        this.states.sort((a, b) => {
           const stateA = a.uf;
           const stateB = b.uf;
           let comparison = 0;
@@ -356,26 +358,13 @@ export default {
           }
           return comparison;
         });
-        console.log(this.states)
         this.statesFetched = true;
       });
     },
-    fetchCities(stateId, query) {
-      return api.getDistricts(stateId, query);
+    onCityChange(city) {
+      this.tempEntity.district_id = city.id;
     }
-  },
-  watch: {
-    search(query) {
-      if (query.length <= 3) return;
-      clearTimeout(this.debounce);
-      let that = this;
-      this.debounce = setTimeout(function() {
-        that.fetchCities(that.tempEntity.state, query).then(res => {
-          that.cities = res.data;
-        });
-      }, 300);
-    }
-  },
+  }
 };
 </script>
 
