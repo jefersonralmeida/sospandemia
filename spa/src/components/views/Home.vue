@@ -101,11 +101,17 @@
         <div class="card-body">
           {{ demand.text}}
           <hr v-if="demand.quantity" />
-          <p v-if="demand.quantity">Quantidade: {{ demand.quantity }}</p>
+          <p v-if="demand.quantity">Quantidade: {{ demand.quantity }} {{ demand.unit }}</p>
+          <hr v-if="demand.contact_info || demand.entity.contact_info" />
+          <h5 v-if="demand.contact_info || demand.entity.contact_info">Informações de Contato:</h5>
+          <hr v-if="demand.contact_info || demand.entity.contact_info" style="width: 300px"/>
+          <p v-if="demand.entity.contact_info"><strong>Entidade:</strong> {{ demand.entity.contact_info }}</p>
+          <p v-if="demand.contact_info"><strong>Específico da Demanda:</strong> {{ demand.contact_info }}</p>
+
         </div>
         <div
           class="card-footer"
-        >{{ demand.entity.name }} - {{ demand.entity.city }} - {{ demand.entity.state}}</div>
+        >{{ demand.entity.name }} - {{ demand.entity.city }}</div>
       </div>
     </div>
     <div class="text-center mt-2" v-if="widgetLoading==false && last_page>1">

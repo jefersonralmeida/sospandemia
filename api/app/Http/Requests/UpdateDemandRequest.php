@@ -38,7 +38,9 @@ class UpdateDemandRequest extends FormRequest
         return [
             'title' => 'filled',
             'text' => 'filled',
+            'contact_info' => 'filled|string',
             'quantity' => 'filled|int|min:0',
+            'unit' => 'filled|string',
         ];
     }
 }

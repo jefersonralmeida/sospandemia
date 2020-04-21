@@ -26,6 +26,7 @@ class Entity extends Model
         'name',
         'legal_name',
         'description',
+        'contact_info',
         'street_address',
         'district_id',
         'entity_type_id',

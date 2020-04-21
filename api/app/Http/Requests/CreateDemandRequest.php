@@ -33,9 +33,11 @@ class CreateDemandRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'text' => 'required',
-            'quantity' => 'filled|int|min:0'
+            'title' => 'required|string',
+            'text' => 'required|string',
+            'contact_info' => 'filled|string',
+            'quantity' => 'filled|int|min:0',
+            'unit' => 'filled|string'
         ];
     }
 }

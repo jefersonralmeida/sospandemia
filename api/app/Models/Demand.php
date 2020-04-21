@@ -20,7 +20,7 @@ class Demand extends Model
 
     use Searchable;
 
-    protected $fillable = ['title', 'text', 'quantity', 'entity_id'];
+    protected $fillable = ['title', 'text', 'contact_info', 'quantity', 'entity_id', 'unit'];
     protected $hidden = ['entity_id'];
 
     public function toSearchableArray()
