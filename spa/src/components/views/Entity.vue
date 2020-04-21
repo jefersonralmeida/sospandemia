@@ -36,7 +36,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      ref="address"
+                      ref="street_address"
                       v-model="tempEntity.street_address"
                       :rules="[rules.required]"
                       label="Endereço"
@@ -57,9 +57,11 @@
                   </v-col>
                   <v-col cols="12">
                     <DistrictSelector
+                      refBind="district_id"
                       :stateId="tempEntity.state_id"
                       :disabled="tempEntity.state_id == 0"
                       :onChangeCB="onCityChange"
+                      :rules="[rules.required]"
                       :defaultValue="{name:tempEntity.city, id:tempEntity.district_id}"
                     />
                   </v-col>
@@ -211,9 +213,10 @@
 import api from "./../../api";
 import rules from "../../util/rules";
 import DistrictSelector from "../widgets/DistrictSelector";
+import validation from '../../util/validation';
 
 export default {
-  mixins: [rules],
+  mixins: [rules, validation],
   components: { DistrictSelector },
   props: {
     entity: {
@@ -281,28 +284,28 @@ export default {
       this.tempEntity.state = teste[1];
       this.update = true;
     },
-    validate() {
+    isValidForm() {
       return this.$refs.form.validate();
     },
     handleUpdateEntity(ev) {
       ev.preventDefault();
-      if (this.validate()) {
-        this.loading = true;
-        this.onUpdateEntityCB(this.entity.id, this.entityPayload)
-          .then(() => {
-            this.$store.commit("showMessage", {
-              content: "Entidade alterada com sucesso!",
-              error: false
-            });
-          })
-          .catch(e => {
-            this.$store.commit("showMessage", { content: "Erro", error: true });
-          })
-          .finally(() => {
-            this.loading = false;
-            this.update = false;
+      if (!this.isValidForm()) return;
+      this.loading = true;
+      this.onUpdateEntityCB(this.entity.id, this.entityPayload)
+        .then(() => {
+          this.$store.commit("showMessage", {
+            content: "Entidade alterada com sucesso!",
+            error: false
           });
-      }
+          this.update = false;
+        })
+        .catch(e => {
+          this.$store.commit("showMessage", { content: "Erro ao alterar a entidade. Verifique os campos e tente novamente.", error: true });
+          this.handleResponseError(e, this.$refs)
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     handleExit() {
       this.loading = true;

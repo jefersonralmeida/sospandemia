@@ -63,16 +63,15 @@
       :onDeleteDemandCB="deleteDemand"
       class="mt-2"
     ></demand-card>
-    
-  <div class="text-center mt-2" v-if="checked && last_page>1">
-    <v-pagination
-      v-model="current_page"
-      @input="loadDemands"
-      :length="last_page"
-      next-icon="mdi-skip-next"
-    ></v-pagination>
-  </div>
 
+    <div class="text-center mt-2" v-if="checked && last_page>1">
+      <v-pagination
+        v-model="current_page"
+        @input="loadDemands"
+        :length="last_page"
+        next-icon="mdi-skip-next"
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
@@ -81,10 +80,11 @@ import Demand from "./Demand";
 import api from "../../api";
 import randomstring from "randomstring";
 import LoadingWidget from "../widgets/LoadingWidget";
+import validation from "../../util/validation";
 
 import rules from "../../util/rules";
 export default {
-  mixins: [rules],
+  mixins: [rules, validation],
   name: "ManageDemandsLocal",
   components: {
     "demand-card": Demand,
@@ -92,8 +92,8 @@ export default {
   },
   data: () => ({
     demands: [],
-    current_page:1,
-    last_page:1,
+    current_page: 1,
+    last_page: 1,
     creatingDemand: false,
     checked: false,
     creatingDemandLoading: false,
@@ -101,7 +101,7 @@ export default {
       title: "",
       text: "",
       quantity: 1
-    },
+    }
   }),
   methods: {
     loadDemands: function() {
@@ -113,44 +113,37 @@ export default {
         this.checked = true;
       });
     },
-    validate() {
-      console.log(this.$refs);
+    isValidForm() {
       return this.$refs.form.validate();
     },
     createDemand: function() {
-      if (this.validate()) {
-        this.creatingDemandLoading = true;
-        api
-          .createDemand(this.demandData)
-          .then(() => {
-            this.creatingDemand = false;
-            this.$store.commit("showMessage", {
-              content: "Demanda adicionada!",
-              error: false
-            });
-            this.loadDemands();
-          })
-          .catch(error => {
-            this.$store.commit("showMessage", {
-              content: "Erro ao adicionar a demanda.",
-              error: true
-            });
-            for (let errPropriety in error.response.data.errors) {
-              console.log(this.$refs[errPropriety]);
-              this.$refs[errPropriety].errorMessages.push(
-                error.response.data.errors[errPropriety][0]
-              );
-            }
-          })
-          .finally(() => {
-            this.creatingDemandLoading = false;
-            this.demandData = {
-              title: "",
-              text: "",
-              quantity: 1
-            };
+      if (!this.isValidForm()) return;
+      this.creatingDemandLoading = true;
+      api
+        .createDemand(this.demandData)
+        .then(() => {
+          this.creatingDemand = false;
+          this.$store.commit("showMessage", {
+            content: "Demanda adicionada!",
+            error: false
           });
-      }
+          this.loadDemands();
+        })
+        .catch(error => {
+          this.$store.commit("showMessage", {
+            content: "Erro ao adicionar a demanda.",
+            error: true
+          });
+          this.handleResponseError(error, this.$refs);
+        })
+        .finally(() => {
+          this.creatingDemandLoading = false;
+          this.demandData = {
+            title: "",
+            text: "",
+            quantity: 1
+          };
+        });
     },
     viewDemand: function(demandId) {
       api.getDemand(demandId).then(({ data }) => {
@@ -168,11 +161,11 @@ export default {
     },
     deleteDemand: function(demandId) {
       return api.deleteDemand(demandId).then(response => {
-        console.log("teste",this.demands.length);
-        if(this.demands.length == 1 && this.current_page>1){
+        console.log("teste", this.demands.length);
+        if (this.demands.length == 1 && this.current_page > 1) {
           this.current_page--;
         }
-        this.loadDemands()
+        this.loadDemands();
       });
     }
   },

@@ -17,10 +17,10 @@
     <hr />
     <div v-if="creatingEntity && entityType=='Unidade de Saúde'">
       <h3 class="py-2">Insira as informações referente à entidade</h3>
-      <FormUS :onSubmit="createEntity" :onCancel="handleCreateCancel" :loading="loading" />
+      <FormUS ref="formUS" :onSubmit="createEntity" :onCancel="handleCreateCancel" :loading="loading" />
     </div>
     <div v-if="creatingEntity && entityType=='Outras'">
-      <FormOutros :onSubmit="createEntity" :onCancel="handleCreateCancel" :loading="loading" />
+      <FormOutros ref="formOutros" :onSubmit="createEntity" :onCancel="handleCreateCancel" :loading="loading" />
     </div>
     <hr />
 
@@ -42,8 +42,10 @@ import api from "../../api";
 import Entity from "./Entity";
 import FormOutros from "../forms/Outros";
 import FormUS from "../forms/UnidadeSaude";
+import validation from '../../util/validation'
 
 export default {
+  mixins: [validation],
   name: "SelectEntity",
   components: {
     "entity-card": Entity,
@@ -97,6 +99,10 @@ export default {
             content: "Não foi possivel criar a entidade.",
             error: true
           });
+          if(this.entityType=='Outras')
+            this.handleResponseError(e, this.$refs.formOutros.$refs)
+          else
+            this.handleResponseError(e, this.$refs.formUS.$refs)
         })
         .finally(() => {
           this.loading = false;

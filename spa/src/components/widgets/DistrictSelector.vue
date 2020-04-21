@@ -1,6 +1,6 @@
 <template>
   <v-autocomplete
-    ref="city"
+    :ref="refBind"
     v-model="city"
     :disabled="disabled"
     :rules="rules"
@@ -42,6 +42,11 @@ export default {
     defaultValue: {
       type: Object,
       required: false
+    },
+    refBind: {
+      type: String,
+      required: false,
+      default: "autocomplete-city"
     }
   },
   data() {
