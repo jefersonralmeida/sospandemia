@@ -69,6 +69,40 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="entityDetails" max-width="600px">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          Detalhes da entidade
+        </v-card-title>
+        <div class="card-body">
+    
+        <v-card-text>
+          <p><strong>Nome: </strong> {{currentEntity.name}}</p>
+          <p><strong>Razão Social: </strong> {{currentEntity.legal_name}}</p>
+          <p><strong>CNPJ: </strong> {{currentEntity.cnpj}}</p>
+          <p v-if="currentEntity.entity_type_id==1">
+            <strong>CNES: </strong> {{currentEntity.entity_type_document}}
+          </p>
+          <p><strong>Endereço: </strong> {{currentEntity.street_address}}</p>
+          <p><strong>Cidade - Estado: </strong> {{currentEntity.city}}</p>
+          <p><strong>Contato: </strong> {{currentEntity.contact_info}}</p>
+          <p><strong>Sobre: </strong> {{currentEntity.description}}</p>
+        </v-card-text>
+        </div>
+      <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="red darken-1"
+              text
+              @click="entityDetails = false"
+            >
+              Fechar
+            </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
     <div class="form-group">
       <v-text-field
         type="email"
@@ -134,7 +168,7 @@
         </div>
         <div
           class="card-footer"
-        >{{ demand.entity.name }} - {{ demand.entity.city }}</div>
+        ><a @click="showEntityDetails(demand.entity)">{{ demand.entity.name }}</a> - {{ demand.entity.city }}</div>
       </div>
     </div>
     <div class="text-center mt-2" v-if="widgetLoading==false && last_page>1">
@@ -158,6 +192,8 @@ export default {
   components: { LoadingWidget, DistrictSelector },
   data() {
     return {
+      entityDetails: false,
+      currentEntity: {},
       help:false,
       donation:false,
       current_page:1,
@@ -182,6 +218,10 @@ export default {
     }
   },
   methods: {
+    showEntityDetails: function(entity){
+      this.entityDetails = true;
+      this.currentEntity = entity;
+    },
     search: function(query) { 
       this.widgetLoading = true;
       if (this.showFilter && this.filterOptions.state != 0) {
