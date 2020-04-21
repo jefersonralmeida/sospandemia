@@ -100,7 +100,7 @@ export default {
     demandData: {
       title: "",
       text: "",
-      quantity: 1
+      quantity: "1"
     }
   }),
   methods: {
@@ -141,7 +141,7 @@ export default {
           this.demandData = {
             title: "",
             text: "",
-            quantity: 1
+            quantity: "1"
           };
         });
     },
