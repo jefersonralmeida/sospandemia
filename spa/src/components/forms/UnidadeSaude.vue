@@ -73,6 +73,15 @@
       ></v-text-field>
     </div>
     <div class="form-group">
+      <v-text-field
+        ref="contact_info"
+        v-model="entity.contact_info"
+        label="Contato"
+        placeholder="Ex: tel: (00) 0000-0000, email: example@example.ex"
+        outlined
+      ></v-text-field>
+    </div>
+    <div class="form-group">
       <v-textarea
         ref="description"
         rows="3"
@@ -113,6 +122,7 @@ export default {
         cnpj: "",
         name: "",
         legal_name: "",
+        contact_info: "",
         description: "",
         street_address: "",
         city: "",
@@ -167,6 +177,7 @@ export default {
         entity_type_document: entity.cnes,
         cnpj: entity.cnpj,
         name: entity.name,
+        contact_info: entity.contact_info,
         legal_name: entity.legal_name,
         description: entity.description,
         street_address: entity.street_address,
