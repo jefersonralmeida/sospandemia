@@ -15,6 +15,15 @@
         <v-card-text>
           Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
         </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>
+          <router-link to="sobre-nos">Equipe</router-link>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>
+          email: contato@sospandemia.org
+        </v-card-text>
+
         <v-card-text v-if="donation">
           Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
           filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
