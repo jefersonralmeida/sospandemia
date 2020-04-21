@@ -9,7 +9,7 @@
           Bem vindo ao SOS Pandemia!
         </v-card-title>
         <v-card-text>
-          Gostaria de cadastrar minha entidade para receber ajuda, <a>como proceder?</a> <!-- adicionar link do video aqui @Hernani -->
+          Gostaria de cadastrar minha entidade para receber ajuda,  <router-link to="primeiros-passos">como proceder?</router-link> <a></a> <!-- adicionar link do video aqui @Hernani -->
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
