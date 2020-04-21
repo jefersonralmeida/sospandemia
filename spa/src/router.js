@@ -10,6 +10,7 @@ import ManageDemands from "./components/views/ManageDemands";
 import GenericError from "./components/errors/GenericError";
 import Equipe from "./components/views/Equipe";
 import Terms from "./components/views/terms";
+import New from "./components/views/new";
 
 Vue.use(Router);
 
@@ -46,6 +47,16 @@ const routes = [
         name: 'sobre-nos',
         title: 'Equipe',
         component: Equipe,
+        meta: {
+            guestAllowed: true,
+        },
+        
+    },
+    {
+        path: '/primeiros-passos',
+        name: 'primeiros-passos',
+        title: 'Primeiros Passos',
+        component: New,
         meta: {
             guestAllowed: true,
         },
