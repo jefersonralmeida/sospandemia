@@ -4,6 +4,7 @@
       <div class="form-group col-6">
         <v-text-field
           v-model="entity.cnes"
+          ref="entity_type_document"
           label="CNES"
           placeholder="informe o CNES"
           type="number"
@@ -14,6 +15,7 @@
       <div class="form-group col-6">
         <v-text-field
           v-model="entity.cnpj"
+          ref="cnpj"
           type="number"
           label="CNPJ"
           placeholder="informe o CNPJ"
@@ -23,10 +25,10 @@
       </div>
     </div>
     <div class="form-group">
-      <v-text-field v-model="entity.name" outlined readonly label="Nome"></v-text-field>
+      <v-text-field ref="name" v-model="entity.name" outlined readonly label="Nome"></v-text-field>
     </div>
     <div class="form-group">
-      <v-text-field v-model="entity.legal_name" outlined readonly label="Razão Social"></v-text-field>
+      <v-text-field ref="legal_name" v-model="entity.legal_name" outlined readonly label="Razão Social"></v-text-field>
     </div>
     <div class="row">
       <div class="form-group col-4 col-md-4">
@@ -50,6 +52,7 @@
     </div>
     <div class="form-group">
       <v-select
+        ref="district_id"
         v-model="entity.district"
         :rules="[rules.required]"
         :items="cities"
@@ -61,7 +64,7 @@
     </div>
     <div class="form-group">
       <v-text-field
-        ref="address"
+        ref="street_address"
         v-model="entity.street_address"
         :rules="[rules.required, rules.min]"
         label="Endereço"
@@ -71,6 +74,7 @@
     </div>
     <div class="form-group">
       <v-textarea
+        ref="description"
         rows="3"
         auto-grow
         :rules="[rules.required, rules.min]"
@@ -82,12 +86,7 @@
     </div>
     <div class="d-flex justify-content-end">
       <v-btn color="red" dark @click="onCancel">Cancelar</v-btn>
-      <v-btn
-        color="success"
-        :loading="loading"
-        class="ml-1"
-        @click="handleSubmit"
-      >Criar</v-btn>
+      <v-btn color="success" :loading="loading" class="ml-1" @click="handleSubmit">Criar</v-btn>
     </div>
   </v-form>
 </template>
@@ -150,13 +149,13 @@ export default {
     fetchCities(stateId, query) {
       return api.getDistricts(stateId, query);
     },
-    handleSubmit(){
-        if(!this.isValidForm()) return
+    handleSubmit() {
+      if (!this.isValidForm()) return;
 
-        this.onSubmit(this.entityPayload)
+      this.onSubmit(this.entityPayload);
     },
-    isValidForm(){
-        return this.$refs.form.validate()
+    isValidForm() {
+      return this.$refs.form.validate();
     }
   },
   mixins: [rules],
@@ -182,6 +181,7 @@ export default {
       return api
         .getEntityByCNES(cnes)
         .then(res => {
+          this.$refs.entity_type_document.errorMessages.pop()
           var cnesResponse = res.data;
           this.entity.name = cnesResponse.name;
           this.entity.legal_name = cnesResponse.legal_name;
@@ -197,6 +197,7 @@ export default {
           });
         })
         .catch(e => {
+          this.$refs.entity_type_document.errorMessages.push("CNES inválido")
           this.$store.commit("showMessage", {
             content: `Problemas ao identificar o CNES!`,
             error: true

@@ -37,7 +37,7 @@
     </div>
     <div class="form-group">
       <v-text-field
-        ref="address"
+        ref="street_address"
         v-model="entity.street_address"
         :counter="300"
         :rules="[rules.required, (value) => rules.min(value, 15), (value) => rules.max(value, 300)]"
