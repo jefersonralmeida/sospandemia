@@ -184,14 +184,14 @@ export default {
       ev.preventDefault();
       //Validar dados
       if (this.validate()) {
-        this.demand.title = this.tempDemand.title;
+        /* this.demand.title = this.tempDemand.title;
         this.demand.text = this.tempDemand.text;
         this.demand.quantity = this.tempDemand.quantity;
         this.demand.unit = this.tempDemand.unit;
-        this.demand.contact_info = this.tempDemand.contact_info;
+        this.demand.contact_info = this.tempDemand.contact_info; */
         this.loading = true;
         console.log("Fired");
-        this.onUpdateDemandCB(this.demand.id, this.demand)
+        this.onUpdateDemandCB(this.demand.id, this.tempDemand)
           .then(ev => {
             this.hidePopup("updateModal");
             this.$store.commit("showMessage", {

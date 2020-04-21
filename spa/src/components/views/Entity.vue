@@ -64,6 +64,14 @@
                     />
                   </v-col>
                   <v-col cols="12">
+                    <v-text-field
+                      ref="contact_info"
+                      v-model="tempEntity.contact_info"
+                      label="Contato"
+                      outlined
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
                     <v-textarea
                       ref="description"
                       rows="3"
@@ -162,7 +170,12 @@
         <hr />
         {{ entity.description }}
         <hr />
+        <div v-if="entity.contact_info">
+          <strong>Contato:</strong> {{entity.contact_info}}
+        </div>
+        <p>
         {{ entity.street_address }} - {{ entity.city}}
+        </p>
       </div>
       <div class="card-footer">
         <div class="row">
@@ -261,6 +274,7 @@ export default {
         entity_type_id: entity.entity_type_id,
         cnpj: entity.cnpj,
         name: entity.name,
+        contact_info: entity.contact_info,
         legal_name: entity.legal_name,
         description: entity.description,
         street_address: entity.street_address,
