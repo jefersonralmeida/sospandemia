@@ -38,6 +38,10 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    defaultValue: {
+      type: Object,
+      required: false
     }
   },
   data() {
@@ -82,6 +86,12 @@ export default {
       if (this.onChangeCB) this.onChangeCB(this.city);
     }
   },
+  created() {
+    if (this.defaultValue) {
+      this.cities.push(this.defaultValue);
+      this.city = this.cities[0];
+    }
+  }
 };
 </script>
 

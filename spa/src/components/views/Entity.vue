@@ -44,33 +44,24 @@
                       outlined
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="3" md="2">
+                  <v-col cols="12">
                     <v-select
                       label="Estado"
                       :items="states"
-                      v-model="tempEntity.state"
+                      v-model="tempEntity.state_id"
                       :loading="!statesFetched"
                       outlined
                       item-text="uf"
                       item-value="id"
                     ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="9" md="10">
-                    <v-text-field
-                      disabled
-                      ref="city"
-                      v-model="tempEntity.city"
-                      :items="cities"
-                      item-text="name"
-                      label="Cidade"
-                      autocomplete="dskjalçkdwlçakdwlça"
-                      placeholder="Digite o nome da cidade para buscar"
-                      :search-input.sync="search"
-                      outlined
-                      hide-no-data
-                      hide-selected
-                      return-object
-                    ></v-text-field>
+                  <v-col cols="12">
+                    <DistrictSelector
+                      :stateId="tempEntity.state_id"
+                      :disabled="tempEntity.state_id == 0"
+                      :onChangeCB="onCityChange"
+                      :defaultValue="{name:tempEntity.city, id:tempEntity.district_id}"
+                    />
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
@@ -219,8 +210,11 @@
 <script>
 import api from "./../../api";
 import rules from "../../util/rules";
+import DistrictSelector from "../widgets/DistrictSelector";
+
 export default {
   mixins: [rules],
+  components: { DistrictSelector },
   props: {
     entity: {
       type: Object,
@@ -257,8 +251,26 @@ export default {
       del: false,
       invite: false,
       statesFetched: false,
-      email: "",
+      email: ""
     };
+  },
+  computed: {
+    entityPayload() {
+      let entity = this.tempEntity;
+      let payload = {
+        entity_type_id: entity.entity_type_id,
+        cnpj: entity.cnpj,
+        name: entity.name,
+        legal_name: entity.legal_name,
+        description: entity.description,
+        street_address: entity.street_address,
+        district_id: entity.district_id
+      };
+      if (entity.entity_type_document)
+        payload.entity_type_document = entity.entity_type_document;
+
+      return payload;
+    }
   },
   methods: {
     openUpdateDialog() {
@@ -267,27 +279,16 @@ export default {
       let teste = this.entity.city.split(" - ");
       this.tempEntity.city = teste[0];
       this.tempEntity.state = teste[1];
-      console.log(this.tempEntity, this.entity);
       this.update = true;
     },
     validate() {
-      console.log(this.$refs);
       return this.$refs.form.validate();
     },
     handleUpdateEntity(ev) {
       ev.preventDefault();
-      //Validar dados
       if (this.validate()) {
-        //this.entity.cnpj = this.tempEntity.cnpj;
-        //this.entity.city = this.tempEntity.city;
-        //this.entity.state = this.tempEntity.state;
-        this.entity.name = this.tempEntity.name;
-        this.entity.legal_name = this.tempEntity.legal_name;
-        this.entity.street_address = this.tempEntity.street_address;
-        this.entity.description = this.tempEntity.description;
-        //console.log(this.tempEntity, this.entity)
         this.loading = true;
-        this.onUpdateEntityCB(this.entity.id, this.entity)
+        this.onUpdateEntityCB(this.entity.id, this.entityPayload)
           .then(() => {
             this.$store.commit("showMessage", {
               content: "Entidade alterada com sucesso!",
@@ -345,7 +346,6 @@ export default {
     },
     fetchStates() {
       api.getStates().then(res => {
-        console.log(res);
         this.states = res.data;
         this.states.sort((a, b) => {
           const stateA = a.uf;
@@ -358,11 +358,13 @@ export default {
           }
           return comparison;
         });
-        console.log(this.states);
         this.statesFetched = true;
       });
     },
-  },
+    onCityChange(city) {
+      this.tempEntity.district_id = city.id;
+    }
+  }
 };
 </script>
 
