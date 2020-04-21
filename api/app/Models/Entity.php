@@ -32,9 +32,9 @@ class Entity extends Model
         'entity_type_document',
     ];
 
-    protected $hidden = ['district_id', 'district'];
+    protected $hidden = ['district'];
 
-    protected $appends = ['entity_type', 'entity_type_document_label', 'city'];
+    protected $appends = ['entity_type', 'entity_type_document_label', 'city', 'state_id'];
 
     public function getEntityTypeAttribute()
     {
@@ -49,6 +49,11 @@ class Entity extends Model
     public function getCityAttribute()
     {
         return "{$this->district->name} - {$this->district->uf}";
+    }
+
+    public function getStateIdAttribute()
+    {
+        return $this->district->state->id;
     }
 
     /**
