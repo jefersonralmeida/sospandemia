@@ -15,13 +15,36 @@
             outlined
           ></v-text-field>
         </div>
+        <div class="row">
+          <div class="form-group col-8">
+            <v-text-field
+              ref="quantity"
+              type="number"
+              v-model="demandData.quantity"
+              :rules="[rules.numberRule,rules.required]"
+              label="Quantidade"
+              outlined
+            ></v-text-field>
+          </div>
+          <div class="form-group col-4">
+            <v-text-field
+              ref="unit"
+              type="text"
+              counter="16"
+              v-model="demandData.unit"
+              hint="Kg, L, Unidades, etc."
+              label="Unidade"
+              outlined
+            ></v-text-field>
+          </div>
+        </div>
         <div class="form-group">
           <v-text-field
-            ref="quantity"
-            type="number"
-            v-model="demandData.quantity"
-            :rules="[rules.numberRule,rules.required]"
-            label="Quantidade"
+            ref="contact_info"
+            type="text"
+            v-model="demandData.contact_info"
+            hint="Campo livre para adicionar telefone, celular, email, etc."
+            label="Contato"
             outlined
           ></v-text-field>
         </div>
@@ -31,7 +54,7 @@
             rows="3"
             auto-grow
             :counter="500"
-            label="Adicione um descrição"
+            label="Adicione uma descrição"
             v-model="demandData.text"
             :rules="[rules.required]"
             outlined
@@ -100,7 +123,9 @@ export default {
     demandData: {
       title: "",
       text: "",
-      quantity: 1
+      unit: "",
+      quantity: 1,
+      contact_info: ""
     },
   }),
   methods: {

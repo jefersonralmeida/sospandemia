@@ -16,12 +16,36 @@
                   outlined
                 ></v-text-field>
               </div>
+              <div class="row">
+                <div class="form-group col-8">
+                  <v-text-field
+                    ref="quantity"
+                    type="number"
+                    v-model="tempDemand.quantity"
+                    :rules="[rules.numberRule,rules.required]"
+                    label="Quantidade"
+                    outlined
+                  ></v-text-field>
+                </div>
+                <div class="form-group col-4">
+                  <v-text-field
+                    ref="unit"
+                    type="text"
+                    counter="16"
+                    v-model="tempDemand.unit"
+                    hint="Kg, L, Unidades, etc."
+                    label="Unidade"
+                    outlined
+                  ></v-text-field>
+                </div>
+              </div>
               <div class="form-group">
                 <v-text-field
-                  type="number"
-                  v-model="tempDemand.quantity"
-                  :rules="[rules.numberRule,rules.required]"
-                  label="Quantidade"
+                  ref="contact_info"
+                  type="text"
+                  v-model="tempDemand.contact_info"
+                  hint="Campo livre para adicionar telefone, celular, email, etc."
+                  label="Contato"
                   outlined
                 ></v-text-field>
               </div>
@@ -69,14 +93,16 @@
     </modal>
 
     <div class="card">
-      <div class="card-body">
-        <div class="card-title">
-          <h5>{{ demand.title }}</h5>
+      <div class="card-header">
+          <h4>{{ demand.title}}</h4>
         </div>
+      <div class="card-body">
         <p class="card-text">{{ demand.text }}</p>
-      </div>
+        <hr v-if="demand.contact_info" style="width: 300px"/>
+        <p v-if="demand.contact_info"><strong>Contato p/ demanda:</strong> {{ demand.contact_info }}</p>
+       </div>
       <div class="d-flex card-footer text-muted small">
-        <div class="flex-grow-1 align-self-center">Quantidade: {{ demand.quantity }}</div>
+        <div class="flex-grow-1 align-self-center">Quantidade: {{ demand.quantity }} {{ demand.unit }}</div>
         <button class="btn btn-warning btn-sm ml-1" @click="openUpdatePopup">Alterar</button>
         <button class="btn btn-danger btn-sm ml-1" @click="handleRemoveDemand">Excluir</button>
       </div>
@@ -161,6 +187,8 @@ export default {
         this.demand.title = this.tempDemand.title;
         this.demand.text = this.tempDemand.text;
         this.demand.quantity = this.tempDemand.quantity;
+        this.demand.unit = this.tempDemand.unit;
+        this.demand.contact_info = this.tempDemand.contact_info;
         this.loading = true;
         console.log("Fired");
         this.onUpdateDemandCB(this.demand.id, this.demand)
