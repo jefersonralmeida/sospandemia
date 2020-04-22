@@ -15,9 +15,7 @@
             <span class="font-italic">Registrar</span>
           </h2>
           <br />
-          <p>
-            <img class="mb-2" src="../../assets/new/registro.png" height="100%" />
-          </p>
+          <img class="img-fluid" src="../../assets/new/registro.png" />
         </div>
       </div>
     </div>
@@ -26,9 +24,7 @@
         <div class="my-3 p-3">
           <h2 class="display-5">2 - Preencha as os campos abaixo conforme indicado:</h2>
           <br />
-          <p>
-            <img class="mb-2" src="../../assets/new/usuario.png" height="100%" />
-          </p>
+          <img class="img-fluid" src="../../assets/new/usuario.png" />
         </div>
       </div>
     </div>
@@ -37,23 +33,18 @@
         <div class="my-3 p-3">
           <h2 class="display-5">3 - Fique atento a mensagem!</h2>
           <br />
-          <p>
-            <img class="mb-2" src="../../assets/new/cofirma_email.png" height="100%" />
-          </p>
+
+          <img class="img-fluid" src="../../assets/new/cofirma_email.png" />
           <br />
           <p>Caso o email não apareça em sua caixa de entrada, verifique se não está em sua caixa de Spam.</p>
           <br />
           <p>Em sua caixa de email, deve aparecer um email conforme mostrado abaixo:</p>
           <br />
-          <p>
-            <img class="mb-2" src="../../assets/new/email_recebido.png" height="100%" />
-          </p>
+          <img class="img-fluid" src="../../assets/new/email_recebido.png" />
           <br />
           <p>O conteúdo do email é mostrado na figura abaixo:</p>
           <br />
-          <p>
-            <img class="mb-2" src="../../assets/new/conteudo_email.png" height="100%" />
-          </p>
+          <img class="img-fluid" src="../../assets/new/conteudo_email.png" />
           <br />
           <p>Clique em: Verifique o endereço de e-mail</p>
         </div>
@@ -64,9 +55,7 @@
                 class="display-5"
               >4 - Clique em Selecionar Entidade. Em seguida, clique em Gerenciar Entidades:</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/gerenciar_entidade.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/gerenciar_entidade.png" />
             </div>
           </div>
         </div>
@@ -77,9 +66,7 @@
                 class="display-5"
               >5 - Para adicionar nova Entidade clique no botão verde "Nova Entidade":</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/nova_entidade.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/nova_entidade.png" />
             </div>
           </div>
         </div>
@@ -90,24 +77,18 @@
                 class="display-5"
               >6 - Você precisa selecionar o tipo de entidade: Unidade de Saúde (para esse cadastro necessita informar o número do CNES) ou Outras (por exemplo, ONGs ou Ingrejas e para esta ação, necessita informar o CNPJ da instituição):</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/tipo_entidade.png" height="100%" />
-              </p>
-              <br>
-              <p><img class="mb-2" src="../../assets/new/tipo_entidade_lista.png" height="100%" /></p>
+              <img class="img-fluid" src="../../assets/new/tipo_entidade.png" />
+              <br />
+              <img class="img-fluid" src="../../assets/new/tipo_entidade_lista.png" />
             </div>
           </div>
         </div>
         <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
           <div class="bg-light mr-md- pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div class="my-3 p-3">
-              <h2
-                class="display-5"
-              >7 - Para o cadastro de "Outras", preencha os seguintes campo:</h2>
+              <h2 class="display-5">7 - Para o cadastro de "Outras", preencha os seguintes campo:</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/outra.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/outra.png" />
               <p>Em seguida, clique em "CRIAR".</p>
               <p>Caso tenha deseje cancelar o cadastro, clique em "CANCELAR".</p>
             </div>
@@ -120,9 +101,7 @@
                 class="display-5"
               >7a - Para o cadastro de "Unidade de Saúde", preencha inicialmente o número do CNES (Cadastro Nacional de Estabelecimento de Saúde) os seguintes campo:</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/unidade_saude.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/unidade_saude.png" />
               <p>Em seguida, clique em "CRIAR".</p>
               <p>Caso tenha deseje cancelar o cadastro, clique em "CANCELAR".</p>
             </div>
@@ -135,35 +114,25 @@
                 class="display-5"
               >8 - Logo após o cadastro da Entidade, pode inicar o cadastro das demandas Clicando em Gerenciar Demandas:</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/gerenciar_demanda.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/gerenciar_demanda.png" />
             </div>
           </div>
         </div>
         <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
           <div class="bg-light mr-md- pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div class="my-3 p-3">
-              <h2
-                class="display-5"
-              >9 - Em seguida, clique em "Nova demanda"</h2>
+              <h2 class="display-5">9 - Em seguida, clique em "Nova demanda"</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/nova_demanda.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/nova_demanda.png" />
             </div>
           </div>
         </div>
         <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
           <div class="bg-light mr-md- pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div class="my-3 p-3">
-              <h2
-                class="display-5"
-              >10 - Em seguida, prencha os três campos obrigatórios:</h2>
+              <h2 class="display-5">10 - Em seguida, prencha os três campos obrigatórios:</h2>
               <br />
-              <p>
-                <img class="mb-2" src="../../assets/new/nova_demanda_entidade.png" height="100%" />
-              </p>
+              <img class="img-fluid" src="../../assets/new/nova_demanda_entidade.png" height="100%" />
             </div>
           </div>
         </div>
@@ -174,9 +143,7 @@
                 class="display-5"
               >Pronto, sua demanda encontra-se registrada e a comunidade pode localizar através da página inicial e contribuir com a demanda cadastrada.</h2>
               <br />
-              <p>
-                Para registrar nova demanda, basta repetir os itens 9 e 10.
-              </p>
+              <p>Para registrar nova demanda, basta repetir os itens 9 e 10.</p>
             </div>
           </div>
         </div>
