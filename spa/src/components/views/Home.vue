@@ -1,8 +1,23 @@
 <template>
   <div class="home">
-    <p>
+    <div style="margin-bottom:32px">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <v-img :src="require('../../assets/logo_app.png')"
+            max-width="300px"
+          ></v-img>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          @click="help=true;"
+        >
+          Primeiros Passos
+        </v-btn>
+      </div>
+    </div>
+    <!-- <p>
       Primeira vez utilizando o sistema? <a @click="help=true">Clique aqui!</a>
-    </p>
+    </p> -->
     <v-dialog v-model="help" max-width="600px">
       <v-card class="">
         <v-card-title class="headline">
@@ -14,6 +29,24 @@
         <v-divider></v-divider>
         <v-card-text>
           Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
+          <v-card-text v-if="donation">
+            <p>
+              Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
+              filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
+            </p>
+            <p>Para visualizar mais informações sobre a empresa necessitada, basta clicar no nome dela que se encontra na parte inferior da demanda.</p>
+            <p>E por fim, basta entrar em contato com a entidade necessitada, por meio de um dos contatos disponibilizados pela mesma
+              (se encontra na demanda ou nas informações detalhadas da empresa).</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              v-if="donation"
+              color="primary"
+              text
+              @click="$vuetify.goTo('#start');help=false;"
+            >entendi, direcionar para demandas</v-btn>
+          </v-card-actions>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
@@ -51,11 +84,6 @@
               <li><router-link to="sobre-nos">Equipe</router-link></li>
             </ul>
 
-        </v-card-text>
-
-        <v-card-text v-if="donation">
-          Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
-          filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -103,7 +131,7 @@
       </v-card>
     </v-dialog>
     
-    <div class="form-group">
+    <div id="start" class="form-group">
       <v-text-field
         type="email"
         class="w-50 m-auto"
