@@ -7,6 +7,9 @@
             max-width="300px"
           ></v-img>
         </div>
+        <div class="row justify-content-center">
+          <p>texto introdutório (Hernani)</p>
+        </div>
         <v-spacer></v-spacer>
         <v-btn
           @click="help=true;"
