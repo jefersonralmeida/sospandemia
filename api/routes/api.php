@@ -17,6 +17,9 @@ Route::get('demands/search', 'DemandsController@search');
 Route::get('states', 'StatesController@index');
 Route::get('states/{state}/search-districts', 'StatesController@searchDistricts');
 
+// route to get entities details
+Route::get('entities/{entity}', 'EntitiesController@info');
+
 Route::middleware('auth:api')->group(function() {
 
     // auth routes
@@ -31,7 +34,6 @@ Route::middleware('auth:api')->group(function() {
     Route::get('entities/{entity}/demands', 'EntitiesController@indexDemands');
     Route::post('entities/{entity}/new-demand', 'EntitiesController@createDemand')->middleware('can:createDemand,entity');
     Route::post('entities', 'EntitiesController@create');
-    Route::get('entities/{entity}', 'EntitiesController@info');
     Route::put('entities/{entity}', 'EntitiesController@update')->middleware('can:update,entity');
     Route::post('entities/{entity}/invite/{invitee}', 'EntitiesController@invite')->middleware('can:invite,entity');
     Route::post('entities/{entity}/leave', 'EntitiesController@leave')->middleware('can:leave,entity');

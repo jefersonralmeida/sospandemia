@@ -27,8 +27,6 @@ class UpdateEntityRequest extends FormRequest
         return [
             'name' => 'uppercase',
             'legal_name' => 'uppercase',
-            'city' => 'uppercase',
-            'state' => 'uppercase',
         ];
     }
 
@@ -44,6 +42,7 @@ class UpdateEntityRequest extends FormRequest
             'name' => 'filled|string|min:4',
             'legal_name' => 'filled|string|min:4',
             'description' => 'filled|string|min:10',
+            'contact_info' => 'filled|string',
             'street_address' => 'filled|string:10',
             'district_id' => 'filled|int|exists:districts,id'
         ];

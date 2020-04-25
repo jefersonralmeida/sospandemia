@@ -1,8 +1,26 @@
 <template>
   <div class="home">
-    <p>
+    <div style="margin-bottom:32px">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <v-img :src="require('../../assets/logo_app.png')"
+            max-width="300px"
+          ></v-img>
+        </div>
+        <div class="row justify-content-center">
+          <p>É uma iniciativa solidária conjunta UTFPR e UEPG que têm como objetivo uma infraestrutura de comunicação que visa integrar as unidades dos sistemas de saúde e projetos sociais conectando a quem pode contribuir com as demandas.</p>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          @click="help=true;"
+        >
+          Primeiros Passos
+        </v-btn>
+      </div>
+    </div>
+    <!-- <p>
       Primeira vez utilizando o sistema? <a @click="help=true">Clique aqui!</a>
-    </p>
+    </p> -->
     <v-dialog v-model="help" max-width="600px">
       <v-card class="">
         <v-card-title class="headline">
@@ -14,6 +32,24 @@
         <v-divider></v-divider>
         <v-card-text>
           Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
+          <v-card-text v-if="donation">
+            <p>
+              Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
+              filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
+            </p>
+            <p>Para visualizar mais informações sobre a empresa necessitada, basta clicar no nome dela que se encontra na parte inferior da demanda.</p>
+            <p>E por fim, basta entrar em contato com a entidade necessitada, por meio de um dos contatos disponibilizados pela mesma
+              (se encontra na demanda ou nas informações detalhadas da empresa).</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              v-if="donation"
+              color="primary"
+              text
+              @click="$vuetify.goTo('#start');help=false;"
+            >entendi, direcionar para demandas</v-btn>
+          </v-card-actions>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
@@ -52,11 +88,6 @@
             </ul>
 
         </v-card-text>
-
-        <v-card-text v-if="donation">
-          Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
-          filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
-        </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -69,7 +100,41 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <div class="form-group">
+
+    <v-dialog v-model="entityDetails" max-width="600px">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          Detalhes da entidade
+        </v-card-title>
+        <div class="card-body">
+    
+        <v-card-text>
+          <p><strong>Nome: </strong> {{currentEntity.name}}</p>
+          <p><strong>Razão Social: </strong> {{currentEntity.legal_name}}</p>
+          <p><strong>CNPJ: </strong> {{currentEntity.cnpj}}</p>
+          <p v-if="currentEntity.entity_type_id==1">
+            <strong>CNES: </strong> {{currentEntity.entity_type_document}}
+          </p>
+          <p><strong>Endereço: </strong> {{currentEntity.street_address}}</p>
+          <p><strong>Cidade - Estado: </strong> {{currentEntity.city}}</p>
+          <p><strong>Contato: </strong> {{currentEntity.contact_info}}</p>
+          <p><strong>Sobre: </strong> {{currentEntity.description}}</p>
+        </v-card-text>
+        </div>
+      <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="red darken-1"
+              text
+              @click="entityDetails = false"
+            >
+              Fechar
+            </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+    <div id="start" class="form-group">
       <v-text-field
         type="email"
         class="w-50 m-auto"
@@ -98,27 +163,12 @@
           ></v-select>
         </v-col>
         <v-col cols="10">
-          <v-autocomplete
-            ref="city"
-            v-model="filterOptions.city"
-            :disabled="filterOptions.state == ''"
-            :items="cities"
-            item-text="name"
-            label="Cidade"
-            autocomplete="dskjalçkdwlçakdwlça"
-            placeholder="Digite o nome da cidade para buscar"
-            :search-input.sync="searchCity"
-            @change="search(query)"
-            :no-data-text="filterOptions.noDataText"
-            outlined
-            hide-selected
-            return-object
-          ></v-autocomplete>
+          <DistrictSelector :stateId="filterOptions.state" :disabled="filterOptions.state == 0"  :onChangeCB="onCityChange"/>
         </v-col>
       </v-row>
       <small id="emailHelp" class="form-text text-muted">
         Buscando resultados em
-        <span v-if="filterOptions.state === null">Brasil.</span>
+        <span v-if="filterOptions.state === 0">Brasil.</span>
         <span
           v-else-if="this.filterOptions.city != null &&
           typeof this.filterOptions.city == 'object'"
@@ -139,11 +189,17 @@
         <div class="card-body">
           {{ demand.text}}
           <hr v-if="demand.quantity" />
-          <p v-if="demand.quantity">Quantidade: {{ demand.quantity }}</p>
+          <p v-if="demand.quantity">Quantidade: {{ demand.quantity }} {{ demand.unit }}</p>
+          <hr v-if="demand.contact_info || demand.entity.contact_info" />
+          <h5 v-if="demand.contact_info || demand.entity.contact_info">Informações de Contato:</h5>
+          <hr v-if="demand.contact_info || demand.entity.contact_info" style="width: 300px"/>
+          <p v-if="demand.entity.contact_info"><strong>Entidade:</strong> {{ demand.entity.contact_info }}</p>
+          <p v-if="demand.contact_info"><strong>Específico da Demanda:</strong> {{ demand.contact_info }}</p>
+
         </div>
         <div
           class="card-footer"
-        >{{ demand.entity.name }} - {{ demand.entity.city }} - {{ demand.entity.state}}</div>
+        ><a @click="showEntityDetails(demand.entity)">{{ demand.entity.name }}</a> - {{ demand.entity.city }}</div>
       </div>
     </div>
     <div class="text-center mt-2" v-if="widgetLoading==false && last_page>1">
@@ -160,12 +216,15 @@
 import api from "../../api";
 import _ from "lodash";
 import LoadingWidget from "../widgets/LoadingWidget";
+import DistrictSelector from "../widgets/DistrictSelector";
 
 export default {
   name: "Home",
-  components: { LoadingWidget },
+  components: { LoadingWidget, DistrictSelector },
   data() {
     return {
+      entityDetails: false,
+      currentEntity: {},
       help:false,
       donation:false,
       current_page:1,
@@ -176,13 +235,9 @@ export default {
       showFilter: false,
       statesFetched: false,
       states: [],
-      cities: [],
-      searchCity: null,
-      debounce: null,
       filterOptions: {
-        state: null,
+        state: 0,
         city: null,
-        noDataText: "Continue digitando para encontrar uma cidade."
       }
     };
   },
@@ -194,9 +249,13 @@ export default {
     }
   },
   methods: {
+    showEntityDetails: function(entity){
+      this.entityDetails = true;
+      this.currentEntity = entity;
+    },
     search: function(query) { 
       this.widgetLoading = true;
-      if (this.showFilter && this.filterOptions.state != null) {
+      if (this.showFilter && this.filterOptions.state != 0) {
         let filterType;
         let filterParam;
         if (
@@ -247,8 +306,8 @@ export default {
         this.statesFetched = true;
       });
     },
-    fetchCities(stateId, query) {
-      return api.getDistricts(stateId, query);
+    onCityChange(city){
+      this.filterOptions.city = city
     }
   },
   watch: {
@@ -261,22 +320,6 @@ export default {
       this.current_page = 1;
       this.search();
     }, 300),
-    searchCity(query) {
-      if(query === null) return
-      if (query.length <= 3) {
-        this.filterOptions.noDataText = "Continue digitando para encontrar uma cidade."
-        return;
-      }
-      clearTimeout(this.debounce);
-      let that = this;
-      this.debounce = setTimeout(function() {
-        that.fetchCities(that.filterOptions.state, query).then(res => {
-          that.cities = res.data;
-          if(res.data.length === 0)
-            that.filterOptions.noDataText = "Nenhuma cidade encontrada. Verifique a busca ou seja mais específico"
-        });
-      }, 300);
-    }
   },
   mounted: function() {
     this.search();

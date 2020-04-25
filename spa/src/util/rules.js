@@ -9,7 +9,7 @@ const rules = {
                     if(v === "") return "O campo deve conter apenas números inteiros." //Vuetify tendo problemas com forms tipo 'text' quando o campo possue carácteres como '.' ou 'e'
                     const regexNumbers = new RegExp(/-?[0-9]*/)
                     let match = v.toString().match(regexNumbers)
-                    if(!(match && match[0] === v)) return "O campo deve conter apenas números inteiros."
+                    if(!(match && match[0] == v)) return "O campo deve conter apenas números inteiros."
                     if(v <= 0) return "O campo deve conter valores maiores que zero."
                     return true
                 }

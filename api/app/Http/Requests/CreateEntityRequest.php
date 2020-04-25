@@ -80,6 +80,7 @@ class CreateEntityRequest extends FormRequest
             'name' => 'required|string|min:4',
             'legal_name' => 'required|string|min:4',
             'description' => 'required|string|min:10',
+            'contact_info' => 'filled|string',
             'street_address' => 'required|string:10',
             'district_id' => 'required|int|exists:districts,id',
         ];

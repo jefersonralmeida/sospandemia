@@ -10,24 +10,50 @@
             <v-form ref="form">
               <div class="form-group">
                 <v-text-field
+                  ref="title"
                   v-model="tempDemand.title"
                   :rules="[rules.required]"
                   label="Demanda"
                   outlined
                 ></v-text-field>
               </div>
+              <div class="row">
+                <div class="form-group col-8">
+                  <v-text-field
+                    ref="quantity"
+                    type="number"
+                    v-model="tempDemand.quantity"
+                    :rules="[rules.numberRule,rules.required]"
+                    label="Quantidade"
+                    outlined
+                  ></v-text-field>
+                </div>
+                <div class="form-group col-4">
+                  <v-text-field
+                    ref="unit"
+                    type="text"
+                    counter="16"
+                    v-model="tempDemand.unit"
+                    hint="Kg, L, Unidades, etc."
+                    label="Unidade"
+                    outlined
+                  ></v-text-field>
+                </div>
+              </div>
               <div class="form-group">
                 <v-text-field
-                  type="number"
-                  v-model="tempDemand.quantity"
-                  :rules="[rules.numberRule,rules.required]"
-                  label="Quantidade"
+                  ref="contact_info"
+                  type="text"
+                  v-model="tempDemand.contact_info"
+                  hint="Campo livre para adicionar telefone, celular, email, etc."
+                  label="Contato"
                   outlined
                 ></v-text-field>
               </div>
               <div class="form-group">
                 <v-textarea
                   rows="4"
+                  ref="description"
                   label="Adicione um descrição"
                   outlined
                   v-model="tempDemand.text"
@@ -69,14 +95,16 @@
     </modal>
 
     <div class="card">
-      <div class="card-body">
-        <div class="card-title">
-          <h5>{{ demand.title }}</h5>
+      <div class="card-header">
+          <h4>{{ demand.title}}</h4>
         </div>
+      <div class="card-body">
         <p class="card-text">{{ demand.text }}</p>
-      </div>
+        <hr v-if="demand.contact_info" style="width: 300px"/>
+        <p v-if="demand.contact_info"><strong>Contato p/ demanda:</strong> {{ demand.contact_info }}</p>
+       </div>
       <div class="d-flex card-footer text-muted small">
-        <div class="flex-grow-1 align-self-center">Quantidade: {{ demand.quantity }}</div>
+        <div class="flex-grow-1 align-self-center">Quantidade: {{ demand.quantity }} {{ demand.unit }}</div>
         <button class="btn btn-warning btn-sm ml-1" @click="openUpdatePopup">Alterar</button>
         <button class="btn btn-danger btn-sm ml-1" @click="handleRemoveDemand">Excluir</button>
       </div>
@@ -86,8 +114,9 @@
 
 <script>
 import rules from "../../util/rules";
+import validation from "../../util/validation";
 export default {
-  mixins: [rules],
+  mixins: [rules, validation],
   props: {
     demand: {
       type: Object,
@@ -119,8 +148,7 @@ export default {
       this.tempDemand = JSON.parse(JSON.stringify(this.demand));
       this.update = true;
     },
-    validate() {
-      console.log(this.$refs);
+    isValidForm() {
       return this.$refs.form.validate();
     },
     hidePopup(ModelName) {
@@ -156,32 +184,27 @@ export default {
     },
     handleUpdateDemand(ev) {
       ev.preventDefault();
-      //Validar dados
-      if (this.validate()) {
-        this.demand.title = this.tempDemand.title;
-        this.demand.text = this.tempDemand.text;
-        this.demand.quantity = this.tempDemand.quantity;
-        this.loading = true;
-        console.log("Fired");
-        this.onUpdateDemandCB(this.demand.id, this.demand)
-          .then(ev => {
-            this.hidePopup("updateModal");
-            this.$store.commit("showMessage", {
-              content: "Demanda salva!",
-              error: false
-            });
-          })
-          .catch(err => {
-            this.$store.commit("showMessage", {
-              content: "Erro ao alterar demanda.",
-              error: true
-            });
-          })
-          .finally(() => {
-            this.loading = false;
-            this.update = false;
+      if (!this.isValidForm()) return;
+      this.loading = true;
+      this.onUpdateDemandCB(this.demand.id, this.tempDemand)
+        .then(ev => {
+          this.hidePopup("updateModal");
+          this.$store.commit("showMessage", {
+            content: "Demanda salva!",
+            error: false
           });
-      }
+          this.update = false;
+        })
+        .catch(err => {
+          this.$store.commit("showMessage", {
+            content: "Erro ao alterar demanda.",
+            error: true
+          });
+          this.handleResponseError(err, this.$refs);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     }
   }
 };
