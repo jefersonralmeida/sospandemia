@@ -8,7 +8,7 @@
           ></v-img>
         </div>
         <div class="row justify-content-center">
-          <p>texto introdutório (Hernani)</p>
+          <p>É uma iniciativa solidária que tem como objetivo uma infraestrutura de comunicação que visa integrar as unidades dos sistemas de saúde e projetos sociais conectando a quem pode contribuir com as demandas desenvolvido em parceria com a UTFPR e UEPG.</p>
         </div>
         <v-spacer></v-spacer>
         <v-btn
