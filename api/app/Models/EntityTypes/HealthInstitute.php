@@ -55,7 +55,10 @@ class HealthInstitute implements EntityTypeContract
             return false;
         }
         $district = District::find($request->district_id);
-        if (trim($result['noMunicipio']) !== strtoupper(sanitizeSearch($district->municipio)) || trim($result['uf']) !== $district->uf) {
+        if (
+            trim(strtoupper(sanitizeSearch($result['noMunicipio']))) !== strtoupper(sanitizeSearch($district->municipio)) ||
+            trim($result['uf']) !== $district->uf
+        ) {
             $error = 'A localização informada não bate com o CNES informado';
             return false;
         }
