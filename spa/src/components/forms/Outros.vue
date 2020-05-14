@@ -37,7 +37,7 @@
     </div>
     <div class="form-group">
       <v-text-field
-        ref="address"
+        ref="street_address"
         v-model="entity.street_address"
         :counter="300"
         :rules="[rules.required, (value) => rules.min(value, 15), (value) => rules.max(value, 300)]"
@@ -59,22 +59,17 @@
         ></v-select>
       </div>
       <div class="form-group col-md-10 col-sm-9 col-12">
-        <v-autocomplete
-          ref="city"
-          v-model="entity.city"
-          :disabled="entity.state == ''"
-          :items="cities"
-          item-text="name"
-          label="Cidade"
-          autocomplete="null"
-          placeholder="Digite o nome da cidade para buscar"
-          :search-input.sync="search"
-          outlined
-          :no-data-text="noDataText"
-          hide-selected
-          return-object
-        ></v-autocomplete>
+        <DistrictSelector :stateId="entity.state" :disabled="entity.state == null" :rules="[rules.required]" :onChangeCB="onCityChange"/>
       </div>
+    </div>
+    <div class="form-group">
+      <v-text-field
+        ref="contact_info"
+        v-model="entity.contact_info"
+        label="Contato"
+        placeholder="Ex: tel: (00) 0000-0000, email: example@example.ex"
+        outlined
+      ></v-text-field>
     </div>
     <div class="form-group">
       <v-textarea
@@ -99,6 +94,7 @@
 <script>
 import api from "../../api";
 import rules from "../../util/rules";
+import DistrictSelector from "../widgets/DistrictSelector";
 
 export default {
   props: {
@@ -113,8 +109,8 @@ export default {
       default: () => {}
     },
     loading: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -126,14 +122,11 @@ export default {
         description: "",
         street_address: "",
         city: "",
-        state: ""
+        contact_info: "",
+        state: 0
       },
       statesFetched: false,
       states: [],
-      cities: [],
-      search: null,
-      debounce: null,
-      noDataText: "Continue digitando para encontrar uma cidade."
     };
   },
   computed: {
@@ -143,6 +136,7 @@ export default {
         entity_type_id: 0,
         cnpj: entity.cnpj,
         name: entity.name,
+        contact_info: entity.contact_info,
         legal_name: entity.legal_name,
         description: entity.description,
         street_address: entity.street_address,
@@ -169,9 +163,6 @@ export default {
         this.statesFetched = true;
       });
     },
-    fetchCities(stateId, query) {
-      return api.getDistricts(stateId, query);
-    },
     handleSubmit() {
       if (!this.isValidForm()) return;
 
@@ -179,28 +170,16 @@ export default {
     },
     isValidForm() {
       return this.$refs.form.validate();
-    }
-  },
-  watch: {
-    search(query) {
-      if (query === null) return;
-      if (query.length < 3) {
-        this.noDataText = "Continue digitando para encontrar uma cidade.";
-        return;
-      }
-      clearTimeout(this.debounce);
-      let that = this;
-      this.debounce = setTimeout(function() {
-        that.fetchCities(that.entity.state, query).then(res => {
-          that.cities = res.data;
-          that.noDataText =
-            "Nenhuma cidade encontrada. Verifique a busca ou seja mais específico";
-        });
-      }, 300);
+    },
+    onCityChange(city){
+      this.entity.city = city;
     }
   },
   created() {
     this.fetchStates();
+  },
+  components: {
+    DistrictSelector
   }
 };
 </script>
