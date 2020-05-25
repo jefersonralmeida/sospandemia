@@ -37,18 +37,25 @@ git checkout development
 - Altere os conteúdos de .env (configurações do mailtrap)
 - Dentro da pasta `spa` copie o arquivo `.env.example` para `.env`
 - Na pasta raiz, rode o comando para subir o ambiente (a primeira execução deve levar alguns minutos):
+
+
+sudo usermod -aG docker yourusername
+
+sudo chown *your-username* /var/run/docker.sock
 ```
-dc up -d
+docker-compose up -d
 ```
 - Assim que a execução terminar, rode os seguintes comandos (um por vez):
 ```
-dc exec api composer install
-dc exec api npm install
-dc exec api npm run dev
-dc exec api php artisan migrate
-dc exec api php artisan passport:keys
-dc exec spa npm install
-dc restart
+docker-compose exec api composer install
+docker-compose exec api npm install
+docker-compose exec api npm run dev
+docker-compose exec api php artisan migrate
+#docker-compose exec api php artisan passport:keys
+docker-compose exec api php artisan passport:keys --force
+docker-compose exec api php artisan migrate:fresh --seed
+docker-compose exec spa npm install
+docker-compose restart
 ```
 
 Assim que o restart concluir, você pode acessar as URLs do projeto (veja a sessão **URLs úteis**. Nesse ponto o
