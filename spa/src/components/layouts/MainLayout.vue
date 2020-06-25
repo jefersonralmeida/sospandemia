@@ -114,12 +114,12 @@
 
         <div class="container">
 
+          <!-- início mobile -->
+
           <div class="d-lg-none">
               <div class="row">
-          <div class="col-3 col-md-2">
-            <img class="mb-2" src="../../assets/logo_app.png" height="30" />
-            <small class="d-block mb-3 text-muted">© 2020</small>
-          </div>
+         
+
           <div class="col-4 col-md">
             <h5>Apoio</h5>
             <ul class="list-unstyled text-small">
@@ -150,7 +150,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-4 col-md">
+          <div class="col-8 col-md">
             <h5>Sobre</h5>
             <ul class="list-unstyled text-small">
               <li>
@@ -159,16 +159,13 @@
               <li>
                 <router-link to="termos-de-uso-e-privacidade">Termo de uso e privacidade</router-link>
               </li>
-              <li>contato@sospandemia.org</li>
             </ul>
           </div>
         </div>
-
-
-
-
-          </div>
-
+<!-- final mobile -->
+<div><p class="text-center">contato@sospandemia.org</p></div>
+        </div>
+<!-- Conteúdo em monitores -->
       <div class="d-none d-lg-block">
         <div class="row">
           <div class="col-12 col-md">
