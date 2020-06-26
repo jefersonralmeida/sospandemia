@@ -125,6 +125,17 @@
               </div>
             </div>
             
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="../../assets/luiseduardo.jpeg" alt="Card image cap">
+                <div class="card-body">
+                  <a href="http://www.linkedin.com/in/ooluis/" target="_blank" class="card-link"><h5 class="card-title">Luis Eduardo Oliveira</h5></a>
+                  <small class="text-muted">Olá, eu sou Luis Eduardo, um desenvolvedor focado em aplicações web. Eu trabalho principalmente com Javascript, Angular, Node.js, MongoDb e Ionic (com Capacitor ou Cordova).</small>
+                 
+                </div>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
