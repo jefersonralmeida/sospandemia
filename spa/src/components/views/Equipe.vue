@@ -124,7 +124,17 @@
                 </div>
               </div>
             </div>
-            
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="../../assets/vitor.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="https://github.com/VitorMac10" target="_blank" class="card-link"><h5 class="card-title">Vitor Macedo</h5></a>
+                  <small class="text-muted">Meu nome é Vitor Macedo, 19 anos, trabalho como desenvolvedor na empresa Quiver Soluções - PG, principalmente com Java em Backend, mas atuo como desenvolvedor free-lancer e com projetos pessoais utilizando Vue.JS e Node.JS para praticamente 90% dos meus projetos</small>
+                 
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
