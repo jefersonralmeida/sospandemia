@@ -1,23 +1,45 @@
 <template>
   <div class="home">
-    <div style="margin-bottom:32px">
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <v-img :src="require('../../assets/logo_app.png')"
-            max-width="300px"
-          ></v-img>
-        </div>
-        <div class="row justify-content-center">
-          <p>É uma iniciativa solidária conjunta UTFPR e UEPG que têm como objetivo uma infraestrutura de comunicação que visa integrar as unidades dos sistemas de saúde e projetos sociais conectando a quem pode contribuir com as demandas.</p>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          @click="help=true;"
-        >
-          Primeiros Passos
-        </v-btn>
-      </div>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col cols="3">
+            <v-col cols="12">
+              <relatorio-numerico title="Pedidos" :qtd="100"></relatorio-numerico>
+            </v-col>
+            <v-col cols="12">
+              <relatorio-numerico title="Atendidos" :qtd="54"></relatorio-numerico>
+            </v-col>
+          </v-col>
+        <v-col cols="6">
+          <div class="row justify-content-center">
+            <v-img :src="require('../../assets/logo_app.png')" max-width="300px"></v-img>
+          </div>
+        </v-col>
+        <v-col cols="3">
+          <v-row>
+            <v-col cols="12">
+              <relatorio-numerico title="Cidades" :qtd="10"></relatorio-numerico>
+            </v-col>
+            <v-col cols="12">
+              <relatorio-numerico title="Usuários" :qtd="23"></relatorio-numerico>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <div class="container-fluid">
+            <div class="row justify-content-center">
+              <p>É uma iniciativa solidária conjunta UTFPR e UEPG que têm como objetivo uma infraestrutura de comunicação que visa integrar as unidades dos sistemas de saúde e projetos sociais conectando a quem pode contribuir com as demandas.</p>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn @click="help=true;">
+              Primeiros Passos
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
     <!-- <p>
       Primeira vez utilizando o sistema? <a @click="help=true">Clique aqui!</a>
     </p> -->
@@ -34,7 +56,7 @@
           Gostaria de ajudar entidades necessitadas, <a @click="donation = true">como proceder?</a>
           <v-card-text v-if="donation">
             <p>
-              Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica, 
+              Na página inicial, são encontradas as necessidades entidades que necessitam de doações, nela é possível buscar por uma necessidade específica,
               filtrar as necessidades por estado e cidade, além de poder procurar por uma entidade específica.
             </p>
             <p>Para visualizar mais informações sobre a empresa necessitada, basta clicar no nome dela que se encontra na parte inferior da demanda.</p>
@@ -107,7 +129,7 @@
           Detalhes da entidade
         </v-card-title>
         <div class="card-body">
-    
+
         <v-card-text>
           <p><strong>Nome: </strong> {{currentEntity.name}}</p>
           <p><strong>Razão Social: </strong> {{currentEntity.legal_name}}</p>
@@ -133,7 +155,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
     <div id="start" class="form-group">
       <v-text-field
         type="email"
@@ -182,7 +204,7 @@
       v-else-if="widgetLoading==false && demands.length === 0"
     >Não há demandas correspondente à busca!</p>
     <div class="results" v-else>
-      <div class="card m-3" v-for="demand in demands">
+      <div class="card m-3" v-for="demand in demands" v-bind:key="demand.id">
         <div class="card-header">
           <h4>{{ demand.title}}</h4>
         </div>
@@ -217,10 +239,11 @@ import api from "../../api";
 import _ from "lodash";
 import LoadingWidget from "../widgets/LoadingWidget";
 import DistrictSelector from "../widgets/DistrictSelector";
+import RelatorioNumerico from "@/components/card-relatorio/RelatorioNumerico";
 
 export default {
   name: "Home",
-  components: { LoadingWidget, DistrictSelector },
+  components: { LoadingWidget, DistrictSelector, RelatorioNumerico },
   data() {
     return {
       entityDetails: false,
@@ -253,7 +276,7 @@ export default {
       this.entityDetails = true;
       this.currentEntity = entity;
     },
-    search: function(query) { 
+    search: function(query) {
       this.widgetLoading = true;
       if (this.showFilter && this.filterOptions.state != 0) {
         let filterType;
@@ -277,7 +300,7 @@ export default {
           });
       } else {
         api.searchDemands(this.query,this.current_page).then(({ data }) => {
-          this.last_page = data.last_page;  
+          this.last_page = data.last_page;
           this.demands = data.data;
           this.widgetLoading = false;
         });
