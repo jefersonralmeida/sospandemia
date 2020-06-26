@@ -1,29 +1,27 @@
 <template>
   <div class="home">
-    <v-container>
+    <v-container fluid>
       <v-row>
-        <v-col cols="3">
-            <v-col cols="12">
-              <relatorio-numerico title="Pedidos" :qtd="100"></relatorio-numerico>
-            </v-col>
-            <v-col cols="12">
-              <relatorio-numerico title="Atendidos" :qtd="54"></relatorio-numerico>
-            </v-col>
+        <v-col cols="12" md="3" order="2" order-md="1">
+          <v-col cols="12">
+            <relatorio-numerico title="Pedidos" :qtd="100"></relatorio-numerico>
           </v-col>
-        <v-col cols="6">
+          <v-col cols="12">
+            <relatorio-numerico title="Atendidos" :qtd="54"></relatorio-numerico>
+          </v-col>
+        </v-col>
+        <v-col cols="12" md="6" order="1" order-md="2">
           <div class="row justify-content-center">
             <v-img :src="require('../../assets/logo_app.png')" max-width="300px"></v-img>
           </div>
         </v-col>
-        <v-col cols="3">
-          <v-row>
-            <v-col cols="12">
-              <relatorio-numerico title="Cidades" :qtd="10"></relatorio-numerico>
-            </v-col>
-            <v-col cols="12">
-              <relatorio-numerico title="Usuários" :qtd="23"></relatorio-numerico>
-            </v-col>
-          </v-row>
+        <v-col cols="12" md="3" order="3" order-md="3">
+          <v-col cols="12">
+            <relatorio-numerico title="Cidades" :qtd="10"></relatorio-numerico>
+          </v-col>
+          <v-col cols="12">
+            <relatorio-numerico title="Usuários" :qtd="23"></relatorio-numerico>
+          </v-col>
         </v-col>
       </v-row>
       <v-row>
