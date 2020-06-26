@@ -103,6 +103,27 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="../../assets/marcos.jpeg" alt="Card image cap">
+                <div class="card-body">
+                  <a href="https://www.linkedin.com/in/marcoscorreats/" target="_blank" class="card-link"><h5 class="card-title">Marcos Correa</h5></a>
+                  <small class="text-muted">Atualmente cursando Análise e Desenvolvimento de Sistemas pela Universidade Tecnológica Federal do Paraná.</small>
+                 
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="../../assets/felipegimenez.jpeg" alt="Card image cap">
+                <div class="card-body">
+                  <a href="http://www.linkedin.com/in/felipe-gimenez-da-silva-8a934a157" target="_blank" class="card-link"><h5 class="card-title">Felipe Gimenez</h5></a>
+                  <small class="text-muted">Atualmente cursando Ciência da Computação na Universidade Tecnológica Federal do Paraná. Atuou em pesquisas de iniciação científica voltado a computação paralela e cálculo numérico computacional.</small>
+                 
+                </div>
+              </div>
+            </div>
             
           </div>
         </div>

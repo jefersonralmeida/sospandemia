@@ -75,7 +75,7 @@
             <div class="my-3 p-3">
               <h2
                 class="display-5"
-              >6 - Você precisa selecionar o tipo de entidade: Unidade de Saúde (para esse cadastro necessita informar o número do CNES) ou Outras (por exemplo, ONGs ou Ingrejas e para esta ação, necessita informar o CNPJ da instituição):</h2>
+              >6 - Você precisa selecionar o tipo de entidade: Unidade de Saúde (para esse cadastro necessita informar o número do CNES) ou Outras (por exemplo, ONGs ou Igrejas e para esta ação, necessita informar o CNPJ da instituição):</h2>
               <br />
               <img class="img-fluid" src="../../assets/new/tipo_entidade.png" />
               <br />
