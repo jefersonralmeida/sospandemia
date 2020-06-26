@@ -130,7 +130,6 @@
                 <div class="card-body">
                   <a href="https://github.com/VitorMac10" target="_blank" class="card-link"><h5 class="card-title">Vitor Macedo</h5></a>
                   <small class="text-muted">Desenvolvedor na empresa Quiver Soluções - PG, trabalha com Java em Backend e atua como desenvolvedor free-lancer em projetos pessoais utilizando Vue.JS e Node.JS.</small>
-                 
                 </div>
               </div>
             </div>
