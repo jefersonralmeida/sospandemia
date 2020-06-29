@@ -142,6 +142,17 @@
                 </div>
               </div>
             </div>
+            
+            <div class="col-md-4">
+              <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="../../assets/alexandrejarosz.jpeg" alt="Card image cap">
+                <div class="card-body">
+                  <a href="http://www.linkedin.com/in/ooluis/" target="_blank" class="card-link"><h5 class="card-title">Alexandre Fernandes Jarosz Antunes</h5></a>
+                  <small class="text-muted">Atualmente cursando Ciência da Computação na Universidade Tecnológica Federal do Paraná.</small>                 
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
