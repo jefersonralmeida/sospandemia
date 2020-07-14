@@ -11,7 +11,7 @@ const api = {
             "id": 1,
             "title": "Demanda 1",
             "text": "Descrição da demanda 1 (Castleblack)",
-            "quantity": null,
+            "quantity": 130,
             "created_at": "2020-03-31T12:48:18.000000Z",
             "updated_at": "2020-03-31T12:48:18.000000Z"
         },
@@ -19,7 +19,7 @@ const api = {
             "id": 2,
             "title": "Demanda 2",
             "text": "Descrição da demanda 2 (Castleblack)",
-            "quantity": null,
+            "quantity": 10,
             "created_at": "2020-03-31T12:48:18.000000Z",
             "updated_at": "2020-03-31T12:48:18.000000Z"
         }
@@ -28,7 +28,7 @@ const api = {
         {
             "id": 1,
             "document": "74360575025",
-            "name": "Jon Snow"
+            "name": "Jon Snow",
         },
         {
             "id": 2,
@@ -36,9 +36,74 @@ const api = {
             "name": "STARBUCKS"
         }
     ],
+    donations: [
+        {
+            quantity: 10,
+            demand: 1,
+            donator:2,
+        }
+    ],
+
+    createDonation: function(data){
+        return new Promise((resolve, reject) => {
+            data = {
+                id: this.donations[this.donations.length-1].id + 1,
+                ...data,
+            }
+            this.donations.push(data)
+            const response = {
+                status: 201,
+                statusText: "Created",
+                data: '',
+            };
+            resolve(response);
+        })
+    },
+    updateDonation: function(donationId, data){
+        const index = this.donations.findIndex(donation => donation.id === donationId);
+        const newDonation = {
+            id: donatorId,
+            document: data.document,
+            name: data.name,
+        };
+
+        this.donations.splice(index, 1, newDonation);
+        const response = {
+            status: 200,
+            statusText: "Ok",
+            data: newDonation
+        };
+        return new Promise((resolve, reject) => {
+            resolve(response);
+        });
+    },
+    indexDonationsByDemand: function() {
+        return new Promise((resolve, reject) => {
+            const data = {
+                "current_page": 1,
+                "data": this.donations,
+                "first_page_url": "http://localhost:8092/api/demand/1/donations?page=1",
+                "from": 1,
+                "last_page": 1,
+                "last_page_url": "http://localhost:8092/api/demand/1/donations?page=1",
+                "next_page_url": null,
+                "path": "http://localhost:8092/api/entidemandties/1/donations",
+                "per_page": 15,
+                "prev_page_url": null,
+                "to": 2,
+                "total": 2
+            };
+            const response = {
+                status: 200,
+                statusText: "Ok",
+                data
+            };
+            resolve(response);
+        });
+    },
 
     createDonator: function(data) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {                
             data = {
                 id: this.donators[this.donators.length-1].id + 1,
                 ...data,
@@ -55,6 +120,17 @@ const api = {
     getDonator: function(donatorId) {
         return new Promise((resolve, reject) => {
             const data = this.donators.find(donator => donator.id === donatorId);
+            const response = {
+                status: 200,
+                statusText: "Ok",
+                data
+            };
+            resolve(response);
+        });
+    },
+    getDonatorByDocument: function(donatorDocument) {
+        return new Promise((resolve, reject) => {
+            const data = this.donators.find(donator => donator.document === donatorDocument);
             const response = {
                 status: 200,
                 statusText: "Ok",
@@ -83,17 +159,17 @@ const api = {
     updateDonator: function(donatorId, data) {
         //const currentDonator = this.donators.find(donator => donator.id === donatorId);
         const index = this.donators.findIndex(donator => donator.id === donatorId);
-        const newDemand = {
+        const newDonator = {
             id: donatorId,
             document: data.document,
             name: data.name,
         };
 
-        this.donators.splice(index, 1, newDemand);
+        this.donators.splice(index, 1, newDonator);
         const response = {
             status: 200,
             statusText: "Ok",
-            data: newDemand
+            data: newDonator
         };
         return new Promise((resolve, reject) => {
             resolve(response);
