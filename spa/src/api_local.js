@@ -29,11 +29,14 @@ const api = {
             "id": 1,
             "document": "74360575025",
             "name": "Jon Snow",
+            "contact":"1515555-99"
         },
         {
             "id": 2,
             "document": "07984267010334",
-            "name": "STARBUCKS"
+            "name": "STARBUCKS",
+            "contact":"starbucks@gmail.com"
+
         }
     ],
     donations: [

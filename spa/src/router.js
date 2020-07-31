@@ -11,6 +11,7 @@ import GenericError from "./components/errors/GenericError";
 import Equipe from "./components/views/Equipe";
 import Terms from "./components/views/terms";
 import New from "./components/views/new";
+import NewDonation from './components/views/NewDonation'
 
 Vue.use(Router);
 
@@ -34,6 +35,14 @@ const routes = [
         component: ManageDemands,
     },
     {
+        path: '/nova-doacao',
+        name: 'noda-doacao',
+        title: "Nova Doação",
+        component: NewDonation, meta: {
+            guestAllowed: true,
+        },
+    },
+    {
         path: '/gerenciar-entidades',
         name: 'gerenciar_entidades',
         title: 'Gerenciar Entidades',
@@ -50,7 +59,7 @@ const routes = [
         meta: {
             guestAllowed: true,
         },
-        
+
     },
     {
         path: '/primeiros-passos',
@@ -60,7 +69,7 @@ const routes = [
         meta: {
             guestAllowed: true,
         },
-        
+
     },
     {
         path: '/termos-de-uso-e-privacidade',
@@ -71,7 +80,7 @@ const routes = [
             guestAllowed: true,
         },
     },
-    
+
     {
         path: '/oauth-callback',
         meta: {
@@ -124,8 +133,8 @@ const routes = [
             errorMessage: 'O endereço que você está acessando não é válido',
         }
     },
-    
-   
+
+
 ];
 
 const router = new Router({
