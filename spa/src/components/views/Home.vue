@@ -101,6 +101,13 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="donationPopup" max-width="600px">
+      <Donation
+        :demand="actualDemand"
+        :close="changeDonationPopupValue"
+      ></Donation>
+    </v-dialog>
+
     <v-dialog v-model="entityDetails" max-width="600px">
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>
@@ -199,7 +206,13 @@
         </div>
         <div
           class="card-footer"
-        ><a @click="showEntityDetails(demand.entity)">{{ demand.entity.name }}</a> - {{ demand.entity.city }}</div>
+        ><a @click="showEntityDetails(demand.entity)">{{ demand.entity.name }}</a> - {{ demand.entity.city }}
+        <v-btn
+            @click="showDonationPopup(demand)"
+            color="success"
+            class="float-right mx-2"
+        >Quero Doar!</v-btn>
+        </div>
       </div>
     </div>
     <div class="text-center mt-2" v-if="widgetLoading==false && last_page>1">
@@ -215,16 +228,19 @@
 <script>
 import api from "../../api";
 import _ from "lodash";
+import Donation from "./NewDonation"
 import LoadingWidget from "../widgets/LoadingWidget";
 import DistrictSelector from "../widgets/DistrictSelector";
 
 export default {
   name: "Home",
-  components: { LoadingWidget, DistrictSelector },
+  components: { LoadingWidget, DistrictSelector, Donation },
   data() {
     return {
       entityDetails: false,
+      donationPopup: false,
       currentEntity: {},
+      actualDemand: {},
       help:false,
       donation:false,
       current_page:1,
@@ -252,6 +268,13 @@ export default {
     showEntityDetails: function(entity){
       this.entityDetails = true;
       this.currentEntity = entity;
+    },
+    changeDonationPopupValue: function(){
+      this.donationPopup = false;
+    },
+    showDonationPopup: function(demand){
+      this.donationPopup = true;
+      this.actualDemand = demand;
     },
     search: function(query) { 
       this.widgetLoading = true;
